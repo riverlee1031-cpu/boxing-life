@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Boxing Life · 台灣高中拳手海外生涯</title>
+<title>Boxing Life V19 · 海外拳擊養成人生</title>
 <style>
 :root{
   --bg:#120b1d;--surface:#1b1832;--surface2:#241f42;--line:#5b4f8c;
@@ -252,7 +252,7 @@ body{background:#060a0e;background-image:linear-gradient(90deg,#07110f 0,#07110f
   </div>
 </div>
 <script>
-const SAVE_KEY="boxing-life-v18-highschool-overseas";
+const SAVE_KEY="boxing-life-v19-yakyo-style";
 const LEGACY_SAVE_KEYS=["boxing-life-v16-fight-lock","boxing-life-v15-single-file","boxing-life-v14-no-win-gate","boxing-life-v13-all-event-images","boxing-life-v12-horizontal-event-pack","boxing-life-v11-horizontal-real-pixel"];
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 let rng=Math.random;
@@ -1844,6 +1844,273 @@ window.render = function(){
       <div class="v18-sidebox"><h4>ATTRIBUTES · 可用點數 ${G.skillPoints}</h4>${SKILLS.map(v18Attr).join("")}</div>
       <div class="v18-sidebox"><h4>${G.isPro?"FIGHT OFFERS":"AMATEUR BOUTS"}</h4>${v18Offers()}</div>
       <button class="v18-btn gold" onclick="save()">儲存目前生涯</button>
+    </aside>
+  </div>`;
+};
+</script>
+
+
+<style id="v19-yakyo-style">
+:root{
+  --y-bg:#0b2a20;--y-deep:#03130e;--y-card:#12382b;--y-card2:#173f31;
+  --y-line:#2c5a49;--y-gold:#f3c54e;--y-ink:#e9eadc;--y-dim:#9eb3a8;--y-faint:#6d8b7d;
+}
+body{background:#0a291f!important}
+#app{max-width:1340px!important}
+.y19-shell{
+  display:grid;grid-template-columns:250px 710px 400px;min-height:100vh;
+  margin:0 auto;border-left:1px solid #294d40;border-right:1px solid #294d40
+}
+.y19-left{background:#0c2a20;border-right:1px solid #294d40;padding:18px 22px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column}
+.y19-brand{font-weight:950;font-size:40px;letter-spacing:-2px;color:#eeecdc;line-height:1}
+.y19-brand em{font-style:normal;color:var(--y-gold)}
+.y19-sub{font-size:9px;letter-spacing:.34em;color:#708f81;border-bottom:1px solid #315346;text-align:center;padding:12px 0 16px}
+.y19-school{margin-top:25px;color:#96aa9f;font-size:11px;font-weight:850}
+.y19-timeline{margin-top:12px;position:relative;padding-left:26px}
+.y19-timeline:before{content:"";position:absolute;left:7px;top:1px;bottom:0;width:1px;background:#456c5a}
+.y19-timeline .node{position:relative;padding-bottom:16px}
+.y19-timeline .node:before{content:"";position:absolute;left:-26px;top:2px;width:13px;height:13px;border-radius:50%;border:2px solid #617c6f;background:#0c2a20}
+.y19-timeline .node.on:before{border-color:var(--y-gold);box-shadow:0 0 10px rgba(243,197,78,.45)}
+.y19-timeline b{font-size:12px;color:#e0e3d8}.y19-timeline span{display:block;font-size:9px;color:#718f81;margin-top:4px}
+.y19-menu{margin-top:22px;display:grid;gap:2px}
+.y19-menu button{background:transparent;border:0;text-align:left;color:#9cb1a6;padding:9px 8px;border-radius:6px;font-size:12px;font-weight:800}
+.y19-menu button.active{background:#163a2d;color:var(--y-gold)}
+.y19-seed{margin-top:auto;border-top:1px solid #315346;padding-top:14px;color:#688578;font-size:9px;line-height:1.8}
+
+.y19-main{background:#04140f;border-right:1px solid #294d40;min-width:0}
+.y19-top{background:#0f3025;border-bottom:1px solid #315346;padding:0 26px 13px}
+.y19-profile{height:60px;display:flex;align-items:center;gap:13px}
+.y19-no{width:48px;height:48px;border:1px solid #8c7628;border-radius:10px;text-align:center;display:flex;flex-direction:column;justify-content:center;color:var(--y-gold);background:#21351f}
+.y19-no small{font-size:7px;letter-spacing:.2em;color:#a2aa92}.y19-no b{font-size:24px}
+.y19-name{flex:1}.y19-name b{display:block;font-size:23px}.y19-tags{display:flex;gap:5px;margin-top:3px}.y19-tags span{font-size:9px;padding:3px 7px;border:1px solid #50715f;border-radius:4px;color:#a8bbb2}.y19-tags .gold{border-color:#8b7728;color:var(--y-gold)}
+.y19-affil{text-align:right;color:#789184;font-size:9px}.y19-affil b{display:block;font-size:14px;color:var(--y-gold);margin-top:4px}
+.y19-metrics{display:grid;grid-template-columns:repeat(4,1fr) 65px;gap:6px}
+.y19-metric{background:#14392d;border:1px solid #285344;border-radius:9px;text-align:center;padding:8px 4px}
+.y19-metric b{display:block;color:var(--y-gold);font-size:20px}.y19-metric span{display:block;font-size:8px;color:#718e81;margin-top:5px}
+.y19-detail{border-style:dashed;color:#889e93;display:grid;place-items:center;font-size:9px}
+.y19-season{text-align:center;color:#668075;font-size:9px;letter-spacing:.12em;margin-top:7px}
+.y19-season b{color:var(--y-gold)}
+.y19-center{padding:18px 26px 45px}
+.y19-card{background:#12382b;border:1px solid #2d5b4a;border-radius:9px;padding:14px 15px;margin-bottom:14px}
+.y19-card.major{border-color:#806c2c}
+.y19-kicker{font-size:10px;color:#97ada1;font-weight:850;letter-spacing:.1em;margin-bottom:8px}
+.y19-kicker.gold{color:var(--y-gold)}
+.y19-card h3{margin:0 0 6px;font-size:17px;color:#e7e9dd}
+.y19-card p{margin:0;color:#b0c0b7;font-size:12px;line-height:1.7}
+.y19-date{text-align:center;color:#6e8a7d;font-size:9px;letter-spacing:.35em;margin:16px 0 12px}
+.y19-major-image{margin:10px 0 12px;border-radius:7px;overflow:hidden;border:1px solid #416b5a;aspect-ratio:16/9}
+.y19-major-image img{width:100%;height:100%;object-fit:cover;display:block;image-rendering:pixelated}
+.y19-choice-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:11px}
+.y19-choice{background:#153b2e;border:1px solid #456a57;color:#d8ded8;border-radius:7px;padding:10px;text-align:left}
+.y19-choice b{display:block;font-size:11px}.y19-choice span{display:block;color:#769183;font-size:8px;margin-top:4px}
+.y19-choice:hover{border-color:#887429;background:#1a412f}
+.y19-log{padding:8px 0;border-bottom:1px solid #1a3a2d}.y19-log:last-child{border-bottom:0}
+.y19-log span{display:block;font-size:8px;color:#5f7d6f;margin-bottom:3px}.y19-log b{font-size:11px;color:#aebeb6;font-weight:600}
+
+.y19-right{background:#0c2b20;padding:18px 20px;position:sticky;top:0;height:100vh;overflow:auto}
+.y19-training-title{color:#8fa69a;font-size:10px;font-weight:850;line-height:1.55;margin-top:360px;margin-bottom:9px}
+.y19-training-title strong{color:#d9ddd3}
+.y19-dice-row{display:flex;gap:8px;margin-bottom:10px}
+.y19-die{width:45px;height:45px;border-radius:9px;border:2px solid #c1b79f;background:#f1eadc;color:#294136;font-size:20px;font-weight:950;display:grid;place-items:center;box-shadow:inset 0 0 0 3px rgba(255,255,255,.55)}
+.y19-die.six{color:#c85146}.y19-die.selected{border-color:var(--y-gold);box-shadow:0 0 12px rgba(243,197,78,.55),inset 0 0 0 3px rgba(255,255,255,.55)}
+.y19-die.used{opacity:.28;filter:grayscale(.8)}
+.y19-train-row{display:grid;grid-template-columns:70px 1fr 54px;align-items:center;gap:8px;background:#15392d;border:1px solid #315948;border-radius:9px;padding:9px 10px;margin-bottom:6px}
+.y19-train-row .name{font-size:11px;font-weight:800}.y19-train-row .val{font-size:11px;text-align:right;color:#dce1dc}.y19-train-row .val span{color:#6f8c7e}
+.y19-progress{height:7px;background:#061711;border-radius:99px;overflow:hidden;position:relative}
+.y19-progress i{height:100%;background:#efc452;display:block;border-radius:99px}
+.y19-train-row button{grid-column:1/4;margin-top:4px;border:0;border-top:1px solid #294d40;background:transparent;color:#cdb65f;padding-top:6px;font-size:9px}
+.y19-finish{width:100%;border:1px solid #395c4c;border-radius:9px;background:#17372d;color:#788f84;padding:11px;font-weight:850;margin-top:6px}
+.y19-finish.ready{border-color:#846f2b;color:#e0c860;background:#22402f}
+.y19-sidebox{margin-top:12px;border:1px solid #315847;border-radius:9px;padding:11px;background:#12352a}
+.y19-sidebox h4{margin:0 0 8px;font-size:9px;color:#7f998c;letter-spacing:.14em}
+.y19-offer{border:1px solid #3a6251;background:#15392d;border-radius:8px;padding:9px;margin-bottom:7px}.y19-offer b{display:block;font-size:11px}.y19-offer span{font-size:8px;color:#789285;line-height:1.5}
+.y19-offer button{width:100%;margin-top:6px;border:1px solid #73642c;background:#26462f;color:#e2c962;border-radius:6px;padding:7px;font-size:9px;font-weight:850}
+.y19-status{font-size:9px;color:#7f998c;line-height:1.65}
+@media(max-width:1100px){
+  .y19-shell{grid-template-columns:220px minmax(0,1fr)}
+  .y19-right{position:static;height:auto;grid-column:2}.y19-training-title{margin-top:10px}
+}
+@media(max-width:760px){
+  .y19-shell{display:block}.y19-left{display:none}.y19-main{border-right:0}.y19-right{position:static}
+  .y19-top{padding:0 12px 12px}.y19-center{padding:14px}.y19-metrics{grid-template-columns:repeat(2,1fr)}.y19-detail{display:none}
+}
+</style>
+
+<script id="v19-game-loop">
+function y19NeedsTraining(){
+  return !!G && !G.retired && !G.pendingFight && !G.storyCard && !(G.trainingCycle && G.trainingCycle.done);
+}
+function y19InitTraining(){
+  if(!G || G.pendingFight || G.retired || G.storyCard) return;
+  if(!G.trainingCycle || G.trainingCycle.done){
+    const dice=[rnd(1,6),rnd(1,6),rnd(1,6)];
+    G.trainingCycle={dice,used:[false,false,false],selected:null,allocations:[],done:false,seasonKey:`${G.year}-${G.age}-${G.week}`};
+    G.highSixCount=(G.highSixCount||0)+dice.filter(x=>x===6).length;
+    addLog(`季初特訓：自主訓練擲出 ${dice.length} 顆骰。最高值「${Math.max(...dice)}」，六點累計 ${G.highSixCount||0} 次。`,"");
+    save(false);
+  }
+}
+function y19SelectDie(i){
+  if(!G.trainingCycle || G.trainingCycle.used[i])return;
+  G.trainingCycle.selected=i; save(false); render();
+}
+function y19Train(skill){
+  const t=G.trainingCycle;
+  if(!t || t.selected===null || t.used[t.selected])return;
+  const die=t.dice[t.selected];
+  const before=G.stats[skill];
+  const current=G.stats[skill];
+  let xp=die*2;
+  if(current>=75)xp=Math.max(1,Math.round(xp*.35));
+  else if(current>=60)xp=Math.max(1,Math.round(xp*.6));
+  const up=trainXP(skill,xp);
+  t.used[t.selected]=true;
+  t.allocations.push({skill,die,xp,up,before,after:G.stats[skill]});
+  t.selected=null;
+  addLog(`訓練分配：骰子 ${die} → ${SKILL_NAMES[skill]}，${up?`能力提升到 ${G.stats[skill]}`:`累積 ${xp} XP`}。`,"good");
+  save(false); render();
+}
+function y19FinishTraining(){
+  const t=G.trainingCycle;if(!t || !t.used.every(Boolean))return;
+  t.done=true;
+  G.currentEvent=pickEvent();
+  addLog("本期自主訓練完成，進入生活／拳館事件。","");
+  save(false); render();
+}
+function y19AfterEventAdvance(){
+  if(!G.trainingCycle)G.trainingCycle={};
+  G.trainingCycle.done=true;
+}
+const y19OldNextEvent = window.nextEvent;
+window.nextEvent = function(){
+  G.lastOutcome=null;
+  G.currentEvent=null;
+  advanceWeeks(6);
+  if(!G.retired){
+    G.trainingCycle=null;
+    y19InitTraining();
+  }
+  save(false);render();
+};
+
+function y19Major(e){
+  if(!e)return false;
+  return !!e.special || ["license","medical","amateur_tourney","gym_rival","sponsor_dinner","food_poison","young_challenger","slow_recovery","last_payday","retirement_talk","special_tv"].includes(e.id);
+}
+function y19Image(e){
+  return y19Major(e)?`<div class="y19-major-image"><img src="${realEventImage(e)}" alt="${esc(e.title||"重大事件")}"></div>`:"";
+}
+function y19TrainingPanel(){
+  if(G.pendingFight){
+    return `<div class="y19-training-title"><strong>比賽備戰中</strong><br>普通事件與自主訓練暫停，先完成這場比賽。</div>`;
+  }
+  if(G.storyCard){
+    return `<div class="y19-training-title"><strong>重大生涯節點</strong><br>完成中央劇情後，下一期才會開始自主訓練。</div>`;
+  }
+  y19InitTraining();
+  const t=G.trainingCycle;
+  if(!t)return "";
+  const names={power:"力量",speed:"速度",stamina:"體能",defense:"防守",chin:"抗擊打",technique:"技術"};
+  const dice=t.dice.map((d,i)=>`<button class="y19-die ${d===6?"six":""} ${t.selected===i?"selected":""} ${t.used[i]?"used":""}" onclick="y19SelectDie(${i})">${d}</button>`).join("");
+  const rows=SKILLS.map(k=>{
+    const v=G.stats[k], cap=G.potential[k]||90;
+    return `<div class="y19-train-row">
+      <div class="name">${names[k]}</div>
+      <div class="y19-progress"><i style="width:${Math.min(100,(v/cap)*100)}%"></i></div>
+      <div class="val">${v}<span>/${cap}</span></div>
+      <button onclick="y19Train('${k}')">把選取的骰子分配到 ${names[k]}</button>
+    </div>`;
+  }).join("");
+  return `<div class="y19-training-title">分配訓練成果（點骰套用｜能力越高成長越慢）<br><strong>本期 3 顆骰，每一顆都必須分配</strong></div>
+    <div class="y19-dice-row">${dice}</div>${rows}
+    <button class="y19-finish ${t.used.every(Boolean)?"ready":""}" onclick="y19FinishTraining()">↪ 完成本期訓練</button>`;
+}
+function y19CenterEvent(){
+  if(G.storyCard)return renderStoryCard();
+  if(G.pendingFight)return fightPrepHTML(G.pendingFight);
+  const t=G.trainingCycle;
+  if(t && !t.done){
+    const max=Math.max(...t.dice);
+    return `<div class="y19-card">
+      <div class="y19-kicker">■ 季初特訓</div>
+      <h3>自主訓練擲出 ${t.dice.length} 顆骰。</h3>
+      <p>最高值「${max}」，六點累計 <b style="color:#e4c85e">${G.highSixCount||0}</b> 次。請在右側把每一顆骰子分配到拳擊能力。</p>
+    </div>`;
+  }
+  if(G.lastOutcome){
+    const o=G.lastOutcome;
+    const ev={id:G.lastEventId||"",title:o.ev,imageKey:G.lastEventTheme||"gym"};
+    return `<div class="y19-card ${y19Major(ev)?"major":""}">
+      <div class="y19-kicker ${y19Major(ev)?"gold":""}">■ ${y19Major(ev)?"重大事件結果":"本期事件結果"}</div>
+      <h3>${o.ev}</h3>${y19Image(ev)}
+      <p>${o.txt}</p>
+      <div style="margin-top:8px;color:#d3bd60;font-size:11px">命運骰：${o.roll}</div>
+      <button class="y19-choice" style="margin-top:12px;width:100%" onclick="nextEvent()"><b>進入下一期 ▶</b><span>時間前進，重新擲出訓練骰</span></button>
+    </div>`;
+  }
+  const e=G.currentEvent||pickEvent(); G.currentEvent=e;
+  return `<div class="y19-card ${y19Major(e)?"major":""}">
+    <div class="y19-kicker ${y19Major(e)?"gold":""}">■ ${y19Major(e)?"重大事件":e.cat}</div>
+    <h3>${e.title}</h3>${y19Image(e)}<p>${e.text}</p>
+    <div class="y19-choice-grid">${e.options.map((o,i)=>`<button class="y19-choice" onclick="chooseEvent(${i})"><b>${o.ico} ${o.label}</b><span>${o.hint}</span></button>`).join("")}</div>
+  </div>`;
+}
+function y19Offers(){
+  if(G.retired)return `<div class="y19-status">已引退。</div>`;
+  if(G.pendingFight){const f=G.pendingFight;return `<div class="y19-offer"><b>✅ ${f.name}</b><span>${f.record} · OVR ${f.ovr}<br>${f.city} · ${f.rounds} 回合</span></div>`}
+  if(!G.offers?.length)generateOffers();
+  return G.offers.slice(0,3).map(f=>`<div class="y19-offer"><b>${f.name}</b><span>${f.record} · OVR ${f.ovr}<br>${f.city} · ${f.rounds} 回合</span><button onclick="acceptFight('${f.id}')">接下比賽</button></div>`).join("");
+}
+window.render = function(){
+  const app=document.querySelector("#app");
+  if(!G){ resetAlloc(); V18_ROUTE=null; app.innerHTML=startScreen(); updateAllocUI(); const c=document.querySelector("#city");if(c)c.innerHTML='<option>請先選擇國家</option>';return; }
+  if(!G.trainingCycle && !G.storyCard && !G.pendingFight && !G.lastOutcome)y19InitTraining();
+
+  const dest=START_DESTINATIONS[G.destinationCountry]?.zh||G.destinationCountry;
+  const phase=currentPhase();
+  const inc=Math.round((G.careerIncome||0)/1000);
+  app.innerHTML=`<div class="y19-shell">
+    <aside class="y19-left">
+      <div class="y19-brand">Boxing<em>Life</em></div>
+      <div class="y19-sub">拳 擊 人 生 模 擬 器</div>
+      <div class="y19-school">台灣高中・拳擊部</div>
+      <div class="y19-timeline">
+        <div class="node on"><b>2026　18歲</b><span>高中畢業・海外出發</span></div>
+        <div class="node ${G.age>=19?"on":""}"><b>${dest}・${G.baseCity}</b><span>${phase.zh}</span></div>
+      </div>
+      <div class="y19-menu">
+        <button class="active">▣ 生涯事件</button><button>◆ 訓練</button><button>♜ 比賽</button><button>▦ 行程</button><button>★ 技能</button><button>▥ 數據</button><button>◉ 成就</button>
+        <button onclick="save()">▣ 儲存</button><button onclick="resetGame()">⚙ 重開人生</button>
+      </div>
+      <div class="y19-seed">SEED <b style="color:#c9ad4a">${esc(G.seed||"")}</b><br>v1.9.0<br>18歲固定開局・重大事件才有圖片</div>
+    </aside>
+    <main class="y19-main">
+      <header class="y19-top">
+        <div class="y19-profile">
+          <div class="y19-no"><small>NO.</small><b>1</b></div>
+          <div class="y19-name"><b>${esc(G.name)}</b><div class="y19-tags"><span>拳手</span><span class="gold">${STYLES[G.style].zh}</span></div></div>
+          <div class="y19-affil">所屬地區<b>${dest}　${G.baseCity}</b></div>
+        </div>
+        <div class="y19-metrics">
+          <div class="y19-metric"><b>${G.age}</b><span>年齡</span></div>
+          <div class="y19-metric"><b>${G.year}</b><span>年份</span></div>
+          <div class="y19-metric"><b>${ovr()}</b><span>綜合</span></div>
+          <div class="y19-metric"><b>${inc}</b><span>生涯收入（千）</span></div>
+          <div class="y19-metric y19-detail">詳情⌄</div>
+        </div>
+        <div class="y19-season">● <b>${v18Season()}</b>　○ 賽季中　○ 季末</div>
+      </header>
+      <div class="y19-center">
+        ${G.storyCard?"":`<div class="y19-card"><div class="y19-kicker">■ 拳手誕生</div><p>18 歲高中畢業，${esc(G.name)} 從台灣前往 <b style="color:#e4c85e">${dest}</b>。接下來每一期都會先進行自主訓練，再進入生活、拳館或比賽事件。</p></div>`}
+        <div class="y19-date">${G.year} 年 ・ ${G.age} 歲 ・ ${phase.zh}</div>
+        ${y19CenterEvent()}
+        <div class="y19-card"><div class="y19-kicker">■ 最近紀錄</div>${G.logs.slice(0,6).map(l=>`<div class="y19-log"><span>${l.when}</span><b>${esc(l.text)}</b></div>`).join("")}</div>
+      </div>
+    </main>
+    <aside class="y19-right">
+      ${y19TrainingPanel()}
+      <div class="y19-sidebox"><h4>CAREER STATUS</h4><div class="y19-status">${phase.zh} · ${phase.desc}<br>${G.isPro?`職業 ${G.record.w}-${G.record.l}-${G.record.d} (${G.record.ko}KO)`:`業餘 ${G.amateur.w}-${G.amateur.l}`}<br>${G.pendingFight?"已接賽：普通事件暫停":"生涯會隨時間自然前進，不設勝場門檻。"}</div></div>
+      <div class="y19-sidebox"><h4>${G.isPro?"FIGHT OFFERS":"AMATEUR BOUTS"}</h4>${y19Offers()}</div>
     </aside>
   </div>`;
 };
