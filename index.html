@@ -126,6 +126,35 @@ input:focus,select:focus{border-color:var(--red)}
 .note{font-size:11px;color:var(--faint);line-height:1.55}
 hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 .hidden{display:none!important}
+
+.alloc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.points-left{font-size:12px;color:var(--gold);font-weight:900}
+.alloc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.alloc{
+  background:#0c1118;border:1px solid var(--line);border-radius:11px;padding:9px
+}
+.alloc .top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.alloc .name{font-size:11px;color:var(--dim);font-weight:800}
+.alloc .value{font-size:17px;font-weight:900}
+.alloc .ctrl{display:flex;gap:5px;margin-top:7px}
+.alloc .ctrl button{
+  flex:1;background:#171e2a;border:1px solid var(--line);border-radius:8px;padding:5px;color:var(--ink);font-weight:900
+}
+.alloc .ctrl button:disabled{opacity:.28}
+.event-image{
+  width:100%;aspect-ratio:16/8;object-fit:cover;border-radius:12px;border:1px solid var(--line);
+  margin:9px 0 11px;background:#090d13
+}
+.special-panel{
+  border-color:#72561c!important;
+  background:linear-gradient(160deg,#20190b,#111722 46%,#0f141d)!important;
+  box-shadow:0 12px 34px rgba(242,191,84,.08)!important
+}
+.special-tag{
+  display:inline-flex;padding:4px 8px;border-radius:999px;background:#2b210c;border:1px solid #735919;
+  color:var(--gold);font-size:9px;font-weight:900;letter-spacing:.13em
+}
+
 </style>
 </head>
 <body>
@@ -142,9 +171,9 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 
 <script>
 // =========================================================
-// BOXING LIFE USA V3 — single-file GitHub Pages game
+// BOXING LIFE USA V4 — single-file GitHub Pages game
 // =========================================================
-const SAVE_KEY="boxing-life-usa-v3";
+const SAVE_KEY="boxing-life-usa-v4";
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 let rng=Math.random;
 function seedHash(s){
@@ -196,6 +225,8 @@ const LAST=["Santos","Reyes","Miller","Johnson","Garcia","Torres","Williams","Ra
 
 let G=null;
 let pendingOutcome=null;
+let START_POINTS=8;
+let alloc={power:0,speed:0,stamina:0,defense:0,chin:0,technique:0};
 
 function makeSeed(){return Math.random().toString(36).slice(2,10)}
 function opponentName(){
@@ -248,12 +279,13 @@ function advanceWeek(n=1){
 }
 function baseGame(){
   return {
-    version:3,name:"",gender:"male",age:20,weight:"Lightweight",style:"pressure",baseCity:"Las Vegas, NV",
+    version:4,name:"",gender:"male",age:20,weight:"Lightweight",style:"pressure",baseCity:"Las Vegas, NV",
     seed:makeSeed(),year:2026,week:1,turn:0,phase:"event",retired:false,
     record:{w:0,l:0,d:0,ko:0},rank:1450,money:800,fame:4,health:100,fatigue:6,morale:70,
     manager:50,promoterInterest:12,readiness:35,weightRisk:10,
-    stats:{power:51,speed:53,stamina:52,defense:49,chin:52,technique:51},
+    stats:{power:50,speed:50,stamina:50,defense:50,chin:50,technique:50},
     xp:{power:0,speed:0,stamina:0,defense:0,chin:0,technique:0},
+    allocation:{power:0,speed:0,stamina:0,defense:0,chin:0,technique:0},
     potential:{},titles:[],logs:[],offers:[],currentEvent:null,lastOutcome:null,
     fightsSinceOffer:0
   }
@@ -268,6 +300,10 @@ function createGame(){
   g.baseCity=document.querySelector("#city").value;
   g.seed=document.querySelector("#seed").value.trim()||makeSeed();
   G=g;setSeed(G.seed);
+
+  // 套用玩家開局自由點數（總共 8 點，單項最多 +3）
+  G.allocation={...alloc};
+  SKILLS.forEach(k=>G.stats[k]=clamp(G.stats[k]+(alloc[k]||0),30,70));
 
   const m=STYLES[G.style].mods;
   Object.entries(m).forEach(([k,v])=>G.stats[k]=clamp(G.stats[k]+v,30,70));
@@ -364,13 +400,110 @@ const EVENTS=[
   }
 ];
 
+
+const SPECIAL_EVENTS=[
+  {
+    id:"tv-replacement",special:true,cat:"SPECIAL OPPORTUNITY",title:"全美轉播賽事臨時缺人",
+    text:"一場有電視轉播的拳賽臨時有人退賽。主辦方今晚就要答案，對手比你原本預期強很多。",
+    image:"",
+    cond:g=>g.record.w>=2,
+    options:[
+      {ico:"📺",label:"接下這場大機會",hint:"高曝光 · 高風險",
+       low:["等級差距太明顯，你的備戰節奏被徹底打亂。",{health:-5,fatigue:9,readiness:-5,promoterInterest:6}],
+       mid:["你願意接戰的態度讓主辦方留下深刻印象。",{fame:8,promoterInterest:12,offerBoost:2}],
+       high:["拳擊圈開始討論這個敢接短通知賽的新名字。",{fame:16,promoterInterest:18,morale:6,offerBoost:3}]},
+      {ico:"🛡️",label:"拒絕，保護生涯節奏",hint:"穩定 · 可能錯失曝光",
+       low:["主辦方很快找了別人。",{promoterInterest:-3}],
+       mid:["團隊認為這是成熟的職業決策。",{manager:5,readiness:4}],
+       high:["經紀人因此幫你談到另一場條件更合理的賽事。",{manager:7,promoterInterest:6,offerBoost:1}]}
+    ]
+  },
+  {
+    id:"champ-camp",special:true,cat:"SPECIAL CAMP",title:"前世界冠軍邀你進入訓練營",
+    text:"一名前世界冠軍正在你的城市備戰，團隊願意讓你加入幾週的封閉式訓練營。",
+    image:"",
+    options:[
+      {ico:"👑",label:"加入冠軍訓練營",hint:"技術大機會 · 高疲勞",
+       low:["訓練強度遠超預期，你幾乎都在生存。",{fatigue:14,health:-5,xp:{technique:4}}],
+       mid:["你吸收了很多職業級細節。",{xp:{technique:10,defense:6},fatigue:9,readiness:7}],
+       high:["這次訓練營讓你的拳擊理解提升一個層次。",{xp:{technique:15,defense:8,speed:5},fame:5,morale:5,readiness:10}]},
+      {ico:"🏠",label:"留在原本團隊",hint:"穩定準備",
+       low:["訓練沒有太多新刺激。",{readiness:1}],
+       mid:["你維持正常進度。",{xp:{technique:5},readiness:4}],
+       high:["團隊反而因此更有凝聚力。",{manager:6,morale:5,readiness:6}]}
+    ]
+  },
+  {
+    id:"exclusive",special:true,cat:"CONTRACT",title:"Promotion 提出三場獨家合約",
+    text:"一家正在擴張的 promotion 願意保證你未來三場比賽，但你必須放棄部分自由接賽權。",
+    image:"",
+    cond:g=>g.record.w>=3,
+    options:[
+      {ico:"✍️",label:"簽下三場約",hint:"穩定機會 · 彈性下降",
+       low:["條款沒有想像中漂亮，但至少比賽穩定。",{money:350,promoterInterest:9,manager:-2}],
+       mid:["你得到更穩定的卡司與曝光。",{money:600,promoterInterest:14,fame:5,offerBoost:1}],
+       high:["公司把你列入重點培養名單。",{money:900,promoterInterest:22,fame:9,offerBoost:2}]},
+      {ico:"🕊️",label:"繼續自由身",hint:"保留議價空間",
+       low:["短期內比賽機會稍微減少。",{promoterInterest:-5}],
+       mid:["經紀人支持你等待更好的條件。",{manager:7}],
+       high:["另一家公司聽到你拒絕後，也開始接觸。",{manager:5,promoterInterest:8,fame:3}]}
+    ]
+  },
+  {
+    id:"medical-scare",special:true,cat:"MEDICAL",title:"賽前檢查出現異常數值",
+    text:"例行醫療檢查有一項數值讓醫生想再確認。這不一定代表嚴重問題，但會打亂訓練。",
+    image:"",
+    options:[
+      {ico:"🏥",label:"完整複檢並暫停訓練",hint:"安全優先",
+       low:["複檢花掉不少時間與費用。",{money:-350,readiness:-7}],
+       mid:["確認沒有大礙，你也得到完整恢復。",{money:-250,health:10,fatigue:-10}],
+       high:["休息反而讓累積疲勞清掉很多。",{money:-250,health:12,fatigue:-18,morale:5}]},
+      {ico:"⏱️",label:"只做最低必要檢查",hint:"保住訓練進度 · 風險較高",
+       low:["狀況讓你之後被迫停訓更久。",{health:-14,readiness:-10,morale:-5}],
+       mid:["最後證明只是小問題。",{health:-3,readiness:2}],
+       high:["檢查很快過關，幾乎沒影響備戰。",{readiness:6,morale:3}]}
+    ]
+  },
+  {
+    id:"eliminator",special:true,cat:"TITLE PATH",title:"突然收到冠軍挑戰者淘汰賽邀請",
+    text:"排名系統出現空缺，你有機會提前打一場非常重要的淘汰賽。贏的人可能直接進入世界冠軍路線。",
+    image:"",
+    cond:g=>g.rank<=120 && !g.titles.includes("world"),
+    options:[
+      {ico:"🏆",label:"接受淘汰賽",hint:"生涯轉折點",
+       low:["這個級別的機會來得太快，壓力很明顯。",{morale:-4,fatigue:6,offerBoost:3}],
+       mid:["團隊立刻進入最嚴格的備戰模式。",{readiness:12,promoterInterest:12,offerBoost:3}],
+       high:["媒體把你列為值得注意的新挑戰者。",{fame:14,readiness:15,promoterInterest:18,offerBoost:4}]},
+      {ico:"📈",label:"再累積一兩場",hint:"保守累積",
+       low:["機會很快被別人拿走。",{morale:-3}],
+       mid:["你選擇繼續累積經驗。",{xp:{technique:5},readiness:5}],
+       high:["經紀人因此談到更適合你的排名戰。",{manager:6,offerBoost:2}]}
+    ]
+  }
+];
+
 function pickEvent(){
-  const valid=EVENTS.filter(e=>!e.cond||e.cond(G));
-  let ev=pick(valid);
-  if(G.currentEvent && valid.length>1){
-    let tries=0;while(ev.id===G.currentEvent.id&&tries++<6)ev=pick(valid);
+  const normal=EVENTS.filter(e=>!e.cond||e.cond(G));
+  const special=SPECIAL_EVENTS.filter(e=>!e.cond||e.cond(G));
+
+  // 稀有事件約 11%，避免每週都在發生大事
+  let pool=(special.length && chance(.11)) ? special : normal;
+  let ev=pick(pool);
+
+  if(G.currentEvent && pool.length>1){
+    let tries=0;
+    while(ev.id===G.currentEvent.id && tries++<6) ev=pick(pool);
   }
   return ev;
+}
+
+
+function eventImageHTML(e){
+  return e && e.image ? `<img class="event-image" src="${e.image}" alt="${e.title}" onerror="this.style.display='none'">` : "";
+}
+
+function isSpecialEvent(e){
+  return !!(e && e.special);
 }
 
 function applyDelta(delta){
@@ -400,8 +533,10 @@ function applyDelta(delta){
 function chooseEvent(idx){
   const ev=G.currentEvent,op=ev.options[idx];
   document.querySelector("#eventBox").innerHTML=`
-    <div class="season"><b>${ev.cat}</b><span>${G.year} · Week ${G.week}</span></div>
+    ${isSpecialEvent(ev)?`<div class="special-tag">★ SPECIAL EVENT</div>`:""}
+    <div class="season" style="margin-top:${isSpecialEvent(ev)?"9px":"0"}"><b>${ev.cat}</b><span>${G.year} · Week ${G.week}</span></div>
     <div class="title">${ev.title}</div>
+    ${eventImageHTML(ev)}
     <div class="dice-stage">
       <div id="die" class="die rolling">?</div>
       <div class="text">命運骰子正在決定結果…</div>
@@ -471,10 +606,95 @@ function generateOffers(boost=0){
       record:`${wins}-${losses} (${kos}KO)`,purse,rounds,title,city:pick(FIGHT_CITIES)});
   }
 }
+
+function maybePreFightEvent(f){
+  if(!chance(.24)) return false;
+  const type=pick(["overweight","replacement","tvslot"]);
+  G.preFightEvent={type,fightId:f.id};
+
+  if(type==="overweight"){
+    document.querySelector("#eventBox").innerHTML=`
+      <div class="special-tag">★ FIGHT WEEK EVENT</div>
+      <div class="season" style="margin-top:9px"><b>WEIGH-IN</b><span>${f.city}</span></div>
+      <div class="title">對手過磅超重</div>
+      <div class="text">${f.name} 沒有達到約定體重。主辦方希望你接受比賽，並提出額外補償。</div>
+      <div class="opts">
+        <button class="opt" onclick="resolvePreFight('acceptOver')"><div class="ico">💰</div><div class="ot"><b>接受比賽</b><span>酬勞 +20%，但對手可能有體重優勢</span></div></button>
+        <button class="opt" onclick="resolvePreFight('declineOver')"><div class="ico">🚫</div><div class="ot"><b>拒絕比賽</b><span>保護自身權益，但這場取消</span></div></button>
+      </div>`;
+  }else if(type==="replacement"){
+    document.querySelector("#eventBox").innerHTML=`
+      <div class="special-tag">★ FIGHT WEEK EVENT</div>
+      <div class="season" style="margin-top:9px"><b>5 DAYS NOTICE</b><span>${f.city}</span></div>
+      <div class="title">原對手臨時退出</div>
+      <div class="text">主辦方找到一名臨時替補。你幾乎沒有時間重新準備戰術。</div>
+      <div class="opts">
+        <button class="opt" onclick="resolvePreFight('acceptReplacement')"><div class="ico">⚡</div><div class="ot"><b>接受替補對手</b><span>維持出賽 · 對手能力重新隨機</span></div></button>
+        <button class="opt" onclick="resolvePreFight('declineReplacement')"><div class="ico">📅</div><div class="ot"><b>取消這場</b><span>不冒短通知風險</span></div></button>
+      </div>`;
+  }else{
+    document.querySelector("#eventBox").innerHTML=`
+      <div class="special-tag">★ FIGHT WEEK EVENT</div>
+      <div class="season" style="margin-top:9px"><b>TELEVISION</b><span>${f.city}</span></div>
+      <div class="title">比賽被升到電視主卡</div>
+      <div class="text">前面一場比賽取消，主辦方想把你移到更重要的電視轉播時段。</div>
+      <div class="opts">
+        <button class="opt" onclick="resolvePreFight('takeTV')"><div class="ico">📺</div><div class="ot"><b>接受主卡位置</b><span>人氣與酬勞提高，但壓力也提高</span></div></button>
+        <button class="opt" onclick="resolvePreFight('keepSlot')"><div class="ico">🎯</div><div class="ot"><b>維持原時段</b><span>照原計畫比賽</span></div></button>
+      </div>`;
+  }
+  return true;
+}
+
+function resolvePreFight(action){
+  const pf=G.preFightEvent;
+  if(!pf)return;
+  const f=G.offers.find(x=>x.id===pf.fightId) || G.pendingFight;
+  if(!f){delete G.preFightEvent;render();return}
+
+  if(action==="acceptOver"){
+    f.purse=Math.round(f.purse*1.20);
+    f.ovr=clamp(f.ovr+2,38,99);
+    G.fame=clamp(G.fame+3,0,100);
+    addLog(`對手 ${f.name} 過磅超重，你接受額外補償後照常出賽。`,"");
+    G.pendingFight=f;delete G.preFightEvent;renderFightPrep(f);return;
+  }
+  if(action==="declineOver"){
+    addLog(`因對手 ${f.name} 過磅超重，你拒絕出賽。`,"bad");
+    G.morale=clamp(G.morale+2,0,100);
+    G.offers=G.offers.filter(x=>x.id!==f.id);
+    delete G.pendingFight;delete G.preFightEvent;generateOffers();save(false);render();return;
+  }
+  if(action==="acceptReplacement"){
+    f.name=opponentName();
+    f.ovr=clamp(f.ovr+rnd(-3,5),38,97);
+    f.rank=clamp(f.rank+rnd(-120,120),1,2500);
+    G.readiness=clamp(G.readiness-5,0,100);
+    addLog(`原對手退出，你接受臨時替補 ${f.name}。`,"");
+    G.pendingFight=f;delete G.preFightEvent;renderFightPrep(f);return;
+  }
+  if(action==="declineReplacement"){
+    addLog("原對手臨時退出，你選擇不接受替補對手。","bad");
+    delete G.pendingFight;delete G.preFightEvent;generateOffers();save(false);render();return;
+  }
+  if(action==="takeTV"){
+    f.purse=Math.round(f.purse*1.35);
+    G.fame=clamp(G.fame+6,0,100);
+    G.morale=clamp(G.morale+rnd(-2,4),0,100);
+    addLog("比賽升上電視主卡，你接受了更大的舞台。","good");
+    G.pendingFight=f;delete G.preFightEvent;renderFightPrep(f);return;
+  }
+  if(action==="keepSlot"){
+    addLog("你選擇維持原本的比賽時段。","");
+    G.pendingFight=f;delete G.preFightEvent;renderFightPrep(f);return;
+  }
+}
+
 function acceptFight(id){
   const f=G.offers.find(x=>x.id===id);if(!f)return;
   if(G.health<45){addLog("醫療狀況不適合現在接賽。","bad");render();return}
   G.pendingFight=f;
+  if(maybePreFightEvent(f)) return;
   renderFightPrep(f);
 }
 function renderFightPrep(f){
@@ -621,6 +841,24 @@ function startScreen(){
       <div class="field"><label>拳風</label><div class="chips">
         ${Object.entries(STYLES).map(([k,s],i)=>`<button class="chip style ${i===0?"on":""}" data-v="${k}" onclick="chipOne('style',this)">${s.zh}</button>`).join("")}
       </div></div>
+
+      <div class="field">
+        <div class="alloc-head">
+          <label style="margin:0">自由能力點數</label>
+          <span id="pointsLeft" class="points-left">剩餘 ${START_POINTS} 點</span>
+        </div>
+        <div class="note" style="margin-bottom:8px">總共只有 ${START_POINTS} 點，單一能力最多 +3。拳風加成會另外計算。</div>
+        <div class="alloc-grid">
+          ${SKILLS.map(k=>`<div class="alloc">
+            <div class="top"><span class="name">${SKILL_NAMES[k]}</span><span id="alloc-${k}" class="value">+0</span></div>
+            <div class="ctrl">
+              <button onclick="changeAlloc('${k}',-1)">−</button>
+              <button onclick="changeAlloc('${k}',1)">＋</button>
+            </div>
+          </div>`).join("")}
+        </div>
+      </div>
+
       <div class="field"><label>美國訓練基地</label><select id="city">${CITIES.map(x=>`<option>${x}</option>`).join("")}</select></div>
       <div class="field"><label>種子碼（同一種子可重玩相同隨機序列）</label><input id="seed" value="${makeSeed()}"></div>
       <button class="btn" style="margin-top:16px" onclick="createGame()">開始美國職業生涯 🥊</button>
@@ -629,13 +867,44 @@ function startScreen(){
     <p class="note" style="text-align:center;margin:14px">單檔 HTML / CSS / JavaScript，可直接放 GitHub Pages。</p>
   </div>`;
 }
+
+function resetAlloc(){
+  alloc={power:0,speed:0,stamina:0,defense:0,chin:0,technique:0};
+}
+function allocUsed(){return SKILLS.reduce((s,k)=>s+(alloc[k]||0),0)}
+function changeAlloc(skill,delta){
+  const used=allocUsed();
+  if(delta>0){
+    if(used>=START_POINTS)return;
+    if((alloc[skill]||0)>=3)return;
+    alloc[skill]=(alloc[skill]||0)+1;
+  }else{
+    if((alloc[skill]||0)<=0)return;
+    alloc[skill]-=1;
+  }
+  updateAllocUI();
+}
+function updateAllocUI(){
+  SKILLS.forEach(k=>{
+    const el=document.querySelector("#alloc-"+k);
+    if(el)el.textContent="+"+(alloc[k]||0);
+  });
+  const left=document.querySelector("#pointsLeft");
+  if(left)left.textContent=`剩餘 ${START_POINTS-allocUsed()} 點`;
+}
+
 function chipOne(cls,el){
   document.querySelectorAll("."+cls).forEach(x=>x.classList.remove("on"));el.classList.add("on");
 }
 
 function render(){
   const app=document.querySelector("#app");
-  if(!G){app.innerHTML=startScreen();return}
+  if(!G){
+    resetAlloc();
+    app.innerHTML=startScreen();
+    updateAllocUI();
+    return;
+  }
   const genderIcon=G.gender==="female"?"♀":"♂";
   app.innerHTML=`
     <div class="hud">
@@ -654,7 +923,7 @@ function render(){
     </div>
     <div class="wrap">
       ${G.retired?renderEnd():`
-        <div id="eventBox" class="panel">${eventHTML()}</div>
+        <div id="eventBox" class="panel ${isSpecialEvent(G.currentEvent)?"special-panel":""}">${eventHTML()}</div>
         <div class="panel">
           <div class="label">Attributes</div>
           <div class="attrs">${SKILLS.map(k=>attrHTML(k)).join("")}</div>
@@ -682,8 +951,10 @@ function render(){
 function eventHTML(){
   if(G.lastOutcome)return "";
   const e=G.currentEvent||pickEvent();
-  return `<div class="season"><b>${e.cat}</b><span>${G.year} · Week ${G.week}</span></div>
+  return `${isSpecialEvent(e)?`<div class="special-tag">★ SPECIAL EVENT</div>`:""}
+    <div class="season" style="margin-top:${isSpecialEvent(e)?"9px":"0"}"><b>${e.cat}</b><span>${G.year} · Week ${G.week}</span></div>
     <div class="title">${e.title}</div>
+    ${eventImageHTML(e)}
     <div class="text">${e.text}</div>
     <div class="opts">${e.options.map((o,i)=>`<button class="opt" onclick="chooseEvent(${i})">
       <div class="ico">${o.ico}</div><div class="ot"><b>${o.label}</b><span>${o.hint}</span></div></button>`).join("")}</div>`;

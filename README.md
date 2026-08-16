@@ -1,21 +1,29 @@
-# Boxing Life USA V3
+# Boxing Life USA V4
 
-## 核心方向
-- 男子 / 女子拳手都可建立
-- 0-0 職業新人直接從美國開始
-- 可選 Las Vegas、Los Angeles、New York、Miami、Houston、Philadelphia 為訓練基地
-- 手機直式 UI
-- 種子碼 RNG
-- 每週事件卡
-- 選項 + 1～6 骰子結果
-- 訓練、媒體、贊助、傷病、減重、Promotion、短通知等事件
-- 能力 XP 慢成長 + 隱藏天賦上限
-- 美國各城市比賽邀約
-- 賽前戰術選擇
-- KO/TKO/UD/SD/Draw
-- 排名、酬勞、人氣、健康、疲勞、備戰、減重風險
-- 州級 → 美國區域 → 北美 → 國際 → 世界冠軍
-- localStorage 存檔
+## 新增
+- 開局自由能力配點：總共 8 點
+- 單一能力最多 +3
+- 拳風加成與自由配點分開計算
+- 稀有 Special Event（約 11%）
+- 賽前突發事件（約 24%）
+  - 對手過磅超重
+  - 5 天前臨時換對手
+  - 比賽升上電視主卡
+- 圖片系統預留
+- 事件可以使用 `image:"assets/xxx.jpg"`
 
-## 更新 GitHub Pages
-用這個新版 `index.html` 覆蓋原本 boxing-life repository 根目錄的 `index.html`，Commit changes 後 GitHub Pages 會自動重新部署。
+## 圖片放法
+repository 內建立：
+
+assets/
+  gym.jpg
+  weighin.jpg
+  promoter.jpg
+
+然後在事件資料內：
+
+image:"assets/gym.jpg"
+
+## 更新
+把新版 index.html 與 assets 資料夾上傳到原本的 boxing-life repository。
+GitHub Pages 網址不變。
