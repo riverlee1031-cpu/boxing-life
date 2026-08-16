@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Boxing Life V19 · 海外拳擊養成人生</title>
+<title>Boxing Life V20 · 劇情賽程版</title>
 <style>
 :root{
   --bg:#120b1d;--surface:#1b1832;--surface2:#241f42;--line:#5b4f8c;
@@ -252,7 +252,7 @@ body{background:#060a0e;background-image:linear-gradient(90deg,#07110f 0,#07110f
   </div>
 </div>
 <script>
-const SAVE_KEY="boxing-life-v19-yakyo-style";
+const SAVE_KEY="boxing-life-v20-story-fights";
 const LEGACY_SAVE_KEYS=["boxing-life-v16-fight-lock","boxing-life-v15-single-file","boxing-life-v14-no-win-gate","boxing-life-v13-all-event-images","boxing-life-v12-horizontal-event-pack","boxing-life-v11-horizontal-real-pixel"];
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 let rng=Math.random;
@@ -2116,5 +2116,97 @@ window.render = function(){
 };
 </script>
 
+<style id="v20-story-fights">
+.y20-fight-story{border-color:#866f2b!important;background:linear-gradient(180deg,#173a2c,#113126)!important}
+.y20-fight-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:8px}
+.y20-fight-label{color:#f0ca58;font-size:9px;font-weight:900;letter-spacing:.13em}
+.y20-fight-meta{color:#80998d;font-size:9px;text-align:right;line-height:1.55}
+.y20-opponent{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border:1px solid #3c6252;background:#14382c;border-radius:8px;padding:10px;margin:10px 0}
+.y20-opponent b{font-size:14px;color:#e9ebdf}.y20-opponent span{display:block;color:#7e978b;font-size:9px;margin-top:4px;line-height:1.5}
+.y20-ovr{min-width:54px;text-align:center;border-left:1px solid #365a4a;padding-left:10px}.y20-ovr strong{display:block;color:#f0c955;font-size:20px}.y20-ovr small{font-size:8px;color:#789184}
+.y20-next-fight{border:1px dashed #3a5e4e;border-radius:8px;padding:9px;color:#789184;font-size:9px;line-height:1.65;margin-top:7px}
+</style>
+<script id="v20-story-fights-js">
+function y20EnsureFightStory(){
+  if(!G)return;
+  if(!G.fightStory)G.fightStory={totalPeriods:0,periodsSinceFight:0,fightsOffered:0,fightsAccepted:0,fightsDeclined:0};
+  if(!Array.isArray(G.offers))G.offers=[];
+}
+function y20FightInterval(){
+  const map={amateur_y1:3,amateur_y2:2,amateur_y3:2,pro_debut:1,four_round:2,six_round:2,eight_round:3,contender:3,prime:3,decline:4,final_years:5};
+  return map[currentPhase().id]||3;
+}
+function y20FightStoryText(f){
+  const id=currentPhase().id;
+  if(!G.isPro){
+    if((G.amateur.w+G.amateur.l)===0)return `教練把你叫到一旁。你來到 ${G.baseCity} 已經有一段時間，終於有人願意安排你的第一場正式業餘賽。這不是隨時都能刷的比賽，而是生涯真正的一個節點。`;
+    if(id==='amateur_y3')return `海外業餘生涯進入第三年。教練希望你在轉職業前再累積一次正式擂台經驗。勝敗不會卡住人生，但會影響別人怎麼看你。`;
+    return `拳館替你排到下一場業餘賽。經過幾期訓練與生活事件後，你再次被推回擂台。`;
+  }
+  if(id==='pro_debut')return `職業執照已經到手。Promotion 安排了你的職業出道戰。從這一場開始，每一場都正式寫進職業戰績。`;
+  if(id==='four_round')return `新人職業階段的下一場比賽排定。你不需要靠連勝才能前進，但結果會改變之後的機會。`;
+  if(id==='six_round')return `你開始進入 6 回合階段。對手不再只是純新人，主辦方開始測試你能不能成為穩定的職業拳手。`;
+  if(id==='eight_round')return `一場更重要的 8 回合賽事被排進生涯。這類比賽開始直接影響區域排名與主卡位置。`;
+  if(id==='contender')return `你的名字進入挑戰者討論範圍。團隊帶來一場會真正影響排名的比賽。`;
+  if(id==='prime')return `生涯巔峰期的重大比賽來了。這一場可能把你推向腰帶，也可能讓下一個機會延後。`;
+  if(id==='decline')return `年齡與恢復開始改變你的比賽節奏。團隊不再頻繁接戰，每一場都必須更慎重。`;
+  return `生涯後段又有一場比賽找上門。現在比起戰績，你更需要決定自己還願意付出多少代價。`;
+}
+function y20MakeStoryFight(){
+  y20EnsureFightStory();G.offers=[];generateOffers(0);const f=G.offers?.[0]||null;if(!f)return null;
+  G.offers=[];G.storyFightOffer=f;G.fightStory.fightsOffered++;addLog(`劇情賽程：教練安排 ${G.name} 對上 ${f.name}。`,'titlelog');return f;
+}
+function y20FightDue(){
+  y20EnsureFightStory();if(G.retired||G.pendingFight||G.storyFightOffer||G.storyCard)return false;
+  const fs=G.fightStory;if(fs.fightsOffered===0)return fs.totalPeriods>=2;return fs.periodsSinceFight>=y20FightInterval();
+}
+function y20AcceptStoryFight(){
+  y20EnsureFightStory();const f=G.storyFightOffer;if(!f)return;
+  G.pendingFight=f;G.storyFightOffer=null;G.currentEvent=null;G.lastOutcome=null;G.offers=[];G.fightStory.fightsAccepted++;G.fightStory.periodsSinceFight=0;
+  addLog(`你接受劇情安排的比賽：${f.name}。從現在起普通事件暫停。`,'titlelog');save(false);render();
+}
+function y20DeclineStoryFight(){
+  y20EnsureFightStory();const f=G.storyFightOffer;if(!f)return;
+  G.storyFightOffer=null;G.fightStory.fightsDeclined++;G.fightStory.periodsSinceFight=0;addLog(`你與團隊決定暫時不打 ${f.name}。之後劇情會再安排新的比賽。`,'');
+  G.currentEvent=pickEvent();save(false);render();
+}
+function y20StoryFightCard(){
+  const f=G.storyFightOffer;if(!f)return '';const t=TITLE_DEFS.find(x=>x.id===f.title);
+  return `<div class="y19-card y20-fight-story"><div class="y20-fight-head"><div><div class="y20-fight-label">■ STORY FIGHT · 劇情賽程</div><h3 style="margin-top:6px">${G.isPro?'下一場職業賽':'下一場業餘賽'}</h3></div><div class="y20-fight-meta">${G.year} · ${G.age}歲<br>${currentPhase().zh}</div></div><div class="y19-major-image"><img src="${realEventImage({id:'special_tv',imageKey:'fight'})}" alt="劇情比賽"></div><p>${y20FightStoryText(f)}</p><div class="y20-opponent"><div><b>${f.name}</b><span>${f.record} · ${f.city} · ${f.rounds} 回合${t?` · 🏆 ${t.zh}`:''}${G.isPro?`<br>預估酬勞 ${money(f.purse)} · 世界排名 #${f.rank}`:''}</span></div><div class="y20-ovr"><strong>${f.ovr}</strong><small>OVR</small></div></div><div class="y19-choice-grid"><button class="y19-choice" onclick="y20AcceptStoryFight()"><b>🥊 接下比賽</b><span>進入備戰，普通事件暫停</span></button><button class="y19-choice" onclick="y20DeclineStoryFight()"><b>↪ 這次先不打</b><span>生涯繼續，之後再安排</span></button></div></div>`;
+}
+window.y19FinishTraining=function(){
+  const t=G.trainingCycle;if(!t||!t.used.every(Boolean))return;y20EnsureFightStory();t.done=true;G.fightStory.totalPeriods++;G.fightStory.periodsSinceFight++;G.currentEvent=null;
+  if(y20FightDue())y20MakeStoryFight();else{G.currentEvent=pickEvent();addLog('本期自主訓練完成，進入生活／拳館事件。','');}
+  G.offers=[];save(false);render();
+};
+window.chooseEvent=function(idx){
+  if(G.pendingFight||G.storyFightOffer)return;const ev=G.currentEvent;if(!ev||!ev.options||!ev.options[idx])return;const op=ev.options[idx];const box=document.querySelector('#eventBox');if(!box)return;
+  box.innerHTML=`<div class="y19-card ${y19Major(ev)?'major':''}"><div class="y19-kicker ${y19Major(ev)?'gold':''}">■ 命運判定</div><h3>${ev.title}</h3>${y19Image(ev)}<div class="v18-dice" id="die">?</div><p style="text-align:center">命運骰正在決定這一次選擇的結果…</p></div>`;
+  let ticks=0;const timer=setInterval(()=>{const d=document.querySelector('#die');if(d)d.textContent=rnd(1,6);ticks++;if(ticks>=10){clearInterval(timer);resolveEvent(ev,op,rnd(1,6));}},70);
+};
+window.renderOutcome=function(){
+  const o=G.lastOutcome;if(!o)return;const ev={id:G.lastEventId||'',title:o.ev,imageKey:G.lastEventTheme||'gym'};const box=document.querySelector('#eventBox');if(!box)return;const cls=o.tier==='high'?'good':o.tier==='low'?'bad':'';
+  box.innerHTML=`<div class="y19-card ${y19Major(ev)?'major':''}"><div class="y19-kicker ${y19Major(ev)?'gold':''}">■ ${y19Major(ev)?'重大事件結果':'本期事件結果'}</div><h3>${o.ev}</h3>${y19Image(ev)}<div class="v18-dice">${o.roll}</div><div class="v18-outcome ${cls}"><p>${o.txt}</p><div class="v18-deltas">${o.labels.map(x=>`<span class="v18-delta">${x.txt}</span>`).join('')}</div></div><button class="y19-choice" style="margin-top:12px;width:100%" onclick="nextEvent()"><b>進入下一期 ▶</b><span>時間前進，重新開始下一期訓練</span></button></div>`;
+};
+window.nextEvent=function(){G.lastOutcome=null;G.currentEvent=null;G.offers=[];advanceWeeks(6);checkPhaseUp();if(!G.retired){G.trainingCycle=null;y19InitTraining();}save(false);render();};
+window.closeFightModal=function(){const modal=document.querySelector('#fightModal');if(modal)modal.classList.add('hidden');y20EnsureFightStory();G.offers=[];G.storyFightOffer=null;G.currentEvent=null;G.lastOutcome=null;G.trainingCycle=null;G.fightStory.periodsSinceFight=0;checkPhaseUp();if(!G.retired)y19InitTraining();save(false);render();};
+function y20NextFightHint(){
+  y20EnsureFightStory();if(G.pendingFight)return '目前已進入比賽備戰。';if(G.storyFightOffer)return '中央劇情已出現下一場比賽。';
+  if(G.fightStory.fightsOffered===0)return `第一場正式比賽會在完成約 ${Math.max(0,2-G.fightStory.totalPeriods)} 期養成後由教練安排。`;
+  return `下一場比賽由劇情安排，約再經過 ${Math.max(0,y20FightInterval()-G.fightStory.periodsSinceFight)} 期養成／生活事件。`;
+}
+function y20CenterEvent(){
+  if(G.storyCard)return renderStoryCard();if(G.pendingFight)return fightPrepHTML(G.pendingFight);if(G.storyFightOffer)return y20StoryFightCard();const t=G.trainingCycle;
+  if(t&&!t.done){const max=Math.max(...t.dice);return `<div class="y19-card"><div class="y19-kicker">■ 季初特訓</div><h3>自主訓練擲出 ${t.dice.length} 顆骰。</h3><p>最高值「${max}」，六點累計 <b style="color:#e4c85e">${G.highSixCount||0}</b> 次。請在右側把每一顆骰子分配到拳擊能力。</p></div>`;}
+  if(G.lastOutcome){const o=G.lastOutcome;const ev={id:G.lastEventId||'',title:o.ev,imageKey:G.lastEventTheme||'gym'};return `<div class="y19-card ${y19Major(ev)?'major':''}"><div class="y19-kicker ${y19Major(ev)?'gold':''}">■ ${y19Major(ev)?'重大事件結果':'本期事件結果'}</div><h3>${o.ev}</h3>${y19Image(ev)}<p>${o.txt}</p><div style="margin-top:8px;color:#d3bd60;font-size:11px">命運骰：${o.roll}</div><button class="y19-choice" style="margin-top:12px;width:100%" onclick="nextEvent()"><b>進入下一期 ▶</b><span>時間前進，重新擲出訓練骰</span></button></div>`;}
+  const e=G.currentEvent||pickEvent();G.currentEvent=e;return `<div class="y19-card ${y19Major(e)?'major':''}"><div class="y19-kicker ${y19Major(e)?'gold':''}">■ ${y19Major(e)?'重大事件':e.cat}</div><h3>${e.title}</h3>${y19Image(e)}<p>${e.text}</p><div class="y19-choice-grid">${e.options.map((o,i)=>`<button class="y19-choice" onclick="chooseEvent(${i})"><b>${o.ico} ${o.label}</b><span>${o.hint}</span></button>`).join('')}</div></div>`;
+}
+window.render=function(){
+  const app=document.querySelector('#app');if(!G){resetAlloc();V18_ROUTE=null;app.innerHTML=startScreen();updateAllocUI();const c=document.querySelector('#city');if(c)c.innerHTML='<option>請先選擇國家</option>';return;}
+  y20EnsureFightStory();G.offers=[];if(!G.trainingCycle&&!G.storyCard&&!G.pendingFight&&!G.storyFightOffer&&!G.lastOutcome)y19InitTraining();
+  const dest=START_DESTINATIONS[G.destinationCountry]?.zh||G.destinationCountry,phase=currentPhase(),inc=Math.round((G.careerIncome||0)/1000);
+  app.innerHTML=`<div class="y19-shell"><aside class="y19-left"><div class="y19-brand">Boxing<em>Life</em></div><div class="y19-sub">拳 擊 人 生 模 擬 器</div><div class="y19-school">台灣高中・拳擊部</div><div class="y19-timeline"><div class="node on"><b>2026　18歲</b><span>高中畢業・海外出發</span></div><div class="node ${G.age>=19?'on':''}"><b>${dest}・${G.baseCity}</b><span>${phase.zh}</span></div></div><div class="y19-menu"><button class="active">▣ 生涯事件</button><button>◆ 訓練</button><button>♜ 比賽</button><button>▦ 行程</button><button>★ 技能</button><button>▥ 數據</button><button>◉ 成就</button><button onclick="save()">▣ 儲存</button><button onclick="resetGame()">⚙ 重開人生</button></div><div class="y19-seed">SEED <b style="color:#c9ad4a">${esc(G.seed||'')}</b><br>v2.0.0<br>比賽由劇情安排・重大事件才有圖片</div></aside><main class="y19-main"><header class="y19-top"><div class="y19-profile"><div class="y19-no"><small>NO.</small><b>1</b></div><div class="y19-name"><b>${esc(G.name)}</b><div class="y19-tags"><span>拳手</span><span class="gold">${STYLES[G.style].zh}</span></div></div><div class="y19-affil">所屬地區<b>${dest}　${G.baseCity}</b></div></div><div class="y19-metrics"><div class="y19-metric"><b>${G.age}</b><span>年齡</span></div><div class="y19-metric"><b>${G.year}</b><span>年份</span></div><div class="y19-metric"><b>${ovr()}</b><span>綜合</span></div><div class="y19-metric"><b>${inc}</b><span>生涯收入（千）</span></div><div class="y19-metric y19-detail">詳情⌄</div></div><div class="y19-season">● <b>${v18Season()}</b>　○ 賽季中　○ 季末</div></header><div class="y19-center">${G.storyCard?'':`<div class="y19-card"><div class="y19-kicker">■ 生涯節奏</div><p>每一期先自主訓練，再發生生活／拳館事件。<b style="color:#e4c85e">比賽不再出現在右側清單</b>，而是依照生涯階段由教練與劇情安排。</p></div>`}<div class="y19-date">${G.year} 年 ・ ${G.age} 歲 ・ ${phase.zh}</div><div id="eventBox">${y20CenterEvent()}</div><div class="y19-card"><div class="y19-kicker">■ 最近紀錄</div>${G.logs.slice(0,6).map(l=>`<div class="y19-log"><span>${l.when}</span><b>${esc(l.text)}</b></div>`).join('')}</div></div></main><aside class="y19-right">${y19TrainingPanel()}<div class="y19-sidebox"><h4>CAREER STATUS</h4><div class="y19-status">${phase.zh} · ${phase.desc}<br>${G.isPro?`職業 ${G.record.w}-${G.record.l}-${G.record.d} (${G.record.ko}KO)`:`業餘 ${G.amateur.w}-${G.amateur.l}`}<br>生涯不設勝場門檻。</div><div class="y20-next-fight">${y20NextFightHint()}</div></div></aside></div>`;
+};
+</script>
 </body>
 </html>
