@@ -3,306 +3,293 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Boxing Life V22 · Career Rhythm</title>
+<title>Boxing Life V23 · 高中留學快節奏版</title>
 <style>
 :root{
-  --bg:#072218;
-  --bg2:#04140f;
-  --bg3:#0f3428;
-  --panel:#0d2f24;
-  --panel2:#123b2d;
-  --line:#2e5a49;
-  --line2:#3d6a58;
-  --gold:#f2c455;
-  --ink:#eef1e3;
-  --dim:#a6b8ad;
-  --faint:#769082;
-  --good:#7fdb8d;
-  --bad:#ff7c73;
-  --accent:#8fd6ff;
+  --bg:#061911; --bg2:#09251b; --panel:#0f3427; --panel2:#153d2f;
+  --line:#315d4b; --line2:#436d5a; --ink:#eef0e5; --dim:#b9c8bf;
+  --faint:#81998d; --gold:#f1c553; --good:#78dc91; --bad:#ff766d; --blue:#8fd0eb;
 }
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;padding:0;color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI","Noto Sans TC",sans-serif;background:
-  linear-gradient(180deg,#072117,#04150f 65%),
-  repeating-linear-gradient(120deg,rgba(255,255,255,.02) 0 2px,transparent 2px 24px);
-}
-body{min-height:100vh}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI","Noto Sans TC",sans-serif}
+body{font-size:16px;overflow:hidden;background:
+  linear-gradient(135deg,rgba(65,103,79,.08) 0 1px,transparent 1px 24px),
+  linear-gradient(180deg,#09261b,#051710)}
 button,input,select{font:inherit}
 button{cursor:pointer}
-#app{min-height:100vh}
-.shell{display:grid;grid-template-columns:250px minmax(420px,1fr) 380px;min-height:100vh;max-width:1480px;margin:0 auto;border-left:1px solid #1c4638;border-right:1px solid #1c4638;background:rgba(0,0,0,.12)}
-.left{background:linear-gradient(180deg,#08251a,#062117);border-right:1px solid #214b3b;padding:22px 22px 14px;display:flex;flex-direction:column}
-.brand{font-weight:1000;font-size:58px;line-height:.9;letter-spacing:-3px;text-align:center}
-.brand .ball{font-size:.65em;vertical-align:middle;display:inline-block;transform:translateY(-2px)}
-.sub{margin-top:10px;text-align:center;color:var(--faint);font-size:10px;letter-spacing:.38em;padding-bottom:16px;border-bottom:1px solid #214b3b}
-.side-group{margin-top:22px}
-.side-school{color:#dce0d3;font-size:14px;font-weight:800}
-.side-school small{display:block;color:var(--faint);font-size:11px;font-weight:700;margin-top:6px}
-.timeline{margin-top:18px;padding-left:25px;position:relative}
-.timeline:before{content:"";position:absolute;left:9px;top:2px;bottom:4px;width:1px;background:#50705f}
-.node{position:relative;padding:0 0 18px 0}
-.node:before{content:"";position:absolute;left:-25px;top:2px;width:14px;height:14px;border-radius:50%;border:2px solid #6c8377;background:#08251a}
-.node.active:before{border-color:var(--gold);box-shadow:0 0 10px rgba(242,196,85,.45)}
-.node strong{display:block;font-size:13px;color:var(--ink)}
-.node span{display:block;font-size:10px;color:var(--faint);margin-top:5px;line-height:1.5}
-.menu{margin-top:24px;display:grid;gap:4px}
-.menu div{padding:10px 12px;border-radius:8px;color:#c4d0c8;font-size:14px;font-weight:800}
-.menu div.active{background:#163b2d;color:var(--gold)}
-.seed{margin-top:auto;padding-top:16px;border-top:1px solid #214b3b;color:#7e9589;font-size:11px;line-height:1.9}
-.seed b{color:var(--gold)}
-.center{background:linear-gradient(180deg,#062018,#04140f 25%);border-right:1px solid #214b3b;display:flex;flex-direction:column}
-.topbar{padding:18px 26px 14px;background:linear-gradient(180deg,#0d3024,#0b281f);border-bottom:1px solid #214b3b}
-.topline{display:grid;grid-template-columns:60px 1fr auto auto;gap:12px;align-items:center}
-.noBox{border:1px solid #8c7527;border-radius:12px;padding:7px 0;text-align:center;min-height:60px;background:rgba(255,214,100,.05)}
-.noBox small{display:block;font-size:10px;letter-spacing:.18em;color:#c7c19c}.noBox b{display:block;font-size:34px;color:var(--gold);line-height:1.1}
-.heroName b{display:block;font-size:26px;line-height:1.05}
-.tags{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}.tag{border:1px solid #486a59;border-radius:6px;padding:4px 8px;font-size:11px;color:#d0dacf;font-weight:800}.tag.gold{border-color:#8c7527;color:var(--gold)}
-.schoolRight{text-align:right;color:var(--faint);font-size:10px;font-weight:700}.schoolRight b{display:block;font-size:16px;color:var(--gold);margin-top:5px}
-.menuBtn{width:46px;height:46px;border-radius:12px;background:#0f2f24;border:1px solid #496655;color:#d6ddd7;font-size:24px}
-.metrics{display:grid;grid-template-columns:repeat(4,1fr) 84px;gap:10px;margin-top:14px}
-.metric{background:#133729;border:1px solid #2b5745;border-radius:12px;padding:10px;text-align:center}
-.metric b{display:block;font-size:18px;color:var(--gold)}.metric span{display:block;font-size:11px;color:var(--faint);margin-top:4px}
-.metric.detail{border-style:dashed;color:#9db2a6;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
-.seasonRow{text-align:center;margin-top:10px;color:#6d8a7a;font-size:12px;font-weight:800}
-.seasonDot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;background:#335547;border:1px solid #507463}
-.seasonDot.on{background:var(--gold);border-color:var(--gold);box-shadow:0 0 9px rgba(242,196,85,.4)}
-.mainScroll{padding:20px 26px 36px;overflow:auto}
-.dateLine{text-align:center;color:#91a598;font-size:13px;letter-spacing:.35em;margin:12px 0 16px}
-.card{background:linear-gradient(180deg,#0f3528,#0d2f24);border:1px solid #2d5b48;border-radius:14px;padding:16px 18px;margin-bottom:16px}
-.card.major{border-color:#897229;box-shadow:0 0 0 1px rgba(242,196,85,.08) inset}
-.kicker{font-size:12px;color:#9cb5aa;font-weight:900;letter-spacing:.12em;margin-bottom:8px}
-.kicker.gold{color:var(--gold)}
-.card h3{margin:0 0 8px;font-size:18px}
-.card p{margin:0;color:#d6ddd6;font-size:15px;line-height:1.75}
-.logItem{padding:11px 0;border-bottom:1px solid rgba(255,255,255,.05)}.logItem:last-child{border-bottom:0}
-.logItem .when{font-size:10px;color:#6f8b7d;margin-bottom:4px}
-.logItem .text{font-size:13px;color:#d5ddd6;line-height:1.7}
-.startWrap{max-width:900px;margin:0 auto;padding:48px 18px}
-.startHero{text-align:center;margin-bottom:20px}
-.startHero h1{margin:0;font-size:64px;letter-spacing:-3px}
-.startHero p{margin:12px auto 0;color:#bfd0c5;max-width:680px;line-height:1.8}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.panel{background:linear-gradient(180deg,#11372a,#0d2d22);border:1px solid #2d5a48;border-radius:16px;padding:18px}.panel label{display:block;color:#ccd7d0;font-size:13px;font-weight:800;margin-bottom:8px}.panel input,.panel select{width:100%;background:#072117;border:1px solid #395b4d;color:var(--ink);border-radius:11px;padding:12px}.panel .row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.startBtn{width:100%;margin-top:18px;border:1px solid #8b7527;background:linear-gradient(180deg,#2b4c35,#20402d);color:#f3cd61;border-radius:14px;padding:16px;font-size:18px;font-weight:1000}
-.right{padding:18px 18px 24px;background:linear-gradient(180deg,#0a281d,#082319);display:flex;flex-direction:column;gap:14px}
-.sidePanel{background:linear-gradient(180deg,#12392c,#103327);border:1px solid #2c5947;border-radius:14px;padding:14px}
-.sidePanel h4{margin:0 0 10px;font-size:12px;letter-spacing:.12em;color:#9db4a9}
-.statusGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.miniStat{background:#163d2f;border:1px solid #2c5846;border-radius:10px;padding:10px;text-align:center}.miniStat b{display:block;color:var(--gold);font-size:16px}.miniStat span{display:block;font-size:11px;color:#81978c;margin-top:4px}
-.statRow{margin-bottom:12px}.statRow:last-child{margin-bottom:0}.statHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;font-size:13px;font-weight:800}.statHead span{color:#dfe4df}.statHead b{color:#dfe4df}.bar{height:10px;background:#082017;border-radius:99px;overflow:hidden;border:1px solid #254939}.bar > i{display:block;height:100%;background:linear-gradient(90deg,#77d98a,#f0c554);border-radius:99px}
-.actionBox{margin-top:auto}
-.drawBtn,.nextBtn{width:100%;border-radius:14px;padding:18px 16px;font-size:27px;font-weight:1000;border:1px solid #6f6130;background:linear-gradient(180deg,#34553b,#274931);color:#f0f2e8}
-.drawBtn small,.nextBtn small{display:block;font-size:13px;color:#b4c3ba;font-weight:700;margin-top:6px}
-.choiceTitle{font-size:15px;color:#dce3dd;font-weight:900;margin-bottom:10px;line-height:1.55}
-.choiceBtn{width:100%;text-align:left;background:linear-gradient(180deg,#153c2e,#123628);border:1px solid #456556;color:var(--ink);border-radius:14px;padding:14px 15px;margin-bottom:10px}
-.choiceBtn b{display:block;font-size:18px;margin-bottom:5px}.choiceBtn span{display:block;color:#cdd6d0;font-size:13px;line-height:1.5}.choiceBtn em{display:block;color:#7fa192;font-size:12px;font-style:normal;margin-top:6px}
-.choiceBtn:hover{border-color:#8b7527}
-.resultBox{background:linear-gradient(180deg,#143b2d,#0d3024);border:1px solid #335c4a;border-radius:14px;padding:14px}.die{width:66px;height:66px;border-radius:16px;border:2px solid #c6baa0;background:#efe9da;color:#293f36;display:grid;place-items:center;font-size:34px;font-weight:1000;margin:10px auto 12px}.resultText{font-size:14px;line-height:1.75;color:#dce4dd;text-align:left}.deltaList{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.delta{padding:7px 10px;border-radius:999px;font-size:12px;font-weight:900;border:1px solid #416454;background:#173a2d}.delta.good{color:var(--good);border-color:#2c7a43}.delta.bad{color:var(--bad);border-color:#8a4640}
-.muted{color:#8ca295}
-@media (max-width:1200px){.shell{grid-template-columns:220px minmax(0,1fr)}.right{grid-column:2;min-height:0}.actionBox{margin-top:0}.drawBtn,.nextBtn{font-size:24px}}
-@media (max-width:820px){.shell{display:block}.left{display:none}.topline{grid-template-columns:54px 1fr auto}.schoolRight{display:none}.metrics{grid-template-columns:repeat(2,1fr)}.metric.detail{display:none}.mainScroll{padding:14px}.topbar{padding:12px}.right{padding:12px}.grid2{grid-template-columns:1fr}}
-</style>
+#app{height:100vh}
+.shell{
+  height:100vh;max-width:1600px;margin:auto;display:grid;
+  grid-template-columns:260px minmax(620px,1fr) 430px;
+  border-left:1px solid #234b3b;border-right:1px solid #234b3b
+}
+.left{
+  background:linear-gradient(180deg,#0b2b20,#08241a);border-right:1px solid #264c3d;
+  padding:22px 20px 16px;display:flex;flex-direction:column;overflow:hidden
+}
+.brand{font-size:44px;font-weight:1000;letter-spacing:-2px;line-height:1;text-align:center}
+.brand em{font-style:normal;color:var(--gold)}
+.brandSub{margin:10px 0 18px;padding-bottom:15px;border-bottom:1px solid #2b5142;text-align:center;color:#7d9689;font-size:11px;letter-spacing:.26em}
+.school{font-size:14px;font-weight:900;color:#dbe1da}
+.school small{display:block;color:#859d90;font-size:12px;margin-top:6px}
+.timeline{position:relative;margin:18px 0 8px;padding-left:28px}
+.timeline:before{content:"";position:absolute;left:8px;top:2px;bottom:8px;width:1px;background:#527160}
+.node{position:relative;padding-bottom:17px}
+.node:before{content:"";position:absolute;left:-28px;top:2px;width:15px;height:15px;border-radius:50%;background:#0a291e;border:2px solid #6d8478}
+.node.on:before{border-color:var(--gold);box-shadow:0 0 10px rgba(241,197,83,.55)}
+.node b{display:block;font-size:14px}.node span{display:block;color:#80978b;font-size:11px;margin-top:5px;line-height:1.45}
+.menu{margin-top:10px;display:grid;gap:4px}
+.menu div{padding:10px 11px;border-radius:7px;color:#b9c9c0;font-size:14px;font-weight:850}
+.menu div.active{background:#173b2e;color:var(--gold)}
+.version{margin-top:auto;padding-top:13px;border-top:1px solid #2b5142;font-size:10px;color:#789184;line-height:1.8}
+.version b{color:var(--gold)}
 
-<style id="v22-patch">
-/* V22：更靠近參考圖的右側能力條與生涯節奏 */
-.right{padding-top:26px}
-.sidePanel.attributes{padding:0;background:transparent;border:0}
-.attrCard{
-  background:linear-gradient(180deg,#143b2d,#103326);
-  border:1px solid #315a49;border-radius:11px;padding:11px 12px;margin-bottom:8px
-}
-.attrTop{display:grid;grid-template-columns:74px 1fr 58px;gap:10px;align-items:center}
-.attrName{font-size:13px;font-weight:900;color:#e2e8e1}
-.attrNum{text-align:right;font-weight:900;color:#e2e8e1;font-size:12px}
-.attrNum span{color:#789486;font-weight:700}
-.attrBar{height:8px;background:#061812;border-radius:99px;position:relative;overflow:visible}
-.attrBar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#67d38a,#f3c856)}
-.attrBar:after{
-  content:"";position:absolute;top:-3px;bottom:-3px;left:66%;
-  width:1px;background:#a88b2f;opacity:.9
-}
-.attrHint{
-  grid-column:1/4;text-align:center;margin-top:6px;
-  color:#d2b94f;font-size:9px;line-height:1.4
-}
-.rhythmBox{
-  background:linear-gradient(180deg,#13382b,#0d3024);
-  border:1px solid #315a49;border-radius:12px;padding:12px;margin-bottom:12px
-}
-.rhythmTitle{font-size:10px;letter-spacing:.12em;color:#8fa89a;font-weight:900;margin-bottom:8px}
-.rhythmStep{display:flex;gap:8px;align-items:center;color:#cbd6cf;font-size:11px;margin:5px 0}
-.rhythmStep i{width:8px;height:8px;border-radius:50%;background:#466858;display:inline-block}
-.rhythmStep.on i{background:var(--gold);box-shadow:0 0 8px rgba(242,196,85,.45)}
-.fightForecast{
-  border-top:1px solid rgba(255,255,255,.06);margin-top:9px;padding-top:8px;
-  color:#8ea396;font-size:10px;line-height:1.6
-}
-.card p b{color:var(--gold)}
-</style>
+.center{background:#04140e;border-right:1px solid #264c3d;min-width:0;overflow-y:auto}
+.header{position:sticky;top:0;z-index:5;background:rgba(12,45,33,.97);border-bottom:1px solid #2b5544;padding:12px 24px 11px;backdrop-filter:blur(8px)}
+.profile{display:grid;grid-template-columns:54px 1fr auto;gap:12px;align-items:center}
+.no{height:52px;border:1px solid #907929;border-radius:10px;text-align:center;display:grid;place-items:center;color:var(--gold);font-size:26px;font-weight:1000;background:#1a3726}
+.name b{font-size:24px;display:block}.tags{display:flex;gap:6px;margin-top:5px}.tag{font-size:11px;border:1px solid #567363;border-radius:5px;padding:3px 7px;color:#d3ddd6}.tag.gold{color:var(--gold);border-color:#877229}
+.affil{text-align:right;color:#81998c;font-size:11px}.affil b{display:block;color:var(--gold);font-size:15px;margin-top:3px}
+.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
+.metric{background:#153c2e;border:1px solid #2d5948;border-radius:9px;padding:7px;text-align:center}
+.metric b{display:block;font-size:19px;color:var(--gold)}.metric span{display:block;font-size:10px;color:#839c8f;margin-top:3px}
+.content{padding:18px 24px 38px}
+.date{text-align:center;color:#819a8d;font-size:12px;letter-spacing:.28em;margin:4px 0 15px}
+.card{background:linear-gradient(180deg,#103529,#0d3024);border:1px solid #315b49;border-radius:12px;padding:15px 17px;margin-bottom:14px}
+.card.major{border-color:#8b742b;box-shadow:0 0 0 1px rgba(241,197,83,.08) inset}
+.kicker{font-size:11px;letter-spacing:.11em;color:#9ab2a5;font-weight:900;margin-bottom:8px}.kicker.gold{color:var(--gold)}
+.card h2{margin:0 0 8px;font-size:24px}.card h3{margin:0 0 7px;font-size:19px}.card p{margin:0;color:#d1dbd4;line-height:1.72;font-size:15px}
+.progressBox{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06)}
+.progressText{font-size:13px;color:#9fb2a7}.progressText b{color:var(--gold)}
+.turnDots{display:flex;gap:6px}.turnDots i{display:block;width:12px;height:12px;border-radius:50%;background:#244739;border:1px solid #456b59}.turnDots i.done{background:var(--gold);border-color:var(--gold)}
+.log{padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)}.log:last-child{border-bottom:0}.log small{display:block;color:#66877a;font-size:10px;margin-bottom:4px}.log div{font-size:13px;color:#cbd7d0;line-height:1.55}
+.deltaWrap{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.delta{font-size:12px;font-weight:900;border:1px solid #456858;border-radius:99px;padding:5px 8px;background:#16392c}.delta.good{color:var(--good);border-color:#32744a}.delta.bad{color:var(--bad);border-color:#80433e}.delta.point{color:var(--gold);border-color:#89732c}
 
+.right{background:linear-gradient(180deg,#0b2a20,#082219);padding:16px;overflow-y:auto}
+.rightTitle{font-size:12px;letter-spacing:.1em;color:#8fa89a;font-weight:900;margin:2px 0 9px}
+.rhythm{border:1px solid #315a49;background:#103429;border-radius:11px;padding:11px;margin-bottom:10px}
+.rhythmRow{display:flex;gap:8px;align-items:center;font-size:12px;color:#c6d2cb;margin:5px 0}.rhythmRow i{width:8px;height:8px;border-radius:50%;background:#456858}.rhythmRow.on i{background:var(--gold);box-shadow:0 0 7px rgba(241,197,83,.5)}
+.pointsBox{border:1px solid #806d2b;background:linear-gradient(180deg,#203e2d,#17382a);border-radius:12px;padding:12px;margin-bottom:10px}
+.pointsHead{display:flex;justify-content:space-between;align-items:center}.pointsHead span{font-size:13px;color:#dce2dc;font-weight:900}.pointsHead b{font-size:24px;color:var(--gold)}
+.attr{background:#12382b;border:1px solid #315949;border-radius:9px;padding:9px 10px;margin-bottom:7px}
+.attrTop{display:grid;grid-template-columns:66px 1fr 56px 31px;gap:8px;align-items:center}
+.attrName{font-size:13px;font-weight:900}.attrBar{height:8px;background:#061710;border-radius:99px;overflow:hidden}.attrBar i{display:block;height:100%;background:linear-gradient(90deg,#6dd78c,#efc652);border-radius:99px}
+.attrValue{text-align:right;font-size:12px;font-weight:900}.attrValue span{color:#779084;font-weight:700}
+.plus{width:31px;height:31px;border-radius:7px;border:1px solid #806d2b;background:#284933;color:var(--gold);font-size:18px;font-weight:1000}.plus:disabled{opacity:.3;cursor:not-allowed}
+.cost{text-align:right;margin-top:4px;color:#80998d;font-size:9px}
+.sidePanel{border:1px solid #315a49;background:#103429;border-radius:11px;padding:12px;margin-bottom:10px}
+.choiceTitle{font-size:14px;color:#dfe4de;font-weight:900;margin-bottom:9px}
+.choice{width:100%;text-align:left;border:1px solid #466958;background:#153b2d;color:#eef0e6;border-radius:10px;padding:11px;margin-bottom:8px}.choice:last-child{margin-bottom:0}.choice b{display:block;font-size:16px}.choice span{display:block;font-size:12px;color:#c4d0c9;margin-top:4px}.choice em{display:block;font-size:10px;color:#86a092;font-style:normal;margin-top:5px}.choice:hover{border-color:#8a742b}
+.die{width:58px;height:58px;margin:7px auto 10px;border:2px solid #c3b99f;border-radius:13px;background:#eee7d8;color:#294035;display:grid;place-items:center;font-size:30px;font-weight:1000}
+.resultText{font-size:13px;line-height:1.65;color:#d2ddd6}
+.action{position:sticky;bottom:0;padding-top:8px;background:linear-gradient(180deg,transparent,#082219 24%)}
+.action button{width:100%;border:1px solid #6d6030;background:linear-gradient(180deg,#36583e,#294a34);color:#f0f2e8;border-radius:11px;padding:13px;font-size:17px;font-weight:1000}.action button small{display:block;font-size:11px;color:#b9c7bf;margin-top:4px}
+
+.start{height:100vh;overflow:auto;max-width:1000px;margin:auto;padding:34px 20px}
+.start h1{text-align:center;font-size:52px;margin:0;letter-spacing:-2px}.start h1 em{color:var(--gold);font-style:normal}
+.startIntro{text-align:center;max-width:760px;margin:12px auto 22px;color:#c6d3cb;line-height:1.8;font-size:16px}
+.startGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.panel{border:1px solid #315a49;background:#103429;border-radius:13px;padding:16px}.panel label{display:block;font-size:13px;font-weight:900;margin-bottom:7px}.panel input,.panel select{width:100%;padding:11px;border-radius:8px;border:1px solid #436857;background:#071d15;color:#eef0e5}.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.startBtn{width:100%;margin-top:14px;padding:14px;border-radius:11px;border:1px solid #846f29;background:#2b4d35;color:#f2ce64;font-size:18px;font-weight:1000}
+@media(max-width:1280px){.shell{grid-template-columns:230px minmax(520px,1fr) 390px}.left{padding-left:15px;padding-right:15px}.brand{font-size:38px}.content{padding-left:18px;padding-right:18px}}
+@media(max-width:980px){body{overflow:auto}#app{height:auto}.shell{height:auto;display:block}.left{display:none}.center,.right{overflow:visible}.header{position:static}.startGrid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(3,1fr)}}
+</style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const SAVE_KEY = 'boxing-life-v22-career-rhythm';
-const COUNTRIES = {
-  usa:{name:'美國', base:'Las Vegas', path:'旅美拳擊'},
-  japan:{name:'日本', base:'東京', path:'旅日拳擊'},
-  philippines:{name:'菲律賓', base:'宿霧', path:'旅菲拳擊'}
+const SAVE_KEY="boxing-life-v23-fast-stage-points";
+const COUNTRIES={
+  usa:{name:"美國",base:"Las Vegas",route:"旅美"},
+  japan:{name:"日本",base:"東京",route:"旅日"},
+  philippines:{name:"菲律賓",base:"宿霧",route:"旅菲"}
 };
-const STYLES = {pressure:'壓迫型', outboxer:'技巧型', slugger:'重砲型'};
-const STAT_KEYS = ['power','speed','stamina','defense','chin','technique'];
-const STAT_NAMES = {power:'力量',speed:'速度',stamina:'體能',defense:'防守',chin:'抗擊打',technique:'技術'};
-const EVENT_DECK = [
-  {id:'gym', cat:'事件 · 拳館', title:'球隊讀書會？不，是拳館晨練', desc:'教練突然宣布明天清晨 5 點加開晨練。這次訓練不只會影響體能，也會影響你在拳館的第一印象。', choices:[
-      {label:'全力一搏', sub:'5點準時到，主動多做兩輪', rate:'成功率 35%｜加成／減益幅度大（±3）', mode:'aggressive', good:[['stamina',3],['fame',2],['morale',1]], mid:[['stamina',1]], bad:[['health',-4],['morale',-2]]},
-      {label:'照常執行', sub:'正常完成訓練內容', rate:'成功率 50%｜標準幅度（±2）', mode:'balanced', good:[['stamina',2],['morale',1]], mid:[['stamina',1]], bad:[['morale',-1],['health',-2]]},
-      {label:'保守應對', sub:'先跟上節奏，不逞強', rate:'成功率 70%｜加成／減益較小（±1）', mode:'safe', good:[['health',1],['stamina',1]], mid:[['morale',1]], bad:[['morale',-1]]}
-  ]},
-  {id:'study', cat:'事件 · 生活', title:'留學課業壓力上來了', desc:'期中報告與拳館訓練撞在一起。你要怎麼分配精力？', choices:[
-      {label:'熬夜雙線硬扛', sub:'課業和訓練都不想放', rate:'成功率 35%｜高風險高回報', mode:'aggressive', good:[['technique',2],['fame',1]], mid:[['morale',-1]], bad:[['health',-4],['morale',-3]]},
-      {label:'先顧課業再補訓', sub:'短期少練一些', rate:'成功率 50%｜穩定', mode:'balanced', good:[['morale',1],['technique',1]], mid:[], bad:[['stamina',-1],['morale',-1]]},
-      {label:'請教練幫你調課', sub:'維持節奏不硬碰硬', rate:'成功率 70%｜低波動', mode:'safe', good:[['morale',2]], mid:[['morale',1]], bad:[['fame',-1]]}
-  ]},
-  {id:'spar', cat:'事件 · 拳館', title:'前輩臨時找你對打', desc:'館內資深拳手點名要跟你來幾回合。這是機會，也可能是教訓。', choices:[
-      {label:'主動壓上去', sub:'用氣勢證明自己', rate:'成功率 35%｜可能一戰成名', mode:'aggressive', good:[['power',3],['fame',2]], mid:[['power',1]], bad:[['health',-5],['morale',-2]]},
-      {label:'照教練策略打', sub:'穩穩完成對練', rate:'成功率 50%｜標準型', mode:'balanced', good:[['technique',2],['defense',1]], mid:[['technique',1]], bad:[['health',-3]]},
-      {label:'先以防守為主', sub:'先看懂對手節奏', rate:'成功率 70%｜偏安全', mode:'safe', good:[['defense',2],['chin',1]], mid:[['defense',1]], bad:[['fame',-1]]}
-  ]},
-  {id:'social', cat:'事件 · 人際', title:'網紅主動約合作', desc:'當地小有名氣的網紅想拍你的訓練日常。這可能帶來名氣，也可能打亂節奏。', choices:[
-      {label:'大方合作', sub:'趁機提高曝光', rate:'成功率 35%｜名氣波動大', mode:'aggressive', good:[['fame',4],['income',800]], mid:[['fame',2]], bad:[['morale',-2],['stamina',-1]]},
-      {label:'有條件合作', sub:'只留部分拍攝時間', rate:'成功率 50%｜中庸', mode:'balanced', good:[['fame',2],['income',400]], mid:[['fame',1]], bad:[['morale',-1]]},
-      {label:'先婉拒', sub:'把重心放在訓練', rate:'成功率 70%｜穩定', mode:'safe', good:[['stamina',1],['morale',1]], mid:[], bad:[['fame',-1]]}
-  ]},
-  {id:'diet', cat:'事件 · 生活', title:'飲食控制的抉擇', desc:'體重略微上升，教練提醒你該注意飲食。要狠一點還是慢慢調？', choices:[
-      {label:'立刻嚴格控食', sub:'直接把作息跟飲食鎖死', rate:'成功率 35%｜大幅調整', mode:'aggressive', good:[['stamina',2],['speed',2]], mid:[['stamina',1]], bad:[['morale',-3],['health',-2]]},
-      {label:'正常減量', sub:'逐步修正飲食', rate:'成功率 50%｜平衡型', mode:'balanced', good:[['speed',1],['stamina',1]], mid:[], bad:[['morale',-1]]},
-      {label:'先從宵夜戒起', sub:'保守微調', rate:'成功率 70%｜低幅度', mode:'safe', good:[['morale',1],['speed',1]], mid:[], bad:[['speed',-1]]}
-  ]},
-  {id:'coach', cat:'事件 · 拳館', title:'教練額外留下你', desc:'訓練結束後，教練要你多留半小時。他覺得你有一些細節能再進步。', choices:[
-      {label:'馬上加練', sub:'把握這次一對一機會', rate:'成功率 35%｜高回報', mode:'aggressive', good:[['technique',3],['fame',1]], mid:[['technique',1]], bad:[['health',-3],['morale',-2]]},
-      {label:'按節奏加練', sub:'依教練安排做完', rate:'成功率 50%｜穩定', mode:'balanced', good:[['technique',2]], mid:[['technique',1]], bad:[['morale',-1]]},
-      {label:'請教重點回去練', sub:'維持身體狀態', rate:'成功率 70%｜低風險', mode:'safe', good:[['morale',1],['technique',1]], mid:[], bad:[['fame',-1]]}
-  ]}
+const STYLES={pressure:"壓迫型",boxer:"技巧型",puncher:"重砲型"};
+const SKILLS=["power","speed","stamina","defense","chin","technique"];
+const NAMES={power:"力量",speed:"速度",stamina:"體能",defense:"防守",chin:"抗擊打",technique:"技術"};
+const PHASES=[
+  {id:"hs1",name:"高一・海外適應",age:16,turns:5,story:"海外新人盃",desc:"高一留學第一年，先適應學校、語言與拳館。第 5 回合後進入年度劇情。"},
+  {id:"hs2",name:"高二・校隊主力",age:17,turns:5,story:"青年錦標賽",desc:"你不再只是新人，開始成為拳館與校隊裡被期待的選手。"},
+  {id:"hs3",name:"高三・畢業前夕",age:18,turns:5,story:"畢業大賽",desc:"最後一年，成績、傷病與比賽表現都會影響畢業後的拳擊道路。"},
+  {id:"pro1",name:"職業新人",age:19,turns:5,story:"職業出道戰",desc:"高中畢業後正式轉職業，從 4 回合新人戰開始累積履歷。"},
+  {id:"regional",name:"地區排名",age:21,turns:5,story:"地區排名戰",desc:"開始面對更成熟的職業拳手，排名與酬勞逐步變得重要。"},
+  {id:"contender",name:"世界挑戰者",age:25,turns:5,story:"世界排名戰",desc:"你的名字開始進入國際拳擊網站與挑戰者討論。"},
+  {id:"prime",name:"生涯巔峰",age:29,turns:5,story:"冠軍舞台",desc:"能力與經驗進入巔峰，重大比賽與腰帶機會變多。"},
+  {id:"decline",name:"生涯後段",age:34,turns:5,story:"最後的大賽",desc:"恢復開始變慢，選擇每一場比賽都比以前更重要。"}
 ];
-let state = null;
+
+const EVENTS=[
+ {id:"morning",cat:"事件卡｜晨間訓練",title:"清晨五點的拳館",desc:"高一剛到海外沒多久，教練臨時加開晨練。你要用什麼方式證明自己？",choices:[
+  {label:"全力一搏",sub:"提早到場，多做兩輪",rate:"35% 高回報",mode:"risk",good:[["stamina",2],["morale",1]],mid:[["stamina",1]],bad:[["health",-3],["morale",-2]]},
+  {label:"照表完成",sub:"把每一項都做紮實",rate:"50% 標準",mode:"normal",good:[["stamina",1],["technique",1]],mid:[["stamina",1]],bad:[["morale",-1]]},
+  {label:"保守跟上",sub:"先適應節奏，不逞強",rate:"70% 安全",mode:"safe",good:[["health",1],["stamina",1]],mid:[],bad:[["morale",-1]]}
+ ]},
+ {id:"study",cat:"事件卡｜留學生活",title:"作業、語言與晚間訓練撞在一起",desc:"學校報告和實戰課排在同一週。你第一次真正感受到留學拳擊生活的壓力。",choices:[
+  {label:"兩邊都硬扛",sub:"熬夜也要全部做完",rate:"35% 高風險",mode:"risk",good:[["technique",2],["fame",1]],mid:[["morale",-1]],bad:[["health",-4],["morale",-2]]},
+  {label:"先把課業做完",sub:"少練一晚再補回來",rate:"50% 標準",mode:"normal",good:[["morale",1],["technique",1]],mid:[],bad:[["stamina",-1]]},
+  {label:"跟老師教練協調",sub:"不讓兩邊互相拖累",rate:"70% 安全",mode:"safe",good:[["morale",2]],mid:[["morale",1]],bad:[["fame",-1]]}
+ ]},
+ {id:"spar",cat:"事件卡｜拳館",title:"資深拳手突然點名跟你對打",desc:"教練沒有阻止，只讓你戴上頭盔。這是一次證明自己，也可能是一次被教育。",choices:[
+  {label:"直接壓上去",sub:"用氣勢搶第一印象",rate:"35% 高回報",mode:"risk",good:[["power",2],["fame",2]],mid:[["power",1]],bad:[["health",-4],["morale",-2]]},
+  {label:"照策略打",sub:"穩穩完成每一回合",rate:"50% 標準",mode:"normal",good:[["technique",2],["defense",1]],mid:[["technique",1]],bad:[["health",-2]]},
+  {label:"先看懂對手",sub:"以防守和觀察為主",rate:"70% 安全",mode:"safe",good:[["defense",2]],mid:[["defense",1]],bad:[["fame",-1]]}
+ ]},
+ {id:"language",cat:"事件卡｜海外生活",title:"教練的戰術你其實只聽懂一半",desc:"語言隔閡開始影響訓練。你可以裝懂，也可以想辦法把問題補起來。",choices:[
+  {label:"硬著頭皮照做",sub:"靠觀察和反應撐過去",rate:"35% 高波動",mode:"risk",good:[["technique",2]],mid:[["morale",-1]],bad:[["health",-2],["morale",-2]]},
+  {label:"訓練後再問清楚",sub:"不拖慢團體節奏",rate:"50% 標準",mode:"normal",good:[["technique",1],["morale",1]],mid:[["technique",1]],bad:[["morale",-1]]},
+  {label:"直接請教練重講",sub:"寧可慢一點也不要誤解",rate:"70% 安全",mode:"safe",good:[["morale",1],["defense",1]],mid:[],bad:[["fame",-1]]}
+ ]},
+ {id:"social",cat:"事件卡｜人際",title:"你的訓練片段開始有人轉發",desc:"當地健身帳號轉發你的訓練片段。你第一次感覺到，拳擊可能不只是拳館裡的事情。",choices:[
+  {label:"順勢經營曝光",sub:"主動拍更多內容",rate:"35% 高回報",mode:"risk",good:[["fame",3],["income",500]],mid:[["fame",1]],bad:[["morale",-2],["stamina",-1]]},
+  {label:"偶爾配合",sub:"不影響訓練就拍",rate:"50% 標準",mode:"normal",good:[["fame",2]],mid:[["fame",1]],bad:[["morale",-1]]},
+  {label:"先專心拳擊",sub:"暫時不把時間花在社群",rate:"70% 安全",mode:"safe",good:[["stamina",1],["morale",1]],mid:[],bad:[["fame",-1]]}
+ ]},
+ {id:"diet",cat:"事件卡｜生活",title:"體重開始逼近警戒線",desc:"外食、課業和訓練讓體重慢慢往上。現在不處理，真正比賽週會更辛苦。",choices:[
+  {label:"立刻嚴格控制",sub:"飲食和作息一起鎖死",rate:"35% 高風險",mode:"risk",good:[["speed",2],["stamina",1]],mid:[["speed",1]],bad:[["morale",-3],["health",-2]]},
+  {label:"慢慢減量",sub:"從份量與宵夜先調整",rate:"50% 標準",mode:"normal",good:[["speed",1],["stamina",1]],mid:[],bad:[["morale",-1]]},
+  {label:"先維持體重",sub:"不急著做大幅減重",rate:"70% 安全",mode:"safe",good:[["health",1]],mid:[],bad:[["speed",-1]]}
+ ]},
+ {id:"coach",cat:"事件卡｜教練",title:"所有人走了，教練叫你留下",desc:"教練認為你的基本動作有一個問題。如果現在不改，以後會變成習慣。",choices:[
+  {label:"留下來加練",sub:"多做半小時一對一",rate:"35% 高回報",mode:"risk",good:[["technique",2],["defense",1]],mid:[["technique",1]],bad:[["health",-2],["morale",-1]]},
+  {label:"把重點練完",sub:"按教練安排修正",rate:"50% 標準",mode:"normal",good:[["technique",2]],mid:[["technique",1]],bad:[["morale",-1]]},
+  {label:"記下來明天再練",sub:"保留恢復空間",rate:"70% 安全",mode:"safe",good:[["morale",1],["technique",1]],mid:[],bad:[["fame",-1]]}
+ ]}
+];
+
+let G=null;
 const rnd=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
 const pick=a=>a[rnd(0,a.length-1)];
-const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
-const money=n=>'$'+Math.round(n).toLocaleString('en-US');
-const save=()=>localStorage.setItem(SAVE_KEY,JSON.stringify(state));
-const load=()=>{try{return JSON.parse(localStorage.getItem(SAVE_KEY)||'null')}catch{return null}};
-const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-const ovr=()=>Math.round(STAT_KEYS.reduce((a,k)=>a+state.stats[k],0)/STAT_KEYS.length);
-const currentSeasonLabel=()=>['季初','賽季中','季末'][state.seasonIndex];
-const phaseLabel=()=>['第一年','第二年','第三年'][state.overseasYear-1] || '職業';
-const titlePhase=()=>!state.isPro?`海外業餘 · ${phaseLabel()}`:(state.proStage==='debut'?'職業出道':'職業生涯');
-const remainingEventText=()=>`抽事件卡（剩 ${state.cardsRemaining} 張）`;
-function log(txt){state.logs.unshift({when:`${state.year} · ${currentSeasonLabel()}`,text:txt});state.logs=state.logs.slice(0,18)}
-function createNew(form){const country=form.country;state={version:21,seed:Math.random().toString(36).slice(2,10),name:form.name||'李逍遙',style:form.style,country,base:COUNTRIES[country].base,age:18,year:2026,seasonIndex:0,cardsRemaining:2,overseasYear:1,turn:0,isPro:false,proStage:'none',amateur:{w:0,l:0},record:{w:0,l:0,d:0,ko:0},health:100,morale:70,fame:5,income:0,stats:{power:rnd(45,51),speed:rnd(45,51),stamina:rnd(45,51),defense:rnd(44,50),chin:rnd(45,52),technique:rnd(45,51)},currentEvent:null,result:null,logs:[],scheduledFight:null};log(`18 歲高中畢業，${state.name} 從台灣前往 ${COUNTRIES[country].name}・${state.base}，開始海外拳擊人生。`);save();render();}
-function maybeScheduleFight(){if(state.scheduledFight)return;if(!state.isPro){if((state.turn===2&&state.overseasYear===1)||(state.turn>2&&state.turn%3===0))state.scheduledFight=generateFight(false);if(state.overseasYear>=3&&state.turn>=8&&state.amateur.w+state.amateur.l>=3)state.scheduledFight={type:'turn_pro'};}else{if(state.turn%2===0)state.scheduledFight=generateFight(true);}}
-function generateFight(isPro){const pools={usa:['Marcus Johnson','Tyler Miller','Anthony Lewis','Isaiah Jackson','Jamal Wilson'],japan:['佐藤健太','中村隼人','高橋蓮','山口大地','伊藤優真'],philippines:['Mark Dela Cruz','Rico Santos','Jomari Flores','Paolo Reyes','Carlo Mendoza']};return{type:'fight',pro:isPro,title:isPro?'下一場職業賽':'下一場業餘賽',name:pick(pools[state.country]),ovr:!isPro?rnd(46,54):rnd(52,66),venue:`${COUNTRIES[state.country].name} · ${state.base}`,rounds:isPro?pick([4,6,8]):3,blurb:isPro?'團隊替你安排了下一場正式職業比賽。':'教練幫你排到下一場海外業餘賽。'};}
-function buildScheduledEvent(){if(state.scheduledFight.type==='turn_pro')return{id:'turnpro',cat:'重大事件 · 生涯',major:true,title:'是否轉職業？',desc:'海外業餘生涯打到一個段落了。你可以繼續留在業餘體系，也可以正式轉職業，讓拳擊人生進入下一個階段。',choices:[{label:'正式轉職業',sub:'拿到執照，開始職業賽程',rate:'命運骰 4–6 成功銜接；1–3 先適應一陣子',special:'turnpro_yes'},{label:'再磨一年',sub:'先繼續以業餘賽累積',rate:'穩定發展｜士氣 +1，技術 +1',special:'turnpro_wait'}]};const f=state.scheduledFight;return{id:'fight',cat:'重大事件 · 比賽',major:true,title:f.title,desc:`${f.blurb} 對手是 ${f.name}（OVR ${f.ovr}），地點在 ${f.venue}，採 ${f.rounds} 回合。`,choices:[{label:'接下比賽',sub:'按照劇情節奏進入備戰與出賽',rate:'擲出比賽命運骰，決定勝敗與收穫',special:'fight_accept'},{label:'這次先不打',sub:'讓人生繼續前進，之後還會再有比賽',rate:'穩定｜士氣 -1，但不會卡關',special:'fight_decline'}]};}
-function drawEvent(){if(state.cardsRemaining<=0||state.currentEvent||state.result)return;state.currentEvent=state.scheduledFight?buildScheduledEvent():JSON.parse(JSON.stringify(pick(EVENT_DECK)));save();render();}
-function applyDelta(target,amt){if(target in state.stats){state.stats[target]=clamp(state.stats[target]+amt,30,99);return `${STAT_NAMES[target]} ${amt>0?'+':''}${amt}`;}if(target==='health'){state.health=clamp(state.health+amt,0,100);return `健康 ${amt>0?'+':''}${amt}`;}if(target==='morale'){state.morale=clamp(state.morale+amt,0,100);return `士氣 ${amt>0?'+':''}${amt}`;}if(target==='fame'){state.fame=clamp(state.fame+amt,0,999);return `名氣 ${amt>0?'+':''}${amt}`;}if(target==='income'){state.income=Math.max(0,state.income+amt);return `收入 +${money(amt)}`;}return '';}
-function resolveStandardEvent(ev,choice,roll){let tier='mid';if(choice.mode==='aggressive'||choice.mode==='balanced')tier=roll>=5?'good':(roll<=2?'bad':'mid');if(choice.mode==='safe')tier=roll>=4?'good':(roll===1?'bad':'mid');const effects=tier==='good'?(choice.good||[]):tier==='bad'?(choice.bad||[]):(choice.mid||[]);const deltas=effects.map(([k,v])=>applyDelta(k,v));const tierText=tier==='good'?'結果很不錯，這次選擇幫你拿到正面收穫。':tier==='bad'?'結果不太理想，這次選擇付出了代價。':'結果平穩，沒有爆發，但也沒有太傷。';state.result={title:ev.title,roll,text:`你選擇了「${choice.label}」。${tierText}`,deltas,tier};log(`事件《${ev.title}》：選擇「${choice.label}」，擲出 ${roll}。`);}
-function resolveSpecial(type,ev,roll){let text='',deltas=[],tier='mid';if(type==='fight_decline'){deltas=[applyDelta('morale',-1)];text='你暫時沒有接下這場比賽。生涯會繼續往前走，之後還會再安排新的機會。';state.scheduledFight=null;}else if(type==='turnpro_wait'){deltas=[applyDelta('morale',1),applyDelta('technique',1)];text='你決定先不急著轉職業，再用一年時間磨技術與成熟度。';state.scheduledFight=null;}else if(type==='turnpro_yes'){if(roll>=4){tier='good';state.isPro=true;state.proStage='debut';deltas=[applyDelta('fame',4),applyDelta('morale',4)];text='你正式轉職業，拳擊人生進入新階段。接下來的劇情節奏將改為職業賽為主。';}else{deltas=[applyDelta('morale',-1)];text='你本來想立即轉職業，但團隊認為還需要一些時間適應與準備。';}state.scheduledFight=null;}else if(type==='fight_accept'){const f=state.scheduledFight,my=ovr()+rnd(-3,3),opp=f.ovr+rnd(-3,3);if(my>=opp+3){tier='good';if(f.pro){state.record.w++;if(rnd(1,100)<=35)state.record.ko++;deltas.push(applyDelta('income',rnd(1800,5200)));}else state.amateur.w++;deltas.push(applyDelta('fame',3),applyDelta('morale',4),applyDelta('health',-3));text=`你接下了對 ${f.name} 的比賽，最後順利取勝。這一場讓你在 ${COUNTRIES[state.country].name} 的拳擊圈開始被記住。`;}else if(my>=opp-2){if(f.pro){state.record.l++;deltas.push(applyDelta('income',rnd(1200,3200)));}else state.amateur.l++;deltas.push(applyDelta('morale',-1),applyDelta('health',-5),applyDelta('technique',1));text=`你接下了對 ${f.name} 的比賽，雖然結果不算漂亮，但你撐完整場，也學到了實戰經驗。`;}else{tier='bad';if(f.pro){state.record.l++;deltas.push(applyDelta('income',rnd(1000,2400)));}else state.amateur.l++;deltas.push(applyDelta('morale',-3),applyDelta('health',-8),applyDelta('chin',1));text=`你接下了對 ${f.name} 的比賽，但今晚不是你的夜晚。你吃了敗仗，不過這不會阻止你的人生繼續前進。`;}state.scheduledFight=null;}state.result={title:ev.title,roll,text,deltas,tier};log(`事件《${ev.title}》完成，擲出 ${roll}。`);}
-function chooseResponse(index){const ev=state.currentEvent,choice=ev?.choices[index];if(!ev||!choice||state.result)return;const roll=rnd(1,6);if(choice.special)resolveSpecial(choice.special,ev,roll);else resolveStandardEvent(ev,choice,roll);state.cardsRemaining=Math.max(0,state.cardsRemaining-1);state.currentEvent=null;save();render();}
-function nextStage(){if(state.cardsRemaining>0||state.currentEvent||!state.result)return;state.result=null;state.turn++;if(state.seasonIndex<2)state.seasonIndex++;else{state.seasonIndex=0;state.year++;state.age++;if(!state.isPro)state.overseasYear=clamp(state.overseasYear+1,1,3);}state.cardsRemaining=2;maybeScheduleFight();log(`時間推進到 ${state.year} 年 ${currentSeasonLabel()}。`);save();render();}
-function resetGame(){if(confirm('確定要重開人生嗎？')){localStorage.removeItem(SAVE_KEY);state=null;render();}}
-function startScreen(){return `<div class="startWrap"><div class="startHero"><h1>Boxing🥊Life</h1><p>這版改成更接近你給的介面與玩法：<b>左邊時間線＋中間事件卡＋右側選項區</b>。開局是 <b>18 歲台灣高中畢業生</b>，選擇旅日／旅美／旅菲其中一條路，事件以文字呈現，先不放任何圖片。</p></div><div class="grid2"><div class="panel"><label>拳手名字</label><input id="name" value="李逍遙" maxlength="14"><div class="row" style="margin-top:14px"><div><label>拳風</label><select id="style"><option value="pressure">壓迫型</option><option value="outboxer">技巧型</option><option value="slugger">重砲型</option></select></div><div><label>起點國家</label><select id="country"><option value="usa">🇺🇸 美國</option><option value="japan">🇯🇵 日本</option><option value="philippines">🇵🇭 菲律賓</option></select></div></div></div><div class="panel"><label>玩法說明</label><div class="muted" style="line-height:1.9;font-size:14px">• 每個階段有 <b>2 張事件卡</b><br>• 先抽卡，再在右側做選擇<br>• 做完選擇後系統會擲出命運骰（1–6）<br>• 根據風險不同，成功率與加減幅度也不同<br>• 沒有勝場門檻，不會因為輸了就卡關<br>• 比賽會按照劇情節奏出現，不再固定掛在右下角</div></div></div><button class="startBtn" onclick="createNew({name:document.getElementById('name').value.trim(),style:document.getElementById('style').value,country:document.getElementById('country').value})">開始拳擊人生</button></div>`}
-function render(){const app=document.getElementById('app');if(!state){state=load();if(!state){app.innerHTML=startScreen();return;}}const country=COUNTRIES[state.country],mode=state.currentEvent?'event':state.result?'result':'idle',event=state.currentEvent,result=state.result;const sidebarAction=mode==='idle'?`<button class="drawBtn" onclick="drawEvent()">${remainingEventText()}<small>照圖一玩法：先抽事件卡，再到右側做選擇</small></button>`:mode==='result'&&state.cardsRemaining===0?`<button class="nextBtn" onclick="nextStage()">進入下一階段<small>${state.year} · ${currentSeasonLabel()} 已完成，前往下一個節奏</small></button>`:mode==='result'?`<button class="drawBtn" onclick="state.result=null;save();render()">繼續抽下一張事件卡<small>本階段還剩 ${state.cardsRemaining} 張事件卡</small></button>`:`<div class="sidePanel"><h4>事件選擇中</h4><div class="muted" style="font-size:14px;line-height:1.8">請從下方選擇你要怎麼面對這次事件。系統會在你選擇後擲出命運骰。</div></div>`;const eventChoices=mode==='event'?`<div class="sidePanel"><div class="choiceTitle">${event.cat} — 你要怎麼應對？</div>${event.choices.map((c,i)=>`<button class="choiceBtn" onclick="chooseResponse(${i})"><b>${c.label}</b><span>${c.sub}</span><em>${c.rate}</em></button>`).join('')}</div>`:'';const resultPanel=mode==='result'?`<div class="sidePanel"><h4>RESULT</h4><div class="resultBox"><div class="die">${result.roll}</div><div class="resultText">${result.text}</div><div class="deltaList">${result.deltas.map(t=>`<span class="delta ${t.includes('+')?'good':t.includes('-')?'bad':''}">${esc(t)}</span>`).join('')}</div></div></div>`:'';const centerCard=mode==='event'?`<div class="card ${event.major?'major':''}"><div class="kicker ${event.major?'gold':''}">■ ${event.cat}</div><h3>${event.title}</h3><p>${event.desc}</p></div>`:mode==='result'?`<div class="card ${result.tier==='good'?'major':''}"><div class="kicker ${result.tier==='good'?'gold':''}">■ 事件結果</div><h3>${result.title}</h3><p>${result.text}</p><div class="deltaList">${result.deltas.map(t=>`<span class="delta ${t.includes('+')?'good':t.includes('-')?'bad':''}">${esc(t)}</span>`).join('')}</div></div>`:`<div class="card"><div class="kicker">■ 季初特訓</div><h3>目前階段：${titlePhase()}</h3><p>你現在人在 <b style="color:var(--gold)">${country.name}・${state.base}</b>。這個階段還有 <b style="color:var(--gold)">${state.cardsRemaining}</b> 張事件卡可以抽。抽卡後，到右側做出選擇，系統會擲出命運骰，依照風險決定成長或代價。</p></div>`;app.innerHTML=`<div class="shell"><aside class="left"><div class="brand">Boxing<span class="ball">🥊</span>Life</div><div class="sub">拳 擊 人 生 模 擬 器</div><div class="side-group"><div class="side-school">台灣高中 · 拳擊部<small>${country.path}</small></div><div class="timeline"><div class="node active"><strong>${state.year}　${state.age}歲</strong><span>高中畢業 · 海外出發</span></div><div class="node ${state.turn>0?'active':''}"><strong>${country.name} · ${state.base}</strong><span>${titlePhase()}</span></div></div></div><div class="menu"><div class="active">▣ 準事件</div><div>◆ 訓練</div><div>♜ 比賽</div><div>▦ 行程</div><div>★ 技能</div><div>▥ 數據</div><div>◉ 成就</div><div onclick="save()">▣ 儲存</div><div onclick="resetGame()">⚙ 重開人生</div></div><div class="seed">SEED <b>${state.seed}</b><br>v2.2.0<br>無圖片版 · 事件卡玩法</div></aside><main class="center"><div class="topbar"><div class="topline"><div class="noBox"><small>NO.</small><b>1</b></div><div class="heroName"><b>${esc(state.name)}</b><div class="tags"><span class="tag">拳手</span><span class="tag gold">${STYLES[state.style]}</span></div></div><div class="schoolRight">所屬地區<b>${country.name}　${state.base}</b></div><button class="menuBtn">☰</button></div><div class="metrics"><div class="metric"><b>${state.age}</b><span>年齡</span></div><div class="metric"><b>${state.year}</b><span>年份</span></div><div class="metric"><b>${ovr()}</b><span>綜合</span></div><div class="metric"><b>${Math.floor(state.income/1000)}</b><span>生涯薪（萬）</span></div><div class="metric detail">詳情<br>⌄</div></div><div class="seasonRow"><span class="seasonDot ${state.seasonIndex===0?'on':''}"></span>季初　<span class="seasonDot ${state.seasonIndex===1?'on':''}"></span>賽季中　<span class="seasonDot ${state.seasonIndex===2?'on':''}"></span>季末</div></div><div class="mainScroll"><div class="card"><div class="kicker">■ 拳手誕生</div><p>18 歲高中畢業，<b style="color:var(--gold)">${esc(state.name)}</b> 從台灣前往 <b style="color:var(--gold)">${country.name}</b>。接下來每個階段你都會抽出事件卡，從右側選擇應對方式，然後由命運骰決定這段拳擊人生怎麼前進。</p></div><div class="dateLine">${state.year} 年 ・ ${state.age} 歲 ・ ${titlePhase()} ・ ${currentSeasonLabel()}</div>${centerCard}<div class="card"><div class="kicker">■ 最近紀錄</div>${state.logs.slice(0,8).map(l=>`<div class="logItem"><div class="when">${l.when}</div><div class="text">${esc(l.text)}</div></div>`).join('')}</div></div></main><aside class="right"><div class="sidePanel"><h4>CAREER STATUS</h4><div class="statusGrid"><div class="miniStat"><b>${state.health}</b><span>健康</span></div><div class="miniStat"><b>${state.morale}</b><span>士氣</span></div><div class="miniStat"><b>${state.fame}</b><span>名氣</span></div><div class="miniStat"><b>${state.isPro?`${state.record.w}-${state.record.l}`:`${state.amateur.w}-${state.amateur.l}`}</b><span>${state.isPro?'職業戰績':'業餘戰績'}</span></div></div></div><div class="sidePanel"><h4>ATTRIBUTES</h4>${STAT_KEYS.map(k=>`<div class="statRow"><div class="statHead"><span>${STAT_NAMES[k]}</span><b>${state.stats[k]}</b></div><div class="bar"><i style="width:${state.stats[k]}%"></i></div></div>`).join('')}</div>${eventChoices}${resultPanel}<div class="actionBox">${sidebarAction}</div></aside></div>`;}
-
-const V22_EVENT_TEXT = {
-  gym:{
-    title:"清晨五點，教練把燈打開了",
-    desc:"你才剛適應海外生活，教練就宣布明天清晨加練。沒有人強迫你留下，但拳館裡每個人都在看：這個從台灣來的高中生，究竟能撐多久？"
-  },
-  study:{
-    title:"報告期限撞上拳館實戰週",
-    desc:"學校的期中報告和拳館的高強度實戰撞在同一週。你第一次真正感受到：留學和拳擊不是兩條分開的路，而是在搶同一份時間。"
-  },
-  spar:{
-    title:"館內前輩點名要跟你打",
-    desc:"一名經驗比你多很多的拳手突然叫你戴上頭盔。教練沒有阻止，只說了一句：『上去看看你現在在哪裡。』"
-  },
-  social:{
-    title:"你的訓練片段開始有人轉發",
-    desc:"一段你打靶的短影片被當地健身帳號轉發。原本沒有人認識你，現在卻開始有人私訊、標記，甚至問你下一場什麼時候打。"
-  },
-  diet:{
-    title:"體重開始逼近警戒線",
-    desc:"最近課業、訓練和外食讓體重慢慢往上。教練提醒你：現在還不是正式比賽週，但如果一直放著不管，真正要打時會付出更多代價。"
-  },
-  coach:{
-    title:"所有人走了，教練叫你留下",
-    desc:"晚間訓練結束後，拳館的人一個個離開。教練卻把你叫回鏡子前，說你的動作有一個問題，如果現在不改，以後會變成習慣。"
-  }
-};
-
-for(const e of EVENT_DECK){
-  if(V22_EVENT_TEXT[e.id]){
-    e.title = V22_EVENT_TEXT[e.id].title;
-    e.desc = V22_EVENT_TEXT[e.id].desc;
-  }
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const esc=s=>String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const money=n=>"$"+Math.round(n).toLocaleString();
+function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(G))}
+function load(){try{return JSON.parse(localStorage.getItem(SAVE_KEY)||"null")}catch{return null}}
+function phase(){return PHASES[Math.min(G.phaseIndex,PHASES.length-1)]}
+function ovr(){return Math.round(SKILLS.reduce((s,k)=>s+G.stats[k],0)/SKILLS.length)}
+function statCost(k){const v=G.stats[k];return v>=80?3:v>=70?2:1}
+function log(t){G.logs.unshift({when:`${G.year}・${phase().name}・回合 ${G.turnInPhase+1}`,text:t});G.logs=G.logs.slice(0,16)}
+function apply(k,v){
+  if(k in G.stats){G.stats[k]=clamp(G.stats[k]+v,30,95);return `${NAMES[k]} ${v>0?"+":""}${v}`}
+  if(k==="health"){G.health=clamp(G.health+v,0,100);return `健康 ${v>0?"+":""}${v}`}
+  if(k==="morale"){G.morale=clamp(G.morale+v,0,100);return `士氣 ${v>0?"+":""}${v}`}
+  if(k==="fame"){G.fame=Math.max(0,G.fame+v);return `名氣 ${v>0?"+":""}${v}`}
+  if(k==="income"){G.income=Math.max(0,G.income+v);return `收入 +${money(v)}`}
+  return "";
 }
-
-function v22FightScheduleText(){
-  if(state.scheduledFight){
-    if(state.scheduledFight.type==="turn_pro") return "下一個重大節點：轉職業選擇";
-    return `下一場已排定：${state.scheduledFight.name}`;
-  }
-  if(!state.isPro){
-    if(state.overseasYear===1){
-      if(state.turn<2) return `第一場業餘賽：約再 ${2-state.turn} 個階段`;
-      return "第一年：大約每 3 個階段安排一場業餘賽";
-    }
-    if(state.overseasYear===2) return "第二年：大約每 2～3 個階段安排一場業餘賽";
-    return "第三年：持續累積業餘賽，之後自然進入轉職業選擇";
-  }
-  return "職業階段：大約每 2 個階段安排一場比賽";
+function spendPoint(k){
+  const c=statCost(k);
+  if(G.skillPoints<c || G.stats[k]>=95)return;
+  G.skillPoints-=c; G.stats[k]++; log(`分配能力點：${NAMES[k]} +1（花費 ${c} 點）。`); save();render();
 }
-
-function v22Rhythm(){
-  const idx = state.currentEvent ? 1 : state.result ? 2 : 0;
-  return `<div class="rhythmBox">
-    <div class="rhythmTitle">CAREER RHYTHM</div>
-    <div class="rhythmStep ${idx===0?'on':''}"><i></i>① 抽本階段事件卡</div>
-    <div class="rhythmStep ${idx===1?'on':''}"><i></i>② 選擇你的應對方式</div>
-    <div class="rhythmStep ${idx===2?'on':''}"><i></i>③ 命運骰結算結果</div>
-    <div class="rhythmStep ${state.cardsRemaining===0?'on':''}"><i></i>④ 事件卡用完，時間前進</div>
-    <div class="fightForecast">${v22FightScheduleText()}</div>
+function createGame(){
+  const country=document.getElementById("country").value;
+  G={version:23,name:document.getElementById("name").value.trim()||"李逍遙",style:document.getElementById("style").value,country,base:COUNTRIES[country].base,
+    phaseIndex:0,turnInPhase:0,age:16,year:2026,health:100,morale:72,fame:3,income:0,skillPoints:3,
+    stats:{power:rnd(43,49),speed:rnd(43,49),stamina:rnd(43,49),defense:rnd(42,48),chin:rnd(44,50),technique:rnd(43,49)},
+    amateur:{w:0,l:0},pro:{w:0,l:0,d:0,ko:0},current:null,result:null,stageStory:false,logs:[],lastEvent:null};
+  log(`高一開始留學，${G.name} 從台灣前往 ${COUNTRIES[country].name}・${G.base}，正式加入當地拳館。`);
+  save();render();
+}
+function drawEvent(){
+  if(G.current||G.result)return;
+  if(G.stageStory){G.current=buildStageStory();save();render();return;}
+  let pool=EVENTS.filter(e=>e.id!==G.lastEvent);G.current=JSON.parse(JSON.stringify(pick(pool)));G.lastEvent=G.current.id;save();render();
+}
+function buildStageStory(){
+  const p=phase();
+  if(p.id==="hs1")return storyFight("年度劇情｜海外新人盃","第一個留學學年走到尾聲。教練替你報名海外新人盃。這場比賽不決定你能不能升到高二，但會決定你帶著多少信心進下一年。",false);
+  if(p.id==="hs2")return storyFight("年度劇情｜青年錦標賽","高二的你已經不是拳館新人。這次青年錦標賽，對手的經驗和壓力都比去年更高。",false);
+  if(p.id==="hs3")return {story:true,cat:"年度劇情｜畢業選擇",title:"高中三年結束，下一步是職業拳擊",desc:"三年海外高中生活結束。無論你的業餘戰績漂亮或普通，人生都會進入下一階段。你只需要決定用什麼方式踏入職業拳壇。",choices:[
+    {label:"直接轉職業",sub:"趁年輕直接進 4 回合職業新人戰",rate:"命運骰影響初期名氣與能力點",special:"turnpro"},
+    {label:"先找經理再轉職業",sub:"多花時間談團隊與合約，但仍會進入職業階段",rate:"命運骰影響收入與能力點",special:"manager"}
+  ]};
+  return storyFight(`年度劇情｜${p.story}`,`${p.name}走到一個段落。這一場不是勝場門檻，而是這個階段的代表性大賽。無論輸贏，生涯都會往下一階段前進。`,true);
+}
+function storyFight(cat,desc,pro){
+  return {story:true,cat,title:phase().story,desc,choices:[
+    {label:"全力搶勝",sub:"高風險、高回報的打法",rate:"35%｜勝利時能力點較多",mode:"risk",fight:true,pro},
+    {label:"照策略打",sub:"依照教練計畫穩定出賽",rate:"50%｜標準型",mode:"normal",fight:true,pro},
+    {label:"保守累積經驗",sub:"降低失誤，確保打完整場",rate:"70%｜低波動",mode:"safe",fight:true,pro}
+  ]};
+}
+function choose(i){
+  const ev=G.current,ch=ev?.choices[i];if(!ev||!ch)return;
+  const roll=rnd(1,6);
+  if(ch.special){resolveSpecial(ev,ch,roll);}
+  else if(ch.fight){resolveFight(ev,ch,roll);}
+  else resolveEvent(ev,ch,roll);
+  G.current=null;save();render();
+}
+function tierFor(mode,roll){
+  if(mode==="risk")return roll>=5?"good":roll<=2?"bad":"mid";
+  if(mode==="safe")return roll>=4?"good":roll===1?"bad":"mid";
+  return roll>=5?"good":roll<=2?"bad":"mid";
+}
+function resolveEvent(ev,ch,roll){
+  const tier=tierFor(ch.mode,roll),effects=tier==="good"?(ch.good||[]):tier==="bad"?(ch.bad||[]):ch.mid||[],deltas=effects.map(([k,v])=>apply(k,v));
+  let pts=0;if(tier==="good")pts=roll===6?2:1;G.skillPoints+=pts;if(pts)deltas.push(`能力點 +${pts}`);
+  G.turnInPhase++;
+  if(G.turnInPhase>=phase().turns)G.stageStory=true;
+  const text=tier==="good"?"這次處理得很好，除了事件本身的收穫，你也累積了可以自由分配的能力點。":tier==="bad"?"結果不太理想，但不會阻止劇情往前，只是留下了代價。":"結果平穩，沒有爆發，但也沒有嚴重損失。";
+  G.result={title:ev.title,roll,tier,text,deltas,stageDone:false};
+  log(`事件《${ev.title}》：選擇「${ch.label}」，擲出 ${roll}。`);
+}
+function resolveFight(ev,ch,roll){
+  const tier=tierFor(ch.mode,roll),my=ovr()+roll+rnd(-2,2),opp=ovr()+rnd(-4,5);
+  const win=my>=opp;
+  const p=phase(); let deltas=[];
+  if(p.id.startsWith("hs")){win?G.amateur.w++:G.amateur.l++;}
+  else{win?G.pro.w++:G.pro.l++;if(win&&roll===6)G.pro.ko++;}
+  if(win){deltas.push(apply("fame",3),apply("morale",3));}else{deltas.push(apply("morale",-2),apply("health",-4));}
+  const pts=win?(roll===6?6:4):(roll>=4?3:2);G.skillPoints+=pts;deltas.push(`能力點 +${pts}`);
+  if(!p.id.startsWith("hs"))deltas.push(apply("income",win?rnd(3000,8000):rnd(1500,4000)));
+  G.result={title:ev.title,roll,tier:win?"good":"bad",text:win?`你贏下 ${p.story}。這場勝利讓你帶著更高的評價進入下一階段。`:`你輸掉 ${p.story}，但這不是門檻。劇情照樣往前，你得到的是實戰經驗與下一階段的能力點。`,deltas,stageDone:true};
+  log(`${p.story}：${win?"勝利":"落敗"}，獲得 ${pts} 能力點。`);
+}
+function resolveSpecial(ev,ch,roll){
+  let deltas=[],text="";
+  if(ch.special==="turnpro"){G.skillPoints+=roll>=5?5:3;deltas.push(`能力點 +${roll>=5?5:3}`,apply("fame",roll>=5?3:1));text="你正式成為職業拳手。從下一階段開始，劇情會以職業新人賽為主。";}
+  else{G.skillPoints+=4;deltas.push("能力點 +4",apply("income",roll>=4?2500:800),apply("morale",1));text="你先把經理與團隊談好，再進入職業拳擊。時間沒有被拖住，只是起跑方式不同。";}
+  G.result={title:ev.title,roll,tier:"good",text,deltas,stageDone:true};log(`畢業選擇完成：${ch.label}。`);
+}
+function continueAfterResult(){
+  if(!G.result)return;
+  const stageDone=G.result.stageDone;
+  G.result=null;
+  if(stageDone){
+    G.stageStory=false;G.turnInPhase=0;
+    if(G.phaseIndex<PHASES.length-1)G.phaseIndex++;
+    const p=phase();G.age=p.age;G.year++;
+    log(`進入下一階段：${p.name}。`);
+  }
+  save();render();
+}
+function resetGame(){if(confirm("確定重開人生嗎？")){localStorage.removeItem(SAVE_KEY);G=null;render();}}
+function startScreen(){
+  return `<div class="start"><h1>Boxing <em>Life</em></h1><div class="startIntro">高一就開始海外留學拳擊生涯。每個階段大約 <b style="color:var(--gold)">5 回合</b>，第 5 回合後一定觸發年度劇情／大賽，完成後直接進下一階段。事件與年度大賽都能累積 <b style="color:var(--gold)">能力點</b>，再由你自己分配。</div>
+  <div class="startGrid"><div class="panel"><label>拳手名字</label><input id="name" value="李逍遙"><div class="row2" style="margin-top:12px"><div><label>拳風</label><select id="style"><option value="pressure">壓迫型</option><option value="boxer">技巧型</option><option value="puncher">重砲型</option></select></div><div><label>高一留學地</label><select id="country"><option value="usa">🇺🇸 美國</option><option value="japan">🇯🇵 日本</option><option value="philippines">🇵🇭 菲律賓</option></select></div></div></div>
+  <div class="panel"><label>本版節奏</label><div style="color:#c6d4cc;line-height:1.9;font-size:15px">• 高一，16 歲直接出國<br>• 每回合 1 個事件<br>• 約第 5 回合必定進年度劇情<br>• 年度劇情結束直接進下一階段<br>• 不設勝場門檻<br>• 一般好結果可拿 1～2 點<br>• 年度大賽約拿 2～6 點<br>• 能力點可自由加到六項能力</div></div></div>
+  <button class="startBtn" onclick="createGame()">高一，出發 ▶</button></div>`;
+}
+function rightAttrs(){
+  return `<div class="pointsBox"><div class="pointsHead"><span>可分配能力點</span><b>${G.skillPoints}</b></div></div>
+  ${SKILLS.map(k=>{const cost=statCost(k);return `<div class="attr"><div class="attrTop"><div class="attrName">${NAMES[k]}</div><div class="attrBar"><i style="width:${G.stats[k]}%"></i></div><div class="attrValue">${G.stats[k]}<span>/95</span></div><button class="plus" ${G.skillPoints<cost||G.stats[k]>=95?"disabled":""} onclick="spendPoint('${k}')">＋</button></div><div class="cost">${G.stats[k]>=80?"高能力區":G.stats[k]>=70?"進階區":"成長區"}｜升 1 點花費 ${cost} 能力點</div></div>`}).join("")}`;
+}
+function render(){
+  const app=document.getElementById("app");
+  if(!G){G=load();if(!G){app.innerHTML=startScreen();return;}}
+  const p=phase(),country=COUNTRIES[G.country];
+  const mode=G.current?"event":G.result?"result":"idle";
+  const choices=mode==="event"?`<div class="sidePanel"><div class="choiceTitle">${G.current.cat}｜你要怎麼做？</div>${G.current.choices.map((c,i)=>`<button class="choice" onclick="choose(${i})"><b>${c.label}</b><span>${c.sub}</span><em>${c.rate}</em></button>`).join("")}</div>`:"";
+  const res=mode==="result"?`<div class="sidePanel"><div class="rightTitle">RESULT</div><div class="die">${G.result.roll}</div><div class="resultText">${G.result.text}</div><div class="deltaWrap">${G.result.deltas.filter(Boolean).map(x=>`<span class="delta ${x.includes("能力點")?"point":x.includes("+")?"good":x.includes("-")?"bad":""}">${esc(x)}</span>`).join("")}</div></div>`:"";
+  const action=mode==="idle"?`<button onclick="drawEvent()">${G.stageStory?`進入年度劇情：${p.story}`:`開始第 ${G.turnInPhase+1} / ${p.turns} 回合`}<small>${G.stageStory?"完成後直接進下一階段":"每回合 1 個事件，5 回合左右推進劇情"}</small></button>`:mode==="result"?`<button onclick="continueAfterResult()">${G.result.stageDone?"進入下一階段":"繼續"}<small>${G.result.stageDone?`下一站：${PHASES[Math.min(G.phaseIndex+1,PHASES.length-1)].name}`:"回到下一個事件回合"}</small></button>`:"";
+  const center=mode==="event"?`<div class="card ${G.current.story?"major":""}"><div class="kicker ${G.current.story?"gold":""}">■ ${G.current.cat}</div><h2>${G.current.title}</h2><p>${G.current.desc}</p></div>`:
+    mode==="result"?`<div class="card ${G.result.stageDone?"major":""}"><div class="kicker ${G.result.stageDone?"gold":""}">■ ${G.result.stageDone?"年度劇情結果":"事件結果"}</div><h2>${G.result.title}</h2><p>${G.result.text}</p><div class="deltaWrap">${G.result.deltas.filter(Boolean).map(x=>`<span class="delta ${x.includes("能力點")?"point":x.includes("+")?"good":x.includes("-")?"bad":""}">${esc(x)}</span>`).join("")}</div></div>`:
+    `<div class="card"><div class="kicker">■ ${p.name}</div><h2>${G.stageStory?`5 回合完成：${p.story}`:`第 ${G.turnInPhase+1} 回合準備開始`}</h2><p>${G.stageStory?`這個階段的日常回合已經完成。現在進入年度劇情／大賽，無論輸贏都會進下一階段。`:p.desc}</p><div class="progressBox"><div class="progressText">本階段進度 <b>${G.turnInPhase} / ${p.turns}</b></div><div class="turnDots">${Array.from({length:p.turns},(_,i)=>`<i class="${i<G.turnInPhase?"done":""}"></i>`).join("")}</div></div></div>`;
+  app.innerHTML=`<div class="shell">
+   <aside class="left"><div class="brand">Boxing <em>Life</em></div><div class="brandSub">拳 擊 人 生 模 擬 器</div><div class="school">台灣高中・拳擊部<small>${country.route}｜${country.name}・${G.base}</small></div><div class="timeline"><div class="node on"><b>2026　16歲・高一</b><span>高中一開始就海外留學</span></div><div class="node on"><b>${p.name}</b><span>約 5 回合後觸發 ${p.story}</span></div></div><div class="menu"><div class="active">▣ 生涯事件</div><div>◆ 能力點</div><div>♜ 劇情比賽</div><div>▦ 年度進度</div><div>★ 技能</div><div>▥ 數據</div><div>◉ 成就</div><div onclick="save()">▣ 儲存</div><div onclick="resetGame()">⚙ 重開人生</div></div><div class="version">SEED：LOCAL<br><b>v2.3.0</b><br>大字體・全視窗・5回合推進</div></aside>
+   <main class="center"><header class="header"><div class="profile"><div class="no">1</div><div class="name"><b>${esc(G.name)}</b><div class="tags"><span class="tag">拳手</span><span class="tag gold">${STYLES[G.style]}</span></div></div><div class="affil">所屬地區<b>${country.name}・${G.base}</b></div></div><div class="metrics"><div class="metric"><b>${G.age}</b><span>年齡</span></div><div class="metric"><b>${G.year}</b><span>年份</span></div><div class="metric"><b>${ovr()}</b><span>綜合</span></div><div class="metric"><b>${G.skillPoints}</b><span>能力點</span></div><div class="metric"><b>${G.pro.w}-${G.pro.l}</b><span>職業戰績</span></div></div></header><div class="content"><div class="card"><div class="kicker">■ 生涯主線</div><p><b>高一就出國。</b> 每個階段固定約 <b>5 回合</b>，第 5 回合後一定出現年度劇情／大賽。比賽輸了也不會卡關，劇情照樣進下一階段。</p></div><div class="date">${G.year} 年 ・ ${G.age} 歲 ・ ${p.name}</div>${center}<div class="card"><div class="kicker">■ 最近紀錄</div>${G.logs.slice(0,7).map(l=>`<div class="log"><small>${l.when}</small><div>${esc(l.text)}</div></div>`).join("")}</div></div></main>
+   <aside class="right"><div class="rhythm"><div class="rightTitle">STORY RHYTHM</div><div class="rhythmRow ${!G.stageStory&&!G.current&&!G.result?"on":""}"><i></i>日常事件回合 ${G.turnInPhase} / ${p.turns}</div><div class="rhythmRow ${G.current?"on":""}"><i></i>選擇事件應對</div><div class="rhythmRow ${G.result?"on":""}"><i></i>命運骰結算</div><div class="rhythmRow ${G.stageStory?"on":""}"><i></i>第 5 回合後：${p.story}</div></div>${rightAttrs()}${choices}${res}<div class="action">${action}</div></aside>
   </div>`;
 }
-
-function v22Attributes(){
-  return `<div class="sidePanel attributes">
-    ${STAT_KEYS.map(k=>{
-      const v=state.stats[k];
-      const ceiling=Math.min(99,Math.max(v+18,78));
-      return `<div class="attrCard">
-        <div class="attrTop">
-          <div class="attrName">${STAT_NAMES[k]}</div>
-          <div class="attrBar"><i style="width:${Math.min(100,(v/ceiling)*100)}%"></i></div>
-          <div class="attrNum">${v}<span>/${ceiling}</span></div>
-          <div class="attrHint">${v>=70?'高能力區：成長效率開始下降':'目前仍有明顯成長空間'}</div>
-        </div>
-      </div>`;
-    }).join("")}
-  </div>`;
-}
-
-const V22_originalRender = render;
-render = function(){
-  V22_originalRender();
-  if(!state) return;
-  const right=document.querySelector(".right");
-  if(!right) return;
-
-  const oldAttr=[...right.querySelectorAll(".sidePanel")].find(x=>x.querySelector("h4")?.textContent.includes("ATTRIBUTES"));
-  if(oldAttr) oldAttr.outerHTML = v22Attributes();
-
-  right.insertAdjacentHTML("afterbegin", v22Rhythm());
-};
-
 render();
 </script>
 </body>
