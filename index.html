@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>拳擊人生 · Boxing Life</title>
+  <style>
+    :root{
+      --bg:#0b0d10;
+      --panel:#12161c;
+      --panel2:#171c24;
+      --line:#2a313d;
+      --text:#f5f7fa;
+      --muted:#98a2b3;
+      --accent:#f2c14e;
+      --good:#69d58b;
+      --bad:#ff6b6b;
+      --blue:#77aaff;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(242,193,78,.10), transparent 32%),
+        linear-gradient(180deg,#090b0e,#0d1015 45%,#090b0e);
+      color:var(--text);
+      min-height:100vh;
+    }
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+    .app{max-width:1180px;margin:0 auto;padding:24px}
+    .topbar{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;
+      margin-bottom:18px
+    }
+    .brand h1{margin:0;font-size:clamp(28px,4vw,46px);letter-spacing:-1px}
+    .brand p{margin:4px 0 0;color:var(--muted)}
+    .badge{
+      border:1px solid var(--line);background:#0f1318;border-radius:999px;
+      padding:7px 10px;color:var(--muted);font-size:13px
+    }
+    .layout{display:grid;grid-template-columns:320px 1fr;gap:18px}
+    .card{
+      background:linear-gradient(180deg,var(--panel),#0f1318);
+      border:1px solid var(--line);border-radius:18px;padding:18px;
+      box-shadow:0 10px 35px rgba(0,0,0,.20)
+    }
+    .profile h2{margin:0 0 4px;font-size:24px}
+    .muted{color:var(--muted)}
+    .statline{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #202631}
+    .statline:last-child{border-bottom:0}
+    .bar{height:8px;background:#232a35;border-radius:999px;overflow:hidden;margin-top:5px}
+    .bar > span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#ffdf88)}
+    .skills{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+    .skill{
+      background:var(--panel2);border:1px solid var(--line);padding:10px;border-radius:13px
+    }
+    .skill strong{font-size:20px}
+    .main{display:grid;gap:18px}
+    .headline{display:flex;justify-content:space-between;align-items:center;gap:14px}
+    .headline h2{margin:0}
+    .actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+    .btn{
+      border:1px solid var(--line);background:#171c24;color:var(--text);
+      padding:12px 14px;border-radius:13px;transition:.15s
+    }
+    .btn:hover{transform:translateY(-1px);border-color:#485264}
+    .btn.primary{background:var(--accent);color:#17130a;border-color:transparent;font-weight:800}
+    .btn.good{background:#183322;border-color:#27523a}
+    .btn.danger{background:#351c1c;border-color:#5a2c2c}
+    .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+    .offer{
+      display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;
+      padding:14px;border-radius:14px;background:#151a21;border:1px solid var(--line);margin-top:10px
+    }
+    .offer h3{margin:0 0 5px}
+    .pill{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;font-size:12px;
+      background:#242b36;border:1px solid #343e4c;color:#c8d0db;margin-right:4px}
+    .timeline{max-height:360px;overflow:auto;padding-right:4px}
+    .event{padding:11px 0;border-bottom:1px solid #202631}
+    .event:last-child{border-bottom:0}
+    .event .week{color:var(--muted);font-size:12px;margin-bottom:3px}
+    .event.good{color:#c9f5d5}.event.bad{color:#ffd1d1}.event.title{color:#ffe59a}
+    .champ{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      background:linear-gradient(90deg,#2a2313,#1a1710);border:1px solid #5b4a20;border-radius:14px;padding:12px 14px
+    }
+    .empty{color:var(--muted);padding:14px 0}
+    .modal{
+      position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;
+      padding:20px;z-index:20
+    }
+    .modal.hidden{display:none}
+    .modalbox{width:min(620px,100%);background:#11161d;border:1px solid var(--line);border-radius:20px;padding:22px}
+    .modalbox h2{margin-top:0}
+    .formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    label{display:grid;gap:6px;color:var(--muted);font-size:14px}
+    input,select{
+      width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--line);
+      background:#0d1116;color:var(--text);outline:none
+    }
+    input:focus,select:focus{border-color:#6b778a}
+    .fightlog{
+      background:#090c10;border:1px solid #252c36;border-radius:14px;padding:12px;
+      max-height:280px;overflow:auto;white-space:pre-line;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+      line-height:1.5;color:#dbe2ea
+    }
+    .summary{
+      display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:12px
+    }
+    .mini{background:#151a21;border:1px solid var(--line);border-radius:12px;padding:10px}
+    .mini span{display:block;color:var(--muted);font-size:12px}.mini strong{font-size:18px}
+    .footer{color:#697386;font-size:12px;text-align:center;padding:18px}
+    @media(max-width:900px){
+      .layout{grid-template-columns:1fr}
+      .actions{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:560px){
+      .app{padding:14px}
+      .topbar{align-items:flex-start;flex-direction:column}
+      .formgrid,.skills,.summary{grid-template-columns:1fr 1fr}
+      .actions{grid-template-columns:1fr}
+      .offer{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+<div id="app" class="app">
+  <div class="topbar">
+    <div class="brand">
+      <h1>🥊 拳擊人生</h1>
+      <p>Boxing Life Simulator · 從無名新人打到世界冠軍</p>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" onclick="saveGame()">儲存</button>
+      <button class="btn" onclick="loadGame()">讀取</button>
+      <button class="btn danger" onclick="resetGame()">重開</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <aside class="card profile" id="profile"></aside>
+
+    <main class="main">
+      <section class="card">
+        <div class="headline">
+          <div>
+            <h2 id="careerTitle">職業生涯</h2>
+            <div class="muted" id="careerSub"></div>
+          </div>
+          <div class="badge" id="seasonBadge"></div>
+        </div>
+
+        <div class="summary" id="summary"></div>
+
+        <div class="actions">
+          <button class="btn primary" onclick="train('power')">力量訓練</button>
+          <button class="btn" onclick="train('speed')">速度訓練</button>
+          <button class="btn" onclick="train('technique')">技術訓練</button>
+          <button class="btn good" onclick="restWeek()">休息恢復</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="headline">
+          <div>
+            <h2>比賽邀約</h2>
+            <div class="muted">排名越高，對手越強，酬勞與腰帶機會也越高。</div>
+          </div>
+          <button class="btn" onclick="refreshOffers()">刷新邀約</button>
+        </div>
+        <div id="offers"></div>
+      </section>
+
+      <section class="card">
+        <div class="headline">
+          <div>
+            <h2>冠軍與成就</h2>
+            <div class="muted">區域冠軍 → 洲際冠軍 → 世界冠軍</div>
+          </div>
+        </div>
+        <div id="titles"></div>
+      </section>
+
+      <section class="card">
+        <div class="headline">
+          <div>
+            <h2>生涯紀錄</h2>
+            <div class="muted">每一週的選擇都會改變你的拳擊人生。</div>
+          </div>
+        </div>
+        <div class="timeline" id="timeline"></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="footer">單檔 HTML / CSS / JavaScript · 可直接部署到 GitHub Pages</div>
+</div>
+
+<div class="modal" id="startModal">
+  <div class="modalbox">
+    <h2>建立你的拳手</h2>
+    <p class="muted">你會從一名剛轉職業的新人開始。</p>
+    <div class="formgrid">
+      <label>拳手名字
+        <input id="nameInput" value="Rising Boxer" />
+      </label>
+      <label>出道年齡
+        <select id="ageInput">
+          <option>18</option><option>19</option><option>20</option><option>21</option>
+          <option selected>22</option><option>23</option><option>24</option><option>25</option>
+          <option>26</option><option>27</option><option>28</option><option>29</option><option>30</option>
+        </select>
+      </label>
+      <label>量級
+        <select id="weightInput">
+          <option>Featherweight</option>
+          <option selected>Super Featherweight</option>
+          <option>Lightweight</option>
+          <option>Super Lightweight</option>
+          <option>Welterweight</option>
+          <option>Middleweight</option>
+        </select>
+      </label>
+      <label>拳風
+        <select id="styleInput">
+          <option value="pressure">壓迫型 Pressure Fighter</option>
+          <option value="boxer">技巧型 Out-Boxer</option>
+          <option value="puncher">重砲型 Puncher</option>
+          <option value="counter">反擊型 Counter Puncher</option>
+        </select>
+      </label>
+    </div>
+    <button class="btn primary" style="width:100%;margin-top:16px" onclick="startCareer()">開始職業生涯</button>
+  </div>
+</div>
+
+<div class="modal hidden" id="fightModal">
+  <div class="modalbox">
+    <h2 id="fightTitle">比賽結果</h2>
+    <div class="fightlog" id="fightLog"></div>
+    <button class="btn primary" style="width:100%;margin-top:14px" onclick="closeFight()">繼續生涯</button>
+  </div>
+</div>
+
+<script>
+const VERSION = 1;
+const SAVE_KEY = "boxing-life-save-v1";
+const clamp = (n,min,max)=>Math.max(min,Math.min(max,n));
+const rnd = (min,max)=>Math.floor(Math.random()*(max-min+1))+min;
+const chance = p => Math.random() < p;
+
+const titleDefs = [
+  {id:"regional", name:"Regional Champion", zh:"區域冠軍", minRank:500, prestige:1},
+  {id:"continental", name:"Continental Champion", zh:"洲際冠軍", minRank:150, prestige:2},
+  {id:"world", name:"World Champion", zh:"世界冠軍", minRank:15, prestige:3}
+];
+
+let state = null;
+let currentFightOffer = null;
+
+function baseState(){
+  return {
+    version:VERSION,
+    name:"Rising Boxer",
+    age:22,
+    week:1,
+    year:1,
+    weight:"Super Featherweight",
+    style:"pressure",
+    record:{w:0,l:0,d:0,ko:0},
+    money:1200,
+    popularity:8,
+    rank:1200,
+    health:100,
+    fatigue:8,
+    morale:70,
+    stats:{
+      power:55,
+      speed:55,
+      stamina:55,
+      defense:50,
+      chin:55,
+      technique:52
+    },
+    titles:[],
+    offers:[],
+    history:[],
+    retired:false
+  }
+}
+
+function startCareer(){
+  const s = baseState();
+  s.name = document.getElementById("nameInput").value.trim() || "Rising Boxer";
+  s.age = parseInt(document.getElementById("ageInput").value);
+  s.weight = document.getElementById("weightInput").value;
+  s.style = document.getElementById("styleInput").value;
+
+  if(s.style==="pressure"){s.stats.stamina+=6;s.stats.chin+=4;s.stats.speed-=3}
+  if(s.style==="boxer"){s.stats.speed+=6;s.stats.technique+=5;s.stats.power-=3}
+  if(s.style==="puncher"){s.stats.power+=9;s.stats.speed-=4;s.stats.stamina-=2}
+  if(s.style==="counter"){s.stats.defense+=6;s.stats.technique+=5;s.stats.stamina-=3}
+
+  state = s;
+  addHistory(`你以 ${s.weight} 拳手身分正式轉職業。`, "good");
+  refreshOffers(false);
+  document.getElementById("startModal").classList.add("hidden");
+  render();
+}
+
+function overall(p=state){
+  const a=p.stats;
+  return Math.round(
+    a.power*0.18+a.speed*0.17+a.stamina*0.17+a.defense*0.15+a.chin*0.14+a.technique*0.19
+  );
+}
+
+function styleName(style){
+  return {
+    pressure:"壓迫型", boxer:"技巧型", puncher:"重砲型", counter:"反擊型"
+  }[style] || style;
+}
+
+function addHistory(text, type=""){
+  state.history.unshift({
+    text,type,
+    stamp:`第 ${state.year} 年・第 ${state.week} 週`
+  });
+  if(state.history.length>120) state.history.pop();
+}
+
+function advanceWeek(extra=1){
+  for(let i=0;i<extra;i++){
+    state.week++;
+    if(state.week>52){
+      state.week=1; state.year++; state.age++;
+      state.stats.speed = clamp(state.stats.speed - (state.age>=34 ? rnd(1,2):0), 25, 99);
+      state.stats.stamina = clamp(state.stats.stamina - (state.age>=36 ? 1:0), 25, 99);
+      if(state.age>=40 && chance(0.25)) addHistory("年齡開始明顯影響恢復速度。","bad");
+    }
+    state.fatigue = clamp(state.fatigue-2,0,100);
+    state.health = clamp(state.health+1,0,100);
+  }
+  if(state.age>=43 && !state.retired){
+    state.retired=true;
+    addHistory("你決定高掛拳套，正式結束職業生涯。","title");
+  }
+}
+
+function train(kind){
+  if(!state || state.retired) return;
+  if(state.health<35){addHistory("身體狀況太差，這週無法正常訓練。","bad");render();return}
+
+  const gain = rnd(1,3);
+  const risk = state.fatigue/220 + (state.age>35 ? 0.04:0);
+
+  if(kind==="power"){
+    state.stats.power=clamp(state.stats.power+gain,1,99);
+    state.stats.stamina=clamp(state.stats.stamina+(chance(.35)?1:0),1,99);
+    addHistory(`力量訓練完成，Power +${gain}。`,"good");
+  }else if(kind==="speed"){
+    state.stats.speed=clamp(state.stats.speed+gain,1,99);
+    state.stats.defense=clamp(state.stats.defense+(chance(.35)?1:0),1,99);
+    addHistory(`速度訓練完成，Speed +${gain}。`,"good");
+  }else{
+    state.stats.technique=clamp(state.stats.technique+gain,1,99);
+    state.stats.defense=clamp(state.stats.defense+(chance(.45)?1:0),1,99);
+    addHistory(`技術訓練完成，Technique +${gain}。`,"good");
+  }
+
+  state.fatigue=clamp(state.fatigue+rnd(8,14),0,100);
+  state.morale=clamp(state.morale+rnd(-2,3),0,100);
+
+  if(chance(risk)){
+    const dmg=rnd(6,15);
+    state.health=clamp(state.health-dmg,0,100);
+    addHistory(`訓練中出現小傷，健康 -${dmg}。`,"bad");
+  }
+  randomLifeEvent();
+  advanceWeek();
+  maybeRefreshOffers();
+  render();
+}
+
+function restWeek(){
+  if(!state || state.retired) return;
+  const heal=rnd(7,14), fatigue=rnd(12,22);
+  state.health=clamp(state.health+heal,0,100);
+  state.fatigue=clamp(state.fatigue-fatigue,0,100);
+  state.morale=clamp(state.morale+rnd(1,5),0,100);
+  addHistory(`完整休息一週，健康 +${heal}、疲勞 -${fatigue}。`,"good");
+  advanceWeek();
+  maybeRefreshOffers();
+  render();
+}
+
+function randomLifeEvent(){
+  if(!chance(.22)) return;
+  const events=[
+    ()=>{state.popularity=clamp(state.popularity+3,0,100);addHistory("訓練影片在社群上小爆紅，人氣 +3。","good")},
+    ()=>{state.money+=300;addHistory("你接到一筆小型贊助，收入 +$300。","good")},
+    ()=>{state.money=Math.max(0,state.money-200);addHistory("裝備與恢復支出增加，花費 $200。","bad")},
+    ()=>{state.morale=clamp(state.morale-7,0,100);addHistory("與團隊溝通不順，本週士氣下降。","bad")},
+    ()=>{state.stats.chin=clamp(state.stats.chin+1,1,99);addHistory("高強度實戰讓你更能扛重拳，Chin +1。","good")}
+  ];
+  events[rnd(0,events.length-1)]();
+}
+
+function maybeRefreshOffers(){
+  if(state.week%3===0 || state.offers.length===0) refreshOffers(false);
+}
+
+function refreshOffers(renderNow=true){
+  if(!state || state.retired) return;
+  const base = overall();
+  const count=3;
+  const arr=[];
+
+  for(let i=0;i<count;i++){
+    const riskBand=i-1;
+    let oppOvr=clamp(base + riskBand*rnd(4,8) + rnd(-3,3),35,96);
+    let oppRank=clamp(Math.round(state.rank * (1 + (base-oppOvr)/60) + rnd(-80,80)), 1, 2500);
+    let purse=Math.max(250, Math.round((2800/Math.max(40,state.rank))*450 + oppOvr*18 + state.popularity*15));
+    purse=Math.round(purse*(1+i*0.25));
+    let rounds = state.rank<500 ? 6 : state.rank<120 ? 8 : state.rank<25 ? 10 : 12;
+    let title=null;
+
+    for(const t of titleDefs){
+      const owns=state.titles.includes(t.id);
+      if(!owns && state.rank<=t.minRank && chance(0.36 + i*0.12)){
+        title=t.id; rounds=Math.max(rounds,t.id==="world"?12:10); purse=Math.round(purse*(1+t.prestige));
+        break;
+      }
+    }
+
+    arr.push({
+      id:Date.now()+i+Math.random(),
+      name:generateOpponentName(),
+      overall:oppOvr,
+      rank:oppRank,
+      record:generateOpponentRecord(oppOvr),
+      purse,
+      rounds,
+      title
+    });
+  }
+  state.offers=arr;
+  if(renderNow) render();
+}
+
+function generateOpponentName(){
+  const first=["Marco","Luis","Kenji","Arman","Diego","Rafael","Noel","Jae","Anton","Mikael","Paolo","Darren","Ivan","Miguel"];
+  const last=["Santos","Reyes","Tanaka","Cruz","Garcia","Navarro","Kim","Flores","Ramirez","Mendoza","Silva","Torres","Lopez","Dela Cruz"];
+  return first[rnd(0,first.length-1)]+" "+last[rnd(0,last.length-1)];
+}
+function generateOpponentRecord(ovr){
+  const fights=clamp(Math.round((ovr-35)*0.42)+rnd(2,9),2,35);
+  const losses=clamp(rnd(0,Math.max(1,Math.round((80-ovr)/10))),0,8);
+  const wins=Math.max(1,fights-losses);
+  const ko=clamp(Math.round(wins*(0.35+(ovr-50)/160)),0,wins);
+  return `${wins}-${losses} (${ko}KO)`;
+}
+
+function fight(offerId){
+  if(!state || state.retired) return;
+  const offer=state.offers.find(o=>String(o.id)===String(offerId));
+  if(!offer) return;
+
+  if(state.health<45){
+    addHistory("你的健康狀態不足以安全接賽。先休息恢復。","bad");render();return;
+  }
+  if(state.fatigue>75){
+    addHistory("疲勞過高，團隊拒絕讓你這週上場。","bad");render();return;
+  }
+
+  currentFightOffer=offer;
+  simulateFight(offer);
+}
+
+function simulateFight(opp){
+  const log=[];
+  const me=overall();
+  let myHP=100, opHP=100;
+  let myScore=0, opScore=0;
+  let winner=null, method="", endRound=opp.rounds;
+
+  const styleMods={
+    pressure:{attack:1.05,def:0.96,ko:1.06},
+    boxer:{attack:1.00,def:1.07,ko:.94},
+    puncher:{attack:1.07,def:.94,ko:1.14},
+    counter:{attack:1.01,def:1.06,ko:1.02}
+  }[state.style];
+
+  log.push(`${state.name} vs ${opp.name}`);
+  log.push(`${state.record.w}-${state.record.l}-${state.record.d} vs ${opp.record}`);
+  log.push(`預定 ${opp.rounds} 回合\n`);
+
+  for(let r=1;r<=opp.rounds;r++){
+    const fatiguePenalty=1-(state.fatigue/300);
+    const healthPenalty=.75+state.health/400;
+    const agePenalty=state.age>37 ? 1-(state.age-37)*.018 : 1;
+
+    const myAttack=(state.stats.power*.27+state.stats.speed*.18+state.stats.technique*.25+state.stats.stamina*.12+state.morale*.08+me*.10)
+      *styleMods.attack*fatiguePenalty*healthPenalty*agePenalty*rnd(92,108)/100;
+    const myDef=(state.stats.defense*.38+state.stats.speed*.18+state.stats.chin*.22+state.stats.technique*.22)*styleMods.def*rnd(92,108)/100;
+    const opAttack=opp.overall*rnd(92,110)/100;
+    const opDef=opp.overall*rnd(90,108)/100;
+
+    const myRound=myAttack-opDef+rnd(-12,12);
+    const opRound=opAttack-myDef+rnd(-12,12);
+
+    let line=`R${r}: `;
+    if(myRound>opRound+3){myScore++; line+="你有效壓制對手。";}
+    else if(opRound>myRound+3){opScore++; line+=`${opp.name} 拿下這回合。`;}
+    else{myScore+=.5;opScore+=.5;line+="雙方非常接近。";}
+
+    const myDamage=clamp(Math.round((opAttack-myDef*.72+rnd(-8,10))/8),0,14);
+    const opDamage=clamp(Math.round((myAttack-opDef*.72+rnd(-8,10))/8),0,16);
+    myHP-=myDamage;opHP-=opDamage;
+
+    const myKOChance=clamp(((state.stats.power-opp.overall)/520)+(opDamage/130)+(100-opHP)/650,0.005,.33)*styleMods.ko;
+    const opKOChance=clamp(((opp.overall-state.stats.chin)/500)+(myDamage/125)+(100-myHP)/620,0.005,.30);
+
+    if(chance(myKOChance)){
+      winner="me";method=chance(.64)?"KO":"TKO";endRound=r;
+      line+=` 你抓到機會！${method} 終結！`;
+      log.push(line);break;
+    }
+    if(chance(opKOChance)){
+      winner="opp";method=chance(.56)?"KO":"TKO";endRound=r;
+      line+=` 你遭到重擊，裁判終止比賽。`;
+      log.push(line);break;
+    }
+    log.push(line);
+  }
+
+  if(!winner){
+    if(Math.abs(myScore-opScore)<1){
+      winner="draw";method="Draw";
+    }else if(myScore>opScore){
+      winner="me";method="UD";
+    }else{
+      winner="opp";method="UD";
+    }
+  }
+
+  applyFightResult(opp,winner,method,endRound,log);
+}
+
+function applyFightResult(opp,winner,method,endRound,log){
+  state.money += opp.purse;
+  state.fatigue=clamp(state.fatigue+rnd(18,28),0,100);
+  const fightDamage=rnd(4,13)+(winner==="opp"?rnd(5,12):0);
+  state.health=clamp(state.health-fightDamage,0,100);
+
+  const oldRank=state.rank;
+  const titleObj=titleDefs.find(t=>t.id===opp.title);
+
+  if(winner==="me"){
+    state.record.w++;
+    if(method==="KO"||method==="TKO") state.record.ko++;
+    const quality=Math.max(.35, opp.overall/Math.max(45,overall()));
+    const jump=Math.round(rnd(45,140)*quality*(1+Math.min(2,oldRank/700)));
+    state.rank=clamp(state.rank-jump,1,2500);
+    state.popularity=clamp(state.popularity+rnd(3,8)+(method==="KO"?3:0),0,100);
+    state.morale=clamp(state.morale+rnd(5,10),0,100);
+    addHistory(`擊敗 ${opp.name}（${method} R${endRound}），世界排名 #${oldRank} → #${state.rank}。`,"good");
+
+    if(titleObj && !state.titles.includes(titleObj.id)){
+      state.titles.push(titleObj.id);
+      state.popularity=clamp(state.popularity+10*titleObj.prestige,0,100);
+      addHistory(`🏆 你贏得「${titleObj.zh}」！`,"title");
+    }
+
+    log.push(`\n✅ ${state.name} 勝出：${method}${method==="KO"||method==="TKO" ? " R"+endRound : ""}`);
+    log.push(`世界排名：#${oldRank} → #${state.rank}`);
+    log.push(`酬勞：+$${opp.purse.toLocaleString()}`);
+  }else if(winner==="opp"){
+    state.record.l++;
+    state.rank=clamp(state.rank+rnd(45,130),1,2500);
+    state.popularity=clamp(state.popularity-rnd(1,4),0,100);
+    state.morale=clamp(state.morale-rnd(6,12),0,100);
+    addHistory(`敗給 ${opp.name}（${method}${method==="KO"||method==="TKO" ? " R"+endRound : ""}），排名退到 #${state.rank}。`,"bad");
+    log.push(`\n❌ ${opp.name} 勝出：${method}${method==="KO"||method==="TKO" ? " R"+endRound : ""}`);
+    log.push(`世界排名：#${oldRank} → #${state.rank}`);
+    log.push(`酬勞：+$${opp.purse.toLocaleString()}`);
+  }else{
+    state.record.d++;
+    state.rank=clamp(state.rank+rnd(-20,20),1,2500);
+    state.morale=clamp(state.morale-1,0,100);
+    addHistory(`你與 ${opp.name} 打成平手。`,"");
+    log.push(`\n➖ 比賽結果：平手`);
+  }
+
+  if(state.health<25) addHistory("賽後檢查顯示你需要長時間恢復。","bad");
+  advanceWeek(rnd(4,7));
+  refreshOffers(false);
+
+  document.getElementById("fightTitle").textContent = `${state.name} vs ${opp.name}`;
+  document.getElementById("fightLog").textContent = log.join("\n");
+  document.getElementById("fightModal").classList.remove("hidden");
+  render();
+}
+
+function closeFight(){
+  document.getElementById("fightModal").classList.add("hidden");
+}
+
+function saveGame(){
+  if(!state) return;
+  localStorage.setItem(SAVE_KEY,JSON.stringify(state));
+  addHistory("生涯進度已儲存到此瀏覽器。","good");
+  render();
+}
+function loadGame(){
+  const raw=localStorage.getItem(SAVE_KEY);
+  if(!raw){alert("找不到存檔");return}
+  state=JSON.parse(raw);
+  document.getElementById("startModal").classList.add("hidden");
+  addHistory("已讀取存檔。","good");
+  render();
+}
+function resetGame(){
+  if(confirm("確定要刪除目前進度並重新開始嗎？")){
+    localStorage.removeItem(SAVE_KEY);
+    state=null;
+    location.reload();
+  }
+}
+
+function render(){
+  if(!state) return;
+
+  const ovr=overall();
+  document.getElementById("profile").innerHTML=`
+    <h2>${escapeHtml(state.name)}</h2>
+    <div class="muted">${state.weight} · ${styleName(state.style)}</div>
+    <div style="height:12px"></div>
+    <div class="statline"><span>年齡</span><strong>${state.age}</strong></div>
+    <div class="statline"><span>戰績</span><strong>${state.record.w}-${state.record.l}-${state.record.d} (${state.record.ko}KO)</strong></div>
+    <div class="statline"><span>世界排名</span><strong>#${state.rank}</strong></div>
+    <div class="statline"><span>綜合能力</span><strong>${ovr}</strong></div>
+    <div class="statline"><span>資產</span><strong>$${state.money.toLocaleString()}</strong></div>
+    <div class="statline"><span>人氣</span><strong>${state.popularity}</strong></div>
+
+    <div style="margin-top:14px">
+      <div class="muted">健康 ${state.health}/100</div>
+      <div class="bar"><span style="width:${state.health}%"></span></div>
+    </div>
+    <div style="margin-top:10px">
+      <div class="muted">疲勞 ${state.fatigue}/100</div>
+      <div class="bar"><span style="width:${state.fatigue}%"></span></div>
+    </div>
+
+    <div class="skills">
+      ${skillBox("Power",state.stats.power)}
+      ${skillBox("Speed",state.stats.speed)}
+      ${skillBox("Stamina",state.stats.stamina)}
+      ${skillBox("Defense",state.stats.defense)}
+      ${skillBox("Chin",state.stats.chin)}
+      ${skillBox("Technique",state.stats.technique)}
+    </div>
+  `;
+
+  document.getElementById("careerSub").textContent = state.retired
+    ? "職業生涯已結束"
+    : `${state.weight} · ${styleName(state.style)} · 目標：世界冠軍`;
+  document.getElementById("seasonBadge").textContent=`第 ${state.year} 年・第 ${state.week} 週`;
+
+  document.getElementById("summary").innerHTML=`
+    ${mini("勝場",state.record.w)}
+    ${mini("KO",state.record.ko)}
+    ${mini("排名","#"+state.rank)}
+    ${mini("健康",state.health)}
+    ${mini("人氣",state.popularity)}
+  `;
+
+  const offers=document.getElementById("offers");
+  if(state.retired){
+    offers.innerHTML=`<div class="empty">你已退休。最終戰績：${state.record.w}-${state.record.l}-${state.record.d} (${state.record.ko}KO)</div>`;
+  }else{
+    offers.innerHTML=state.offers.map(o=>{
+      const title=titleDefs.find(t=>t.id===o.title);
+      return `<div class="offer">
+        <div>
+          <h3>${o.name}</h3>
+          <div class="muted">${o.record} · OVR ${o.overall} · 世界 #${o.rank}</div>
+          <div style="margin-top:8px">
+            <span class="pill">${o.rounds} 回合</span>
+            <span class="pill">酬勞 $${o.purse.toLocaleString()}</span>
+            ${title?`<span class="pill">🏆 ${title.zh}</span>`:""}
+          </div>
+        </div>
+        <button class="btn primary" onclick="fight('${o.id}')">接受比賽</button>
+      </div>`
+    }).join("");
+  }
+
+  const titles=document.getElementById("titles");
+  if(state.titles.length===0){
+    titles.innerHTML=`<div class="empty">目前尚未取得冠軍。先提升排名，冠軍戰才會出現。</div>`;
+  }else{
+    titles.innerHTML=state.titles.map(id=>{
+      const t=titleDefs.find(x=>x.id===id);
+      return `<div class="champ"><strong>🏆 ${t.zh}</strong><span class="muted">${t.name}</span></div>`;
+    }).join('<div style="height:8px"></div>');
+  }
+
+  document.getElementById("timeline").innerHTML=state.history.length
+    ? state.history.map(h=>`<div class="event ${h.type}"><div class="week">${h.stamp}</div>${escapeHtml(h.text)}</div>`).join("")
+    : `<div class="empty">你的故事才剛開始。</div>`;
+}
+
+function skillBox(name,val){
+  return `<div class="skill"><span class="muted">${name}</span><br><strong>${val}</strong></div>`;
+}
+function mini(label,val){
+  return `<div class="mini"><span>${label}</span><strong>${val}</strong></div>`;
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+}
+
+window.addEventListener("load",()=>{
+  const raw=localStorage.getItem(SAVE_KEY);
+  if(raw){
+    try{
+      state=JSON.parse(raw);
+      document.getElementById("startModal").classList.add("hidden");
+      render();
+    }catch(e){}
+  }
+});
+</script>
+</body>
+</html>
