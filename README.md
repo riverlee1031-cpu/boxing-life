@@ -1,36 +1,21 @@
-# 拳擊人生 · Boxing Life Simulator
+# Boxing Life USA V3
 
-一個完全不需要後端的拳擊人生模擬器。
-
-## 技術
-- HTML
-- CSS
-- Vanilla JavaScript
+## 核心方向
+- 男子 / 女子拳手都可建立
+- 0-0 職業新人直接從美國開始
+- 可選 Las Vegas、Los Angeles、New York、Miami、Houston、Philadelphia 為訓練基地
+- 手機直式 UI
+- 種子碼 RNG
+- 每週事件卡
+- 選項 + 1～6 骰子結果
+- 訓練、媒體、贊助、傷病、減重、Promotion、短通知等事件
+- 能力 XP 慢成長 + 隱藏天賦上限
+- 美國各城市比賽邀約
+- 賽前戰術選擇
+- KO/TKO/UD/SD/Draw
+- 排名、酬勞、人氣、健康、疲勞、備戰、減重風險
+- 州級 → 美國區域 → 北美 → 國際 → 世界冠軍
 - localStorage 存檔
-- GitHub Pages 部署
 
-## 已有功能
-- 建立拳手
-- 不同量級與拳風
-- 能力值成長
-- 每週訓練 / 休息
-- 隨機人生事件
-- 比賽邀約
-- 回合制模擬
-- KO / TKO / 判定 / 平手
-- 戰績與 KO 數
-- 世界排名升降
-- 比賽酬勞
-- 健康 / 疲勞 / 士氣
-- 區域 / 洲際 / 世界冠軍
-- 年齡與退化
-- localStorage 自動保存式讀檔
-
-## GitHub Pages 上線
-1. 建立新的 GitHub Repository，例如 `boxing-life`
-2. 把 `index.html` 上傳到 repository 根目錄
-3. GitHub Repository → Settings → Pages
-4. Source 選 `Deploy from a branch`
-5. Branch 選 `main`，資料夾選 `/root`
-6. Save
-7. 等 GitHub Pages 網址產生即可
+## 更新 GitHub Pages
+用這個新版 `index.html` 覆蓋原本 boxing-life repository 根目錄的 `index.html`，Commit changes 後 GitHub Pages 會自動重新部署。
