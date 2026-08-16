@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>拳擊人生 · Boxing Life V10</title>
+<title>拳擊人生 · Boxing Life V11</title>
 <style>
 :root{
   --bg:#120b1d;--surface:#1b1832;--surface2:#241f42;--line:#5b4f8c;
@@ -186,6 +186,14 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 .story-art{border-bottom:1px solid #5b4f8c;background:#0f0c20}.story-art svg{display:block;width:100%;height:auto;image-rendering:pixelated;shape-rendering:crispEdges}
 .result-art{margin:8px 0 12px;border:1px solid #5b4f8c;border-radius:12px;overflow:hidden;background:#100d20}.result-art svg{display:block;width:100%;height:auto;image-rendering:pixelated}
 
+
+.story-identity{padding:13px 14px 0}.story-country{font-size:12px;font-weight:900;color:#ffd25a}.story-country-en{font-size:9px;letter-spacing:.15em;color:#8f88bc;margin-top:2px}
+.story-fighter-name{font-size:22px;font-weight:950;margin-top:9px}.story-fighter-sub{font-size:11px;color:#c4bce7;margin-top:4px;line-height:1.5}
+.story-major{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:12px 0}.story-major .m{background:#0f0c21;border:1px solid #403862;border-radius:9px;padding:8px 4px;text-align:center}.story-major b{display:block;color:#ffd25a;font-size:17px}.story-major span{display:block;color:#8f88bc;font-size:8px;margin-top:2px}
+.story-abilities{display:grid;grid-template-columns:repeat(2,1fr);gap:6px 10px;padding:10px;background:#100d20;border:1px solid #403862;border-radius:11px;margin-bottom:13px}.story-ability{display:flex;justify-content:space-between;font-size:11px;color:#c4bce7}.story-ability b{color:#fff}
+.story-chapter-label{border-top:1px solid #4d4475;padding-top:13px;margin-top:12px}.story-chapter-title{font-size:22px;font-weight:950;color:#fff;margin:4px 0}.story-chapter-year{font-size:11px;color:#8f88bc}.story-age-title{font-size:17px;font-weight:900;margin:14px 0 7px;color:#fff}
+.story-photo{margin:10px 14px 0;border:2px solid #5b4f8c;border-radius:13px;overflow:hidden;background:#0f0c20}.story-photo img{display:block;width:100%;height:auto;image-rendering:pixelated}.story-photo-fallback svg{display:block;width:100%;height:auto}
+
 </style>
 </head>
 <body>
@@ -200,7 +208,7 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
   </div>
 </div>
 <script>
-const SAVE_KEY="boxing-life-v10-story-pixel";
+const SAVE_KEY="boxing-life-v11-prologue";
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 let rng=Math.random;
 function seedHash(s){let h=2166136261>>>0; for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)} return h>>>0;}
@@ -212,6 +220,10 @@ const money=n=>"$"+Math.round(n).toLocaleString();
 const SKILLS=["power","speed","stamina","defense","chin","technique"];
 const SKILL_NAMES={power:"POWER",speed:"SPEED",stamina:"STAMINA",defense:"DEFENSE",chin:"CHIN",technique:"TECHNIQUE"};
 const WEIGHTS=["Bantamweight","Featherweight","Super Featherweight","Lightweight","Super Lightweight","Welterweight","Middleweight"];
+const BODY_PROFILE={
+  Bantamweight:{height:168,kg:53}, Featherweight:{height:171,kg:57}, "Super Featherweight":{height:173,kg:59},
+  Lightweight:{height:175,kg:61}, "Super Lightweight":{height:177,kg:64}, Welterweight:{height:179,kg:67}, Middleweight:{height:181,kg:72}
+};
 const START_DESTINATIONS={
   USA:{zh:"美國",cities:["Las Vegas","Los Angeles","New York","Houston"]},
   Japan:{zh:"日本",cities:["Tokyo","Osaka","Fukuoka","Yokohama"]},
@@ -281,10 +293,10 @@ function advanceWeek(n=1){
 }
 function baseGame(){
   return {
-    version:10, name:"李逍遙", gender:"male", age:18, weight:"Lightweight", style:"pressure", originCountry:"台灣", destinationCountry:"USA", baseCity:"Las Vegas",
+    version:11, name:"李逍遙", gender:"male", age:18, weight:"Lightweight", style:"pressure", originCountry:"台灣", destinationCountry:"USA", baseCity:"Las Vegas",
     seed:makeSeed(), year:2026, week:1, retired:false, isPro:false,
     phaseIndex:0, skillPoints:0, milestoneShown:false,
-    amateur:{w:0,l:0}, record:{w:0,l:0,d:0,ko:0}, rank:1450, money:200, fame:3, health:100, fatigue:6, morale:70,
+    amateur:{w:0,l:0}, record:{w:0,l:0,d:0,ko:0}, rank:1450, money:200, careerIncome:0, fame:3, health:100, fatigue:6, morale:70,
     manager:20, promoterInterest:5, readiness:30, weightRisk:8, discipline:70,
     stats:{power:49,speed:50,stamina:50,defense:49,chin:49,technique:50},
     xp:{power:0,speed:0,stamina:0,defense:0,chin:0,technique:0},
@@ -302,7 +314,7 @@ function defaultAvatar(){
 }
 
 const STORY_CHAPTERS={
-  prologue:{kicker:"🇹🇼 TAIWAN · PROLOGUE",title:"序章 · 離鄉的第一拳",theme:"travel",button:"抵達海外，踏進拳館 ▶"},
+  prologue:{kicker:"🇹🇼 台灣拳擊少年",title:"序章 · 離鄉的第一拳",theme:"travel",button:"踏進拳館，開始拳擊人生 ▶"},
   amateur_local:{kicker:"AMATEUR · CHAPTER 1",title:"第一章 · 陌生拳館的新人",theme:"gym",button:"開始海外業餘生涯 ▶"},
   amateur_elite:{kicker:"AMATEUR · CHAPTER 2",title:"第二章 · 名字開始被記住",theme:"medal",button:"挑戰更高層級的業餘賽 ▶"},
   turn_pro:{kicker:"PRO BOXING · CHAPTER 3",title:"第三章 · 簽下職業執照",theme:"contract",button:"以 0-0 身分踏入職業拳壇 ▶"},
@@ -310,17 +322,109 @@ const STORY_CHAPTERS={
   contender:{kicker:"RANKING · CHAPTER 5",title:"第五章 · 挑戰者的名字",theme:"media",button:"向世界排名逼近 ▶"},
   world:{kicker:"WORLD STAGE · FINAL CHAPTER",title:"最終章 · 世界舞台的燈光",theme:"medal",button:"走向冠軍之路 ▶"}
 };
+const STORY_IMAGES={
+  amateur_local:"assets/chapter_gym.png",
+  amateur_elite:"assets/chapter_fight.png",
+  turn_pro:"assets/chapter_media.png",
+  regional:"assets/chapter_fight.png",
+  contender:"assets/chapter_media.png",
+  world:"assets/chapter_world.png"
+};
 function destinationZh(){ return START_DESTINATIONS[G.destinationCountry]?.zh||G.destinationCountry; }
+function prologueImage(){
+  return G.destinationCountry==="Japan"?"assets/prologue_japan.png":G.destinationCountry==="Philippines"?"assets/prologue_philippines.png":"assets/prologue_usa.png";
+}
+function storyImageFor(id){ return id==="prologue"?prologueImage():(STORY_IMAGES[id]||""); }
+function destinationLifeText(){
+  if(G.destinationCountry==="Japan") return `目的地是 **日本 · ${G.baseCity}**。
+
+這裡的拳館安靜、嚴格，連最普通的基本動作都會被要求一遍又一遍。語言還不熟，生活也陌生，但每一次鞠躬、每一回合實戰，都在告訴你——想留下來，就得靠實力。`;
+  if(G.destinationCountry==="Philippines") return `目的地是 **菲律賓 · ${G.baseCity}**。
+
+濕熱的空氣、老舊的拳館、密集的實戰，是你到這裡後最先感受到的東西。這裡有很多從小就靠拳擊討生活的拳手。沒有人會因為你是外國人而手下留情。`;
+  return `目的地是 **美國 · ${G.baseCity}**。
+
+這裡的拳館充滿競爭。有人從小就想靠拳擊翻身，有人已經被 promotion 盯上。你只是剛來到這裡的台灣留學生，口音、生活方式、拳風，全都跟周圍的人不一樣。`;
+}
+
 function storyTextFor(id){
   const name=G.name, city=G.baseCity, dest=destinationZh();
   const texts={
-    prologue:`${G.age} 歲那年，你第一次拖著裝有拳鞋、護齒與課本的行李離開台灣。\n\n你叫 **${name}**。在台灣，你還不是什麼明星，只是一個想知道自己到底能走多遠的業餘拳手。\n\n目的地是 **${dest} · ${city}**。白天，你是留學生；傍晚下課後，你會搭車前往一間陌生拳館。語言、生活費、課業、孤單，以及擂台上的拳頭，都會成為你新的日常。\n\n沒有人保證你能轉職業，更沒有人保證你能成為冠軍。\n\n但從今天開始，每一次選擇都會留下痕跡。`,
-    amateur_local:`拳館裡沒有人在意你以前是誰。\n\n第一次實戰，你甚至還搞不清楚教練的口令；第一次業餘賽，觀眾席也可能只有幾十個人。\n\n你的任務很簡單：**先證明自己能在這裡生存。**\n\n累積勝場、適應海外生活，也別讓課業、夜生活與傷病把夢提前結束。`,
-    amateur_elite:`幾場比賽之後，拳館裡開始有人叫得出 **${name}**。\n\n你的對手不再只是第一次參賽的新人。地方賽、公開賽與更成熟的業餘拳手開始出現。\n\n這個階段，勝負不只是紀錄——它會決定有沒有教練、經紀人或 promoter 願意多看你一眼。`,
-    turn_pro:`桌上放著職業執照文件。\n\n你的業餘戰績即將被留在身後。從下一場開始，沒有護頭，回合更長，每一拳都可能直接改變你的排名與收入。\n\n你將以 **0-0** 的身分重新開始。\n\n業餘時期得到的掌聲沒有辦法替你贏下任何一場職業賽。`,
-    regional:`你已經不是完全沒人知道的 0-0 新人。\n\n主辦方開始把你排進更正式的賽事，對手也有自己的戰績、經紀人與生涯計畫。\n\n有人會把你當墊腳石；也有人會拒絕跟你打。\n\n真正的職業拳擊，現在才開始。`,
-    contender:`你的名字開始出現在排名與拳擊媒體裡。\n\n每一次接賽都變得更難：太弱的對手沒有價值，太強的對手可能直接終結你的上升勢頭。\n\n贊助、媒體、感情與名氣也會一起變大。\n\n你不只需要會打拳，還得學會管理自己的人生。`,
-    world:`燈光不再是小型體育館裡的幾盞白燈。\n\n記者、轉播、贊助商、排名與冠軍腰帶，全部開始圍繞著你。\n\n從台灣出發的那個留學生，已經走到真正的世界舞台。\n\n接下來沒有任何一場是普通比賽。`
+    prologue:`出發那天，桃園機場的廣播聲不斷響起。
+
+你的行李箱裡沒有太多東西——幾件衣服、幾本課本、一雙拳鞋、護齒，還有那副已經被汗水浸透無數次的舊拳套。
+
+你叫 **${name}**。
+
+在台灣，你只是一個還沒什麼人認識的業餘拳手。沒有冠軍腰帶，沒有經紀公司，也沒有漂亮的職業戰績。
+
+但你做了一個決定。
+
+${destinationLifeText()}
+
+白天，你是普通的台灣留學生。晚上，你會走進陌生的拳館，和完全不認識的拳手一起跳繩、打靶、跑步、對打。
+
+沒有人知道你能走多遠。
+
+可能在業餘賽就被淘汰。
+
+可能因為傷病提早放棄。
+
+可能沉迷夜生活、戀愛與名氣，慢慢離開拳擊。
+
+也可能——
+
+有一天，你會站在萬人注目的擂台中央，讓全世界第一次記住這個來自台灣的名字。
+
+**${name}。**
+
+現在，你的戰績是：
+
+**0 勝 · 0 敗**
+
+一切都還沒有開始。
+
+而你人生的第一個回合，即將敲鐘。
+
+**接下來，你將正式展開在 ${dest} 的海外業餘拳擊生涯。**`,
+    amateur_local:`第一天走進 ${city} 的拳館時，沒有任何人特別看你。
+
+你只是那個從台灣來的留學生。
+
+第一次跳繩跟不上節奏，第一次實戰也可能被打得滿臉通紅。教練不在乎你的夢想有多大，他只看你明天還會不會準時出現在拳館。
+
+你的第一個目標只有一個：**先在這裡生存下來。**`,
+    amateur_elite:`幾場業餘賽過後，拳館裡開始有人叫得出 **${name}**。
+
+你不再只是新人。地方公開賽、強校拳手與更有經驗的業餘選手開始出現在對面。
+
+每一場勝利都讓你更接近職業拳擊，但每一次失誤，也可能讓別人重新評估你的價值。`,
+    turn_pro:`桌上放著職業執照與第一份正式比賽文件。
+
+業餘時代即將留在身後。下一場開始，回合更長、拳套更小，沒有任何勝場可以帶進新的戰績。
+
+你的職業紀錄將重新變成：
+
+**0 勝 · 0 敗。**
+
+真正的職業拳擊，從現在開始。`,
+    regional:`你已經不再是完全沒人知道的新人。
+
+主辦方開始給你更正式的對手，也開始有人研究你的錄影。每個人都有自己的戰績、團隊與生涯計畫。
+
+你想往上爬，就代表另一個人必須掉下去。`,
+    contender:`你的名字開始出現在拳擊網站、排名與媒體貼文裡。
+
+現在接一場比賽，考慮的不只是能不能贏。排名、酬勞、promotion、曝光、傷病與風險，全都綁在一起。
+
+你開始真正理解：成為挑戰者，比成為新人困難得多。`,
+    world:`聚光燈照在擂台中央。
+
+記者、轉播、贊助商、排名與冠軍腰帶全都圍繞著你。
+
+很多年前，那個拖著行李離開桃園機場的台灣留學生，現在已經走到世界舞台。
+
+從這裡開始，每一場比賽都有可能成為你一生被記住的那一晚。`
   };
   return texts[id]||texts.amateur_local;
 }
@@ -330,16 +434,43 @@ function makeStoryCard(id){
 }
 function renderStoryCard(){
   const s=G.storyCard;if(!s)return "";
-  const record=G.isPro?`${G.record.w}-${G.record.l}-${G.record.d} (${G.record.ko}KO)`:`${G.amateur.w}-${G.amateur.l}`;
+  const bp=BODY_PROFILE[G.weight]||{height:175,kg:61};
+  const income=G.careerIncome||0;
+  const countryLine=s.id==="prologue"?`TAIWAN · AMATEUR BOXING`:`${destinationZh().toUpperCase()} · ${G.isPro?"PRO BOXING":"AMATEUR BOXING"}`;
+  const ageTitle=s.id==="prologue"?`${G.age} 歲，第一次離開台灣`:`${G.age} 歲，${s.title.replace(/^.*?·\s*/,"")}`;
+  const img=storyImageFor(s.id);
   return `<div class="story-card">
-    <div class="story-head"><div class="story-kicker">${s.kicker}</div><div class="story-title">${s.title}</div><div class="story-year">${G.year} · ${G.age} 歲</div></div>
-    <div class="story-art">${pixelSceneSVG(s.theme)}</div>
+    <div class="story-identity">
+      <div class="story-country">${s.id==="prologue"?"🇹🇼 台灣拳擊少年":s.kicker}</div>
+      <div class="story-country-en">${countryLine}</div>
+      <div class="story-fighter-name">${esc(G.name)}　${STYLES[G.style].zh}</div>
+      <div class="story-fighter-sub">${G.weight}｜${bp.height}cm / ${bp.kg}kg｜${G.age}歲｜${G.isPro?"職業":"業餘"} · ${s.id==="prologue"?"台灣":`台灣 → ${destinationZh()}`}</div>
+      <div class="story-major">
+        <div class="m"><b>${ovr()}</b><span>OVR</span></div>
+        <div class="m"><b>${G.health}</b><span>健康</span></div>
+        <div class="m"><b>${G.morale}</b><span>士氣</span></div>
+        <div class="m"><b>${G.fame}</b><span>名氣</span></div>
+        <div class="m"><b>${income}</b><span>生涯收入</span></div>
+      </div>
+      <div class="story-abilities">
+        <div class="story-ability"><span>力量</span><b>${G.stats.power}</b></div>
+        <div class="story-ability"><span>速度</span><b>${G.stats.speed}</b></div>
+        <div class="story-ability"><span>體能</span><b>${G.stats.stamina}</b></div>
+        <div class="story-ability"><span>防守</span><b>${G.stats.defense}</b></div>
+        <div class="story-ability"><span>抗擊打</span><b>${G.stats.chin}</b></div>
+        <div class="story-ability"><span>技術</span><b>${G.stats.technique}</b></div>
+      </div>
+    </div>
+    ${img?`<div class="story-photo"><img src="${img}" alt="${esc(s.title)}" onerror="this.style.display='none'"&#39;")}</div>'"></div>`:`<div class="story-art">${pixelSceneSVG(s.theme)}</div>`}
     <div class="story-body">
-      <div class="story-profile"><div class="chibi">${avatarSVG(G.avatar,G.gender)}</div><div><b style="font-size:18px">${esc(G.name)} · ${STYLES[G.style].zh}</b><div class="text" style="font-size:11px">${G.weight}｜${G.age}歲｜台灣 → ${destinationZh()} · ${G.baseCity}</div><div class="story-stats">
-        <div class="story-stat"><b>${ovr()}</b><span>OVR</span></div><div class="story-stat"><b>${G.health}</b><span>健康</span></div><div class="story-stat"><b>${G.morale}</b><span>士氣</span></div><div class="story-stat"><b>${record}</b><span>${G.isPro?"職業":"業餘"}</span></div>
-      </div></div></div>
+      <div class="story-chapter-label">
+        <div class="story-chapter-title">${s.title}</div>
+        <div class="story-chapter-year">${G.year}</div>
+      </div>
+      <div style="font-size:28px;margin-top:12px">🥊</div>
+      <div class="story-age-title">${ageTitle}</div>
       <div class="story-copy">${s.text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>
-      <button class="btn gold" style="margin-top:14px" onclick="continueStory()">${s.button}</button>
+      <button class="btn gold" style="margin-top:16px" onclick="continueStory()">${s.button}</button>
     </div>
   </div>`;
 }
@@ -786,7 +917,7 @@ function simulateFight(f,strategy){
 }
 function applyFight(f,winner,method,end,log){
   if(G.isPro){
-    const oldRank=G.rank; G.money+=f.purse; G.fatigue=clamp(G.fatigue+rnd(18,29),0,100);
+    const oldRank=G.rank; G.money+=f.purse; G.careerIncome=(G.careerIncome||0)+f.purse; G.fatigue=clamp(G.fatigue+rnd(18,29),0,100);
     G.health=clamp(G.health-rnd(5,14)-(winner==="opp"?rnd(3,8):0),0,100);
     G.readiness=clamp(G.readiness-rnd(18,28),0,100); G.weightRisk=clamp(G.weightRisk-rnd(5,15),0,100);
     const title=TITLE_DEFS.find(x=>x.id===f.title);
@@ -861,7 +992,7 @@ function phaseHTML(){
 }
 function startScreen(){
   return `<div class="hero">
-    <div class="eyebrow">BOXING LIFE · V10 STORY MODE</div>
+    <div class="eyebrow">BOXING LIFE · V11 STORY MODE</div>
     <h1>拳擊<br>人生</h1>
     <p>你是來自台灣的拳手，先選擇前往美國、日本或菲律賓留學兼學拳，從業餘起步，一步步走向職業與世界舞台。整體視覺改成 Q版復古像素風格，致敬 90 年代街機格鬥遊戲的熱血感。</p>
   </div>
