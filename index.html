@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>拳擊人生 · Boxing Life V11 Horizontal Pixel Edition</title>
+<title>拳擊人生 · Boxing Life V14 No Win Gate</title>
 <style>
 :root{
   --bg:#120b1d;--surface:#1b1832;--surface2:#241f42;--line:#5b4f8c;
@@ -195,7 +195,7 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 .story-photo{margin:10px 14px 0;border:2px solid #5b4f8c;border-radius:13px;overflow:hidden;background:#0f0c20}.story-photo img{display:block;width:100%;height:auto;image-rendering:pixelated}.story-photo-fallback svg{display:block;width:100%;height:auto}
 
 
-/* ===== V11 HORIZONTAL REAL PIXEL EDITION ===== */
+/* ===== V12 NO WIN GATE ===== */
 body{background:#060a0e;background-image:linear-gradient(90deg,#07110f 0,#07110f 11%,#071014 11%,#05090d 100%)}
 #app{max-width:1480px;margin:0 auto;min-height:100vh;padding-bottom:30px}
 .real-pixel-art img,.story-photo img{display:block;width:100%;height:100%;object-fit:cover;image-rendering:pixelated}
@@ -205,6 +205,7 @@ body{background:#060a0e;background-image:linear-gradient(90deg,#07110f 0,#07110f
 .desktop-shell{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh;border-left:1px solid #24302d;border-right:1px solid #24302d}
 .desktop-side{background:linear-gradient(180deg,#0b2019,#091813);border-right:1px solid #2b433a;padding:22px 16px;position:sticky;top:0;height:100vh;overflow:auto}
 .brand{font-size:30px;font-weight:950;letter-spacing:-1px;margin-bottom:4px}.brand em{font-style:normal;color:var(--gold)}
+.brand small{display:block;font-size:11px;letter-spacing:.18em;color:#8ca89d;font-weight:800;margin-top:5px}
 .brand-sub{font-size:11px;letter-spacing:.2em;color:#8ca89d;padding-bottom:18px;border-bottom:1px solid #284139}
 .side-route{margin:18px 0;padding:12px;border:1px solid #2c4c41;border-radius:12px;background:#0d251e}.side-route b{display:block;color:var(--gold);font-size:12px}.side-route span{font-size:11px;color:#a4bbb3;line-height:1.55}
 .side-nav{display:flex;flex-direction:column;gap:7px}.side-nav button{background:transparent;border:1px solid transparent;color:#b8cbc5;text-align:left;padding:11px 12px;border-radius:9px;font-weight:800}.side-nav button.active{border-color:#80662b;background:#25341f;color:#ffd25a;box-shadow:0 0 16px rgba(255,210,90,.1)}
@@ -241,7 +242,8 @@ body{background:#060a0e;background-image:linear-gradient(90deg,#07110f 0,#07110f
   </div>
 </div>
 <script>
-const SAVE_KEY="boxing-life-v11-horizontal-real-pixel";
+const SAVE_KEY="boxing-life-v14-no-win-gate";
+const LEGACY_SAVE_KEYS=["boxing-life-v13-all-event-images","boxing-life-v12-horizontal-event-pack","boxing-life-v11-horizontal-real-pixel"];
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 let rng=Math.random;
 function seedHash(s){let h=2166136261>>>0; for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)} return h>>>0;}
@@ -270,12 +272,12 @@ const STYLES={
   counter:{zh:"反擊型",mods:{defense:5,technique:5,stamina:-2}}
 };
 const CAREER_PHASES=[
-  {id:"amateur_local",zh:"業餘新人",need:4,reward:2,desc:"先累積基礎業餘戰績"},
-  {id:"amateur_elite",zh:"業餘強化",need:9,reward:2,desc:"地方賽 → 全國賽"},
-  {id:"turn_pro",zh:"轉職業",need:1,reward:3,desc:"正式 0-0 轉職業"},
-  {id:"regional",zh:"地區排名",need:6,reward:2,desc:"建立職業戰績"},
-  {id:"contender",zh:"挑戰者",need:12,reward:2,desc:"衝排名與冠軍機會"},
-  {id:"world",zh:"世界舞台",need:18,reward:3,desc:"世界排名與冠軍賽"}
+  {id:"amateur_local",zh:"業餘新人",duration:10,reward:2,desc:"適應海外拳館與第一批業餘賽"},
+  {id:"amateur_elite",zh:"業餘強化",duration:18,reward:2,desc:"地方賽、公開賽與更強的業餘對手"},
+  {id:"turn_pro",zh:"轉職業",duration:6,reward:3,desc:"取得職業執照，重新以 0-0 開始"},
+  {id:"regional",zh:"地區排名",duration:26,reward:2,desc:"累積職業經驗、酬勞與地區曝光"},
+  {id:"contender",zh:"挑戰者",duration:34,reward:2,desc:"排名、主卡、媒體與冠軍機會開始增加"},
+  {id:"world",zh:"世界舞台",duration:9999,reward:3,desc:"進入世界級舞台，勝敗只影響你能走多高"}
 ];
 const TITLE_DEFS=[
   {id:"state",name:"State Champion",zh:"州級冠軍",rank:650},
@@ -302,8 +304,17 @@ function trainXP(skill,amount){
   while(G.stats[skill]<99 && G.xp[skill]>=xpNeed(G.stats[skill])){G.xp[skill]-=xpNeed(G.stats[skill]);G.stats[skill]++;ups++}
   return ups;
 }
-function stageWinsNeeded(){ return CAREER_PHASES[Math.min(G.phaseIndex, CAREER_PHASES.length-1)].need; }
 function currentPhase(){ return CAREER_PHASES[Math.min(G.phaseIndex, CAREER_PHASES.length-1)] }
+function ensurePhaseState(){
+  if(!G)return;
+  if(typeof G.phaseElapsedWeeks!=="number") G.phaseElapsedWeeks=0;
+  if(typeof G.phaseIndex!=="number") G.phaseIndex=0;
+}
+function phaseStatusText(i){
+  if(i<G.phaseIndex) return "已經歷";
+  if(i===G.phaseIndex) return "進行中";
+  return "未來章節";
+}
 function ovr(){
   const a=G.stats;
   return Math.round(a.power*.18+a.speed*.17+a.stamina*.17+a.defense*.16+a.chin*.13+a.technique*.19);
@@ -313,6 +324,8 @@ function addLog(text,type=""){
   G.logs=G.logs.slice(0,140);
 }
 function advanceWeek(n=1){
+  ensurePhaseState();
+  G.phaseElapsedWeeks += n;
   for(let i=0;i<n;i++){
     G.week++;
     G.fatigue=clamp(G.fatigue-rnd(1,3),0,100);
@@ -326,9 +339,9 @@ function advanceWeek(n=1){
 }
 function baseGame(){
   return {
-    version:11, name:"李逍遙", gender:"male", age:18, weight:"Lightweight", style:"pressure", originCountry:"台灣", destinationCountry:"USA", baseCity:"Las Vegas",
+    version:14, name:"李逍遙", gender:"male", age:18, weight:"Lightweight", style:"pressure", originCountry:"台灣", destinationCountry:"USA", baseCity:"Las Vegas",
     seed:makeSeed(), year:2026, week:1, retired:false, isPro:false,
-    phaseIndex:0, skillPoints:0, milestoneShown:false,
+    phaseIndex:0, phaseElapsedWeeks:0, skillPoints:0, milestoneShown:false,
     amateur:{w:0,l:0}, record:{w:0,l:0,d:0,ko:0}, rank:1450, money:200, careerIncome:0, fame:3, health:100, fatigue:6, morale:70,
     manager:20, promoterInterest:5, readiness:30, weightRisk:8, discipline:70,
     stats:{power:49,speed:50,stamina:50,defense:49,chin:49,technique:50},
@@ -427,11 +440,11 @@ ${destinationLifeText()}
 第一次跳繩跟不上節奏，第一次實戰也可能被打得滿臉通紅。教練不在乎你的夢想有多大，他只看你明天還會不會準時出現在拳館。
 
 你的第一個目標只有一個：**先在這裡生存下來。**`,
-    amateur_elite:`幾場業餘賽過後，拳館裡開始有人叫得出 **${name}**。
+    amateur_elite:`經過一段時間的業餘賽、訓練與海外生活後，拳館裡開始有人叫得出 **${name}**。
 
 你不再只是新人。地方公開賽、強校拳手與更有經驗的業餘選手開始出現在對面。
 
-每一場勝利都讓你更接近職業拳擊，但每一次失誤，也可能讓別人重新評估你的價值。`,
+勝利會帶來名氣與機會，失敗也會留下經驗。無論戰績如何，時間都會把你推向下一個選擇：是否正式轉職業。`,
     turn_pro:`桌上放著職業執照與第一份正式比賽文件。
 
 業餘時代即將留在身後。下一場開始，回合更長、拳套更小，沒有任何勝場可以帶進新的戰績。
@@ -574,20 +587,27 @@ function addSkillPoints(n, why=""){
   if(n>0) addLog(`你獲得 ${n} 點自由能力點數${why?`（${why}）`:""}。`,"titlelog");
 }
 function checkPhaseUp(){
+  ensurePhaseState();
+  if(G.phaseIndex>=CAREER_PHASES.length-1) return;
   const phase=currentPhase();
-  const wins = G.isPro ? G.record.w : G.amateur.w;
-  if(wins>=phase.need && G.phaseIndex<CAREER_PHASES.length-1){
-    G.phaseIndex++;
-    const next=currentPhase();
-    addSkillPoints(next.reward, `升級到「${next.zh}」`);
-    if(next.id==="turn_pro"){
-      G.isPro=true; G.rank=1350; G.money+=500; G.promoterInterest+=8;
-      addLog("你正式結束業餘生涯，簽下職業執照，成為 0-0 的職業拳手。","titlelog");
-    }else{
-      addLog(`生涯階段提升：${next.zh}。${next.desc}`,"titlelog");
-    }
-    G.storyCard=makeStoryCard(next.id);
+  if(G.phaseElapsedWeeks < phase.duration) return;
+
+  G.phaseElapsedWeeks=0;
+  G.phaseIndex++;
+  const next=currentPhase();
+  addSkillPoints(next.reward, `進入「${next.zh}」`);
+
+  if(next.id==="turn_pro"){
+    G.isPro=true;
+    G.rank=1350;
+    G.money+=500;
+    G.careerIncome=(G.careerIncome||0)+500;
+    G.promoterInterest=clamp(G.promoterInterest+8,0,100);
+    addLog("不論業餘勝敗，你都完成了這段歷練並取得職業執照。職業戰績從 0-0 重新開始。","titlelog");
+  }else{
+    addLog(`時間與經驗把你帶進下一章：${next.zh}。勝敗不會阻止生涯推進。`,"titlelog");
   }
+  G.storyCard=makeStoryCard(next.id);
 }
 function countryLabelFromCity(city){
   const c=countryFromCity(city);
@@ -694,28 +714,57 @@ function pixelSceneSVG(theme){
   </svg>`;
 }
 const EVENT_IMAGE_BY_THEME={
-  gym:"assets/training.png",
-  coach:"assets/training.png",
-  crowd:"assets/fight.png",
-  medal:"assets/champion.png",
-  fight:"assets/fight.png",
-  media:"assets/media.png",
-  love:"assets/romance.png",
-  nightlife:"assets/nightlife.png",
-  doctor:"assets/medical.png",
+  gym:"assets/event_training.png",
+  coach:"assets/event_training.png",
+  crowd:"assets/event_fight.png",
+  medal:"assets/event_world.png",
+  fight:"assets/event_fight.png",
+  media:"assets/event_media.png",
+  love:"assets/event_romance.png",
+  nightlife:"assets/event_party.png",
+  doctor:"assets/event_medical.png",
   study:"assets/prologue_japan.png",
-  contract:"assets/media.png",
+  contract:"assets/event_collab.png",
   travel:"assets/prologue_usa.png",
-  food:"assets/nightlife.png"
+  food:"assets/event_party.png"
+};
+const EVENT_IMAGE_BY_ID={
+  sparring:"assets/event_sparring.png",
+  strength:"assets/event_strength.png",
+  viral:"assets/event_viral.png",
+  idol_date:"assets/event_idol_date.png",
+  influencer:"assets/event_influencer.png",
+  party:"assets/event_party_night.png",
+  romance_break:"assets/event_romance_break.png",
+  gaming:"assets/event_gaming.png",
+  charity:"assets/event_charity.png",
+  coach:"assets/event_coach.png",
+  amateur_tourney:"assets/event_amateur_tourney.png",
+  license:"assets/event_license.png",
+  medical:"assets/event_medical_hand.png",
+  special_tv:"assets/event_special_tv.png",
+  homesick:"assets/event_homesick.png",
+  language:"assets/event_language.png",
+  scholarship:"assets/event_scholarship.png",
+  food_poison:"assets/event_food_poison.png",
+  fan_dm:"assets/event_fan_dm.png",
+  sponsor_dinner:"assets/event_sponsor_dinner.png",
+  visa:"assets/event_visa.png",
+  gym_rival:"assets/event_gym_rival.png",
+  podcast:"assets/event_podcast.png",
+  part_time:"assets/event_part_time.png",
+  ramen_trip:"assets/event_ramen_trip.png",
+  scandal:"assets/event_scandal.png"
 };
 function realEventImage(e){
+  if(e && e.id && EVENT_IMAGE_BY_ID[e.id]) return EVENT_IMAGE_BY_ID[e.id];
   const theme=eventThemeKey(e);
   if(theme==="travel" && G){
     if(G.destinationCountry==="Japan") return "assets/prologue_japan.png";
     if(G.destinationCountry==="Philippines") return "assets/prologue_philippines.png";
     return "assets/prologue_usa.png";
   }
-  return EVENT_IMAGE_BY_THEME[theme]||"assets/training.png";
+  return EVENT_IMAGE_BY_THEME[theme]||"assets/event_training.png";
 }
 function eventImageHTML(e){
   const src=realEventImage(e);
@@ -792,7 +841,7 @@ const EVENTS=[
     {ico:"🏅",label:"報名參賽",hint:"拚戰績",low:["首輪就被淘汰。",{morale:-4,readiness:2}],mid:["你拿下一場勝利。",{readiness:5,fame:3,skillPoints:1}],high:["你連贏兩場，聲量上升。",{readiness:8,fame:6,skillPoints:1,xp:{technique:5,stamina:4}}]},
     {ico:"📚",label:"先繼續訓練",hint:"穩定成長",low:["有點可惜。",{morale:-1}],mid:["你多一週準備時間。",{readiness:4}],high:["這週訓練效果極佳。",{xp:{speed:5,technique:4}}]}
   ]},
-  {id:"license",cat:"CAREER",title:"職業執照測驗說明會",text:"你開始思考是否該準備轉職業。",cond:g=>!g.isPro && g.amateur.w>=6,options:[
+  {id:"license",cat:"CAREER",title:"職業執照測驗說明會",text:"你開始思考是否該準備轉職業。",cond:g=>!g.isPro && g.phaseIndex>=1,options:[
     {ico:"📄",label:"開始準備職業執照",hint:"轉職業進度",low:["還是覺得自己太嫩。",{morale:-2,readiness:3}],mid:["你了解很多轉職業流程。",{manager:5,readiness:4}],high:["你找到適合的經紀人窗口。",{manager:8,promoterInterest:6,skillPoints:1}]},
     {ico:"⏳",label:"再多打幾場業餘",hint:"穩一點",low:["機會暫時延後。",{morale:-1}],mid:["這是合理選擇。",{xp:{technique:4}}],high:["你的業餘名氣越來越好。",{fame:6,readiness:3}]}
   ]},
@@ -800,7 +849,7 @@ const EVENTS=[
     {ico:"🩺",label:"去檢查並休息",hint:"健康優先",low:["檢查沒有大問題，但停了一週。",{readiness:-4,money:-180}],mid:["及早處理避免惡化。",{health:6,fatigue:-8,money:-180}],high:["物理治療效果很好。",{health:10,fatigue:-12,money:-180,morale:2}]},
     {ico:"🔥",label:"繼續練",hint:"高風險",low:["疼痛惡化，被迫停訓。",{health:-15,readiness:-8,morale:-5}],mid:["撐過去了。",{health:-4,xp:{technique:4},readiness:3}],high:["你沒有受到影響。",{xp:{power:5,technique:5},readiness:7}]}
   ]},
-  {id:"special_tv",cat:"SPECIAL OPPORTUNITY",title:"電視轉播賽臨時缺人",text:"一場有電視轉播的拳賽臨時有人退賽。",special:true,cond:g=>g.isPro && g.record.w>=2,options:[
+  {id:"special_tv",cat:"SPECIAL OPPORTUNITY",title:"電視轉播賽臨時缺人",text:"一場有電視轉播的拳賽臨時有人退賽。",special:true,cond:g=>g.isPro && g.phaseIndex>=3,options:[
     {ico:"📺",label:"接下這場大機會",hint:"高曝光 · 高風險",low:["等級差距太明顯。",{health:-5,fatigue:9,readiness:-5,promoterInterest:6}],mid:["你願意接戰讓主辦方印象深刻。",{fame:8,promoterInterest:12,offerBoost:2}],high:["拳擊圈開始記住你。",{fame:16,promoterInterest:18,morale:6,offerBoost:3}]},
     {ico:"🛡️",label:"拒絕，保護生涯節奏",hint:"穩定",low:["主辦方很快找了別人。",{promoterInterest:-3}],mid:["團隊認為這是成熟決定。",{manager:5,readiness:4}],high:["經紀人幫你談到另一場更合理的賽事。",{manager:7,promoterInterest:6,offerBoost:1}]}
   ]},
@@ -1017,12 +1066,26 @@ function applyFight(f,winner,method,end,log){
 }
 function closeFightModal(){ document.querySelector("#fightModal").classList.add("hidden") }
 function save(show=true){ if(G)localStorage.setItem(SAVE_KEY,JSON.stringify(G)); if(show&&G){addLog("生涯已儲存。","good"); render()} }
+function readSavedGame(){
+  let raw=localStorage.getItem(SAVE_KEY);
+  if(raw) return raw;
+  for(const k of LEGACY_SAVE_KEYS){
+    raw=localStorage.getItem(k);
+    if(raw) return raw;
+  }
+  return null;
+}
+function normalizeSave(){
+  if(!G)return;
+  if(typeof G.phaseElapsedWeeks!=="number") G.phaseElapsedWeeks=0;
+  G.version=14;
+}
 function loadGame(){
-  const r=localStorage.getItem(SAVE_KEY); if(!r)return;
-  G=JSON.parse(r); setSeed(G.seed||"boxing");
+  const r=readSavedGame(); if(!r)return;
+  G=JSON.parse(r); normalizeSave(); setSeed(G.seed||"boxing");
   if(!G.currentEvent)G.currentEvent=pickEvent();
   if(!G.offers||!G.offers.length)generateOffers();
-  render();
+  save(false); render();
 }
 function resetGame(){ if(confirm("確定要結束這次人生並重新建立拳手嗎？")){ localStorage.removeItem(SAVE_KEY); G=null; render(); } }
 
@@ -1050,14 +1113,15 @@ function miniAvatar(g){ return `<div class="chibi small-chibi">${avatarSVG(g.ava
 function fullAvatar(g){ return `<div class="chibi">${avatarSVG(g.avatar||defaultAvatar(), g.gender)}</div>` }
 
 function phaseHTML(){
+  ensurePhaseState();
   return `<div class="stage">${CAREER_PHASES.slice(0,4).map((p,i)=>`<div class="stage-card ${i===Math.min(G.phaseIndex,3)?"on":""}">
-    <b>${p.zh}</b><span>${p.need} 勝門檻</span></div>`).join("")}</div>`;
+    <b>${p.zh}</b><span>${phaseStatusText(i)}</span></div>`).join("")}</div>`;
 }
 function startScreen(){
   return `<div class="start-desktop"><div class="hero">
     <div class="eyebrow">BOXING LIFE · V11 STORY MODE</div>
     <h1>拳擊<br>人生</h1>
-    <p>你是來自台灣的拳手，先選擇前往美國、日本或菲律賓留學兼學拳，從業餘起步，一步步走向職業與世界舞台。整體視覺改成 Q版復古像素風格，致敬 90 年代街機格鬥遊戲的熱血感。</p>
+    <p>你是來自台灣的拳手，前往美國、日本或菲律賓留學兼學拳。生涯從業餘開始，之後會隨時間與事件自然推進；沒有勝場門檻，就算連敗也能繼續走到職業與世界舞台。</p>
   </div>
   <div class="wrap">
     <div class="panel">
@@ -1086,7 +1150,7 @@ function startScreen(){
       <div class="field"><label>種子碼</label><input id="seed" value="${makeSeed()}"></div>
       <button class="btn" style="margin-top:16px" onclick="createGame()">從業餘開始 🥊</button>
     </div>
-    ${localStorage.getItem(SAVE_KEY)?`<button class="btn ghost" onclick="loadGame()">讀取上次生涯</button>`:""}
+    ${readSavedGame()?`<button class="btn ghost" onclick="loadGame()">讀取上次生涯</button>`:""}
   </div></div>`;
 }
 function chipOne(cls,el){ document.querySelectorAll("."+cls).forEach(x=>x.classList.remove("on")); el.classList.add("on"); }
@@ -1156,7 +1220,7 @@ function render(){
       </div>
     </div>`;
   const normal=`
-      <div class="phase-banner"><b>目前階段：</b> ${currentPhase().zh} ｜ ${currentPhase().desc}<br><span class="note">故事背景：來自台灣，正在 ${dest} 留學兼打拳 ｜ 下一階段門檻：${G.isPro?G.record.w:G.amateur.w}/${stageWinsNeeded()} 勝 ｜ 可用自由點數：${G.skillPoints}</span></div>
+      <div class="phase-banner"><b>目前階段：</b> ${currentPhase().zh} ｜ ${currentPhase().desc}<br><span class="note">故事背景：來自台灣，正在 ${dest} 留學兼打拳 ｜ <b style="color:#6ce7a2">沒有勝場門檻</b>：生涯會隨時間與事件自然推進，輸掉比賽也不會卡關 ｜ 可用自由點數：${G.skillPoints}</span></div>
       <div class="dashboard-grid">
         <div class="primary-col">
           <div class="panel"><div class="label">Career Stage</div>${phaseHTML()}</div>
@@ -1182,8 +1246,8 @@ function eventHTML(){
     <div class="opts">${e.options.map((o,i)=>`<button class="opt" onclick="chooseEvent(${i})"><div class="ico">${o.ico}</div><div class="ot"><b>${o.label}</b><span>${o.hint}</span></div></button>`).join("")}</div>`;
 }
 window.addEventListener("load",()=>{
-  const raw=localStorage.getItem(SAVE_KEY);
-  if(raw){ try{ G=JSON.parse(raw); setSeed(G.seed||"boxing"); if(!G.currentEvent)G.currentEvent=pickEvent(); if(!G.offers?.length)generateOffers(); }catch(e){G=null} }
+  const raw=readSavedGame();
+  if(raw){ try{ G=JSON.parse(raw); normalizeSave(); setSeed(G.seed||"boxing"); if(!G.currentEvent)G.currentEvent=pickEvent(); if(!G.offers?.length)generateOffers(); save(false); }catch(e){G=null} }
   render();
   if(!G) setTimeout(()=>{ try{ updateCityOptions(); }catch(e){} },0);
 });
