@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>拳擊人生 · Boxing Life V6</title>
+<title>拳擊人生 · Boxing Life V7</title>
 <style>
 :root{
   --bg:#090b10;--surface:#121722;--surface2:#191f2c;--line:#2b3444;
@@ -157,6 +157,10 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 }
 .phase-banner b{color:var(--gold)}
 .small-chibi{width:50px;height:50px}
+.event-art{margin:10px 0 12px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#0b1018}
+.event-art svg{display:block;width:100%;height:auto;image-rendering:pixelated;shape-rendering:crispEdges}
+.trip{font-size:11px;color:var(--gold);font-weight:800;margin-top:3px}
+
 </style>
 </head>
 <body>
@@ -170,7 +174,7 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
   </div>
 </div>
 <script>
-const SAVE_KEY="boxing-life-v6-amateur";
+const SAVE_KEY="boxing-life-v7-overseas";
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 let rng=Math.random;
 function seedHash(s){let h=2166136261>>>0; for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)} return h>>>0;}
@@ -182,7 +186,12 @@ const money=n=>"$"+Math.round(n).toLocaleString();
 const SKILLS=["power","speed","stamina","defense","chin","technique"];
 const SKILL_NAMES={power:"POWER",speed:"SPEED",stamina:"STAMINA",defense:"DEFENSE",chin:"CHIN",technique:"TECHNIQUE"};
 const WEIGHTS=["Bantamweight","Featherweight","Super Featherweight","Lightweight","Super Lightweight","Welterweight","Middleweight"];
-const CITIES=["台北","高雄","台中","Las Vegas","Los Angeles","Manila"];
+const START_DESTINATIONS={
+  USA:{zh:"美國",cities:["Las Vegas","Los Angeles","New York","Houston"]},
+  Japan:{zh:"日本",cities:["Tokyo","Osaka","Fukuoka","Yokohama"]},
+  Philippines:{zh:"菲律賓",cities:["Manila","Cebu","Baguio","Davao"]}
+};
+const CITIES=["Las Vegas","Los Angeles","New York","Houston","Tokyo","Osaka","Fukuoka","Manila","Cebu","Baguio"];
 const STYLES={
   pressure:{zh:"壓迫型",mods:{stamina:5,chin:3,speed:-2}},
   boxer:{zh:"技巧型",mods:{speed:5,technique:4,power:-2}},
@@ -246,7 +255,7 @@ function advanceWeek(n=1){
 }
 function baseGame(){
   return {
-    version:6, name:"李逍遙", gender:"male", age:18, weight:"Lightweight", style:"pressure", baseCity:"台北",
+    version:7, name:"李逍遙", gender:"male", age:18, weight:"Lightweight", style:"pressure", originCountry:"台灣", destinationCountry:"USA", baseCity:"Las Vegas",
     seed:makeSeed(), year:2026, week:1, retired:false, isPro:false,
     phaseIndex:0, skillPoints:0, milestoneShown:false,
     amateur:{w:0,l:0}, record:{w:0,l:0,d:0,ko:0}, rank:1450, money:200, fame:3, health:100, fatigue:6, morale:70,
@@ -272,6 +281,7 @@ function createGame(){
   g.age=parseInt(document.querySelector("#age").value);
   g.weight=document.querySelector("#weight").value;
   g.style=document.querySelector(".style.on").dataset.v;
+  g.destinationCountry=document.querySelector("#country").value;
   g.baseCity=document.querySelector("#city").value;
   g.seed=document.querySelector("#seed").value.trim()||makeSeed();
   G=g; setSeed(G.seed);
@@ -280,7 +290,8 @@ function createGame(){
   SKILLS.forEach(k=>G.stats[k]=clamp(G.stats[k]+(alloc[k]||0),30,70));
   const m=STYLES[G.style].mods; Object.entries(m).forEach(([k,v])=>G.stats[k]=clamp(G.stats[k]+v,30,70));
   SKILLS.forEach(k=>{ let p=rnd(76,88); if(chance(.16))p+=rnd(4,8); G.potential[k]=clamp(p,74,96); });
-  addLog(`${G.name} 在 ${G.baseCity} 開始業餘拳擊生涯。目標先累積業餘戰績，再轉職業。`,"good");
+  const destZh=START_DESTINATIONS[G.destinationCountry]?.zh||G.destinationCountry;
+  addLog(`${G.name} 是來自台灣的拳手，前往${destZh}的 ${G.baseCity} 留學兼學拳，從業餘生涯開始。`,"good");
   G.currentEvent=pickEvent(); save(false); render();
 }
 function opponentName(){
@@ -339,7 +350,7 @@ function generateOffers(boost=0){
       rounds=3; purse=0;
       G.offers.push({
         id:String(Date.now())+i+String(rnd(10,99)), name:opponentName(), ovr:oppOvr, record:realisticRecord(stage,oppOvr),
-        purse, rounds, title:null, city:pick(["台北","高雄","台中","Manila","Cebu"]), rank:"業餘"
+        purse, rounds, title:null, city:pick(START_DESTINATIONS[G.destinationCountry]?.cities||[G.baseCity]), rank:"業餘"
       });
     }else{
       stage="pro";
@@ -355,12 +366,52 @@ function generateOffers(boost=0){
       }
       G.offers.push({
         id:String(Date.now())+i+String(rnd(10,99)), name:opponentName(), ovr:oppOvr, rank:oppRank,
-        record:realisticRecord(stage,oppOvr), purse, rounds, title, city:pick(["Las Vegas","Los Angeles","New York","Manila","Cebu","Bangkok"])
+        record:realisticRecord(stage,oppOvr), purse, rounds, title, city:pick(["Las Vegas","Los Angeles","New York","Tokyo","Osaka","Fukuoka","Manila","Cebu","Davao"])
       });
     }
   }
 }
-function eventImageHTML(e){ return ""; }
+function eventThemeKey(e){
+  const map={
+    sparring:"gym",strength:"gym",viral:"media",idol_date:"love",influencer:"media",party:"nightlife",romance_break:"love",
+    gaming:"nightlife",charity:"crowd",coach:"coach",amateur_tourney:"medal",license:"study",medical:"doctor",special_tv:"fight",
+    homesick:"travel",language:"study",scholarship:"study",food_poison:"food",fan_dm:"love",sponsor_dinner:"contract",
+    visa:"travel",gym_rival:"fight",podcast:"media",part_time:"study",ramen_trip:"food",beach_day:"travel",scandal:"media"
+  };
+  return (e&&e.imageKey)||map[e.id]||"gym";
+}
+function pixelSceneSVG(theme){
+  const sky={gym:'#243048',media:'#35284e',love:'#4d2437',nightlife:'#1b1b3b',crowd:'#18363d',coach:'#402d22',medal:'#483617',study:'#23364a',doctor:'#29434e',fight:'#402320',travel:'#2f3552',food:'#45331d',contract:'#2b3146'}[theme]||'#243048';
+  const ground={gym:'#1a2230',media:'#241c34',love:'#2a1a24',nightlife:'#141424',crowd:'#132830',coach:'#2e2119',medal:'#32270f',study:'#1a2838',doctor:'#1a3137',fight:'#2c1b1b',travel:'#20253b',food:'#312412',contract:'#202635'}[theme]||'#1a2230';
+  const accent={gym:'#e64a4a',media:'#62a8ff',love:'#ff6fa7',nightlife:'#9b7dff',crowd:'#55c985',coach:'#f2bf54',medal:'#f2bf54',study:'#62a8ff',doctor:'#7de0d3',fight:'#ff734f',travel:'#86b4ff',food:'#f2bf54',contract:'#8ec8ff'}[theme]||'#e64a4a';
+  const prop=(p)=>({
+    gym:`<rect x="78" y="44" width="18" height="24" fill="#444"/><rect x="74" y="46" width="6" height="20" fill="#888"/><rect x="96" y="46" width="6" height="20" fill="#888"/>`,
+    media:`<rect x="76" y="44" width="22" height="16" fill="#111"/><rect x="79" y="47" width="16" height="10" fill="${accent}"/><rect x="90" y="59" width="4" height="8" fill="#666"/>`,
+    love:`<rect x="80" y="42" width="16" height="16" fill="#ff8bbb"/><rect x="76" y="46" width="8" height="8" fill="#ff8bbb"/><rect x="92" y="46" width="8" height="8" fill="#ff8bbb"/>`,
+    nightlife:`<rect x="80" y="42" width="10" height="22" fill="#ffd37a"/><rect x="90" y="48" width="8" height="14" fill="#74d2ff"/>`,
+    crowd:`<rect x="76" y="50" width="6" height="12" fill="#5b6"/><rect x="84" y="46" width="6" height="16" fill="#79c"/><rect x="92" y="50" width="6" height="12" fill="#d77"/>`,
+    coach:`<rect x="76" y="42" width="20" height="18" fill="#76543a"/><rect x="82" y="46" width="8" height="4" fill="#f2bf54"/>`,
+    medal:`<rect x="82" y="40" width="12" height="12" fill="#f2bf54"/><rect x="84" y="52" width="8" height="12" fill="#4a78d4"/>`,
+    study:`<rect x="76" y="42" width="20" height="18" fill="#20324a"/><rect x="78" y="44" width="16" height="14" fill="#fff"/>`,
+    doctor:`<rect x="76" y="42" width="20" height="18" fill="#dceff2"/><rect x="84" y="44" width="4" height="14" fill="#55bfae"/><rect x="80" y="48" width="12" height="4" fill="#55bfae"/>`,
+    fight:`<rect x="74" y="44" width="24" height="18" fill="#7d2d2d"/><rect x="76" y="46" width="20" height="14" fill="#ff734f"/>`,
+    travel:`<rect x="76" y="44" width="20" height="14" fill="#5a6aa1"/><rect x="80" y="40" width="12" height="6" fill="#86b4ff"/>`,
+    food:`<rect x="76" y="48" width="20" height="8" fill="#d09b42"/><rect x="80" y="44" width="12" height="4" fill="#fff1ba"/>`,
+    contract:`<rect x="76" y="42" width="20" height="18" fill="#dfecff"/><rect x="78" y="44" width="16" height="14" fill="#fff"/>`
+  }[p]||'');
+  return `<svg viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg">
+    <rect width="120" height="72" fill="${sky}"/>
+    <rect y="56" width="120" height="16" fill="${ground}"/>
+    <rect x="12" y="16" width="18" height="14" fill="#f1c27d"/><rect x="10" y="10" width="22" height="8" fill="#1d1d1d"/>
+    <rect x="10" y="30" width="22" height="14" fill="#ffffff"/><rect x="10" y="42" width="8" height="10" fill="${accent}"/><rect x="24" y="42" width="8" height="10" fill="${accent}"/>
+    <rect x="18" y="22" width="3" height="3" fill="#222"/><rect x="24" y="22" width="3" height="3" fill="#222"/><rect x="19" y="27" width="8" height="2" fill="#8b5a3c"/>
+    <rect x="44" y="18" width="18" height="14" fill="#f1c27d"/><rect x="42" y="12" width="22" height="8" fill="#684126"/>
+    <rect x="42" y="32" width="22" height="14" fill="#d7e4ff"/><rect x="42" y="44" width="8" height="10" fill="#d94242"/><rect x="56" y="44" width="8" height="10" fill="#d94242"/>
+    <rect x="50" y="24" width="3" height="3" fill="#222"/><rect x="56" y="24" width="3" height="3" fill="#222"/><rect x="51" y="29" width="8" height="2" fill="#8b5a3c"/>
+    ${prop(theme)}
+  </svg>`;
+}
+function eventImageHTML(e){ return `<div class="event-art">${pixelSceneSVG(eventThemeKey(e))}</div>`; }
 function isSpecialEvent(e){ return !!(e && e.special); }
 function applyDelta(delta){
   const labels=[];
@@ -443,6 +494,54 @@ const EVENTS=[
   {id:"special_tv",cat:"SPECIAL OPPORTUNITY",title:"電視轉播賽臨時缺人",text:"一場有電視轉播的拳賽臨時有人退賽。",special:true,cond:g=>g.isPro && g.record.w>=2,options:[
     {ico:"📺",label:"接下這場大機會",hint:"高曝光 · 高風險",low:["等級差距太明顯。",{health:-5,fatigue:9,readiness:-5,promoterInterest:6}],mid:["你願意接戰讓主辦方印象深刻。",{fame:8,promoterInterest:12,offerBoost:2}],high:["拳擊圈開始記住你。",{fame:16,promoterInterest:18,morale:6,offerBoost:3}]},
     {ico:"🛡️",label:"拒絕，保護生涯節奏",hint:"穩定",low:["主辦方很快找了別人。",{promoterInterest:-3}],mid:["團隊認為這是成熟決定。",{manager:5,readiness:4}],high:["經紀人幫你談到另一場更合理的賽事。",{manager:7,promoterInterest:6,offerBoost:1}]}
+  ]},
+  {id:"homesick",cat:"OVERSEAS LIFE",title:"想家低潮",text:"你剛到海外生活一陣子，突然非常想念台灣家人與食物。",options:[
+    {ico:"📞",label:"打電話回家",hint:"士氣回升",low:["講完反而更想家。",{morale:-2}],mid:["你重新穩住情緒。",{morale:4,discipline:2}],high:["家人的支持讓你更有力量。",{morale:8,readiness:4}]},
+    {ico:"🥊",label:"把想念變成訓練動力",hint:"自我逼進步",low:["你其實沒有真正消化情緒。",{fatigue:5,morale:-3}],mid:["這週訓練很紮實。",{xp:{stamina:5,power:3},readiness:4}],high:["你打出一週超高品質訓練。",{xp:{stamina:8,power:5},readiness:7,morale:3}]}
+  ]},
+  {id:"language",cat:"OVERSEAS LIFE",title:"語言隔閡",text:"在國外拳館，有些戰術指示你其實沒有完全聽懂。",options:[
+    {ico:"📘",label:"認真補語言",hint:"長期收益",low:["學得很卡。",{fatigue:3}],mid:["溝通慢慢變好。",{readiness:4,manager:2}],high:["你開始能直接理解教練細節。",{readiness:8,discipline:4,xp:{technique:4}}]},
+    {ico:"😅",label:"先靠感覺撐著",hint:"短期省事",low:["你在實戰中誤解指令。",{morale:-3,readiness:-4}],mid:["勉強跟上。",{readiness:1}],high:["你靠拳感硬是吸收到了。",{xp:{technique:4}}]}
+  ]},
+  {id:"scholarship",cat:"STUDY",title:"留學獎學金機會",text:"學校提供一個小型獎學金或學費補助名額。",options:[
+    {ico:"📝",label:"花時間申請",hint:"資金 / 壓力",low:["資料準備不足。",{fatigue:3,morale:-2}],mid:["你成功拿到補助。",{money:600,morale:3}],high:["補助金比預期更好，壓力下降。",{money:1200,morale:6,readiness:3}]},
+    {ico:"⏱️",label:"專心練拳就好",hint:"穩定訓練",low:["錯過機會有點可惜。",{morale:-1}],mid:["你保住訓練節奏。",{readiness:4}],high:["這週練得非常完整。",{xp:{speed:4,technique:4},readiness:5}]}
+  ]},
+  {id:"food_poison",cat:"HEALTH",title:"吃壞肚子",text:"你在外國吃到不太習慣的食物，腸胃開始抗議。",options:[
+    {ico:"🍲",label:"乖乖休息補水",hint:"保守",low:["還是虛了一兩天。",{health:-4,readiness:-2}],mid:["恢復得還算順利。",{health:2,fatigue:-4}],high:["你很快回到狀態。",{health:5,fatigue:-6,morale:2}]},
+    {ico:"😤",label:"不管了照樣練",hint:"硬撐",low:["狀況更差，練到一半就吐。",{health:-10,fatigue:8,morale:-4}],mid:["勉強撐完。",{health:-5,fatigue:4}],high:["你真的鐵打的。",{xp:{chin:4},morale:2}]}
+  ]},
+  {id:"fan_dm",cat:"ROMANCE",title:"收到粉絲私訊示好",text:"你開始有一點人氣，甚至有粉絲主動約你出去。",options:[
+    {ico:"💌",label:"試著認識看看",hint:"有趣但分心",low:["見面後超級尷尬。",{morale:-2,discipline:-3}],mid:["心情不錯，訓練也沒受太大影響。",{morale:4,fame:3}],high:["你多了一個很支持你的對象。",{morale:7,fame:5,readiness:3}]},
+    {ico:"🙅",label:"婉拒，先專心生涯",hint:"自律",low:["有點可惜。",{morale:-1}],mid:["你保持專注。",{discipline:3,readiness:3}],high:["這份克制讓你接下來狀態更好。",{discipline:5,readiness:5}]}
+  ]},
+  {id:"sponsor_dinner",cat:"BUSINESS",title:"贊助商飯局",text:"一個品牌想約你吃飯談合作，但當晚原本排了恢復訓練。",options:[
+    {ico:"🍽️",label:"去談合作",hint:"資金 / 曝光",low:["飯局很久，幾乎沒談成。",{money:80,readiness:-3}],mid:["合作順利。",{money:450,fame:4,promoterInterest:2}],high:["你談到很好的長期合作。",{money:900,fame:8,promoterInterest:4}]},
+    {ico:"🏃",label:"改天再約，先訓練",hint:"專注",low:["品牌覺得你不好約。",{money:-0,promoterInterest:-1}],mid:["對方願意配合你的節奏。",{discipline:3,readiness:4}],high:["他們反而更尊重你的職業態度。",{discipline:5,money:200}]}
+  ]},
+  {id:"visa",cat:"OVERSEAS LIFE",title:"簽證與文件問題",text:"你的留學或訓練文件出現一點問題，需要花時間處理。",options:[
+    {ico:"📂",label:"立刻去處理",hint:"安全但花時間",low:["跑流程跑到很煩。",{fatigue:4,morale:-2}],mid:["順利解決。",{morale:2}],high:["你處理得很俐落，之後生活更穩。",{discipline:4,readiness:3}]},
+    {ico:"😬",label:"先拖一下",hint:"可能爆炸",low:["問題被拖大了。",{morale:-5,readiness:-5}],mid:["暫時沒事。",{morale:-1}],high:["你運氣不錯，還有緩衝時間。",{readiness:1}]}
+  ]},
+  {id:"gym_rival",cat:"RIVALRY",title:"拳館宿敵出現",text:"拳館裡出現一個跟你年紀和量級都相近的勁敵，大家開始拿你們比較。",options:[
+    {ico:"⚔️",label:"正面較勁",hint:"高成長",low:["你被激得太急。",{morale:-3,fatigue:6}],mid:["彼此刺激，實力都在進步。",{xp:{power:4,technique:4},readiness:4}],high:["競爭讓你爆發出新的上限。",{xp:{power:6,speed:5,technique:5},fame:4}]},
+    {ico:"🧊",label:"低調做自己",hint:"穩定",low:["大家覺得你有點示弱。",{morale:-2}],mid:["你避免了無謂消耗。",{discipline:3,readiness:3}],high:["最後是你用比賽成績說話。",{fame:5,readiness:5}]}
+  ]},
+  {id:"podcast",cat:"MEDIA",title:"節目訪談邀約",text:"當地節目想邀你談台灣拳擊與你的海外生活。",options:[
+    {ico:"🎙️",label:"接受訪談",hint:"人氣",low:["你有點緊張。",{fame:2,morale:-1}],mid:["觀眾對你印象不錯。",{fame:6,promoterInterest:2}],high:["節目播出後你人氣明顯增加。",{fame:11,promoterInterest:5,money:250}]},
+    {ico:"🤫",label:"先拒絕",hint:"專注",low:["錯過曝光。",{fame:-1}],mid:["你保住準備節奏。",{readiness:4}],high:["製作單位改成比賽後再邀你。",{manager:3}]}
+  ]},
+  {id:"part_time",cat:"LIFE",title:"留學生活費壓力",text:"除了拳擊，你也得面對生活費與學費。",options:[
+    {ico:"💼",label:"找兼職",hint:"資金 / 疲勞",low:["工作超累，練拳品質掉下來。",{money:280,fatigue:10,readiness:-5}],mid:["勉強平衡。",{money:420,fatigue:5}],high:["你找到很彈性的工作。",{money:600,fatigue:2,morale:2}]},
+    {ico:"🎯",label:"咬牙專心訓練",hint:"專注 · 經濟壓力",low:["口袋變得很緊。",{money:-120,morale:-2}],mid:["雖然拮据，但訓練完整。",{readiness:5}],high:["你把所有精力都放在拳擊上。",{readiness:8,xp:{stamina:4,technique:4}}]}
+  ]},
+  {id:"ramen_trip",cat:"FUN",title:"拉麵 / 美食小旅行",text:"你難得有一天休息，想去城市裡找好吃的放鬆一下。",options:[
+    {ico:"🍜",label:"好好放鬆一天",hint:"心情提升",low:["吃太多有點罪惡。",{morale:3,weightRisk:4}],mid:["補到精神，心情很好。",{morale:6,fatigue:-4}],high:["這次放鬆非常值得。",{morale:9,fatigue:-6,readiness:2}]},
+    {ico:"🥗",label:"克制飲食，輕鬆走走",hint:"平衡",low:["有點掃興。",{morale:-1}],mid:["你控制得很好。",{discipline:3,weightRisk:-3}],high:["連放鬆都很專業。",{discipline:5,weightRisk:-5,morale:3}]}
+  ]},
+  {id:"scandal",cat:"DRAMA",title:"社群爭議",text:"你的一則發言被截圖曲解，社群上出現一些爭議。",special:true,options:[
+    {ico:"🧾",label:"發文澄清",hint:"正面處理",low:["越解釋越亂。",{fame:-4,morale:-3}],mid:["大多數人接受。",{fame:1,morale:2}],high:["你化危機為轉機。",{fame:6,promoterInterest:3,morale:4}]},
+    {ico:"🤐",label:"冷處理",hint:"賭風波會過",low:["大家開始亂猜。",{fame:-5,morale:-2}],mid:["風波慢慢自己退掉。",{morale:1}],high:["你幾乎沒受影響。",{discipline:2}]}
   ]}
 ];
 function pickEvent(){
@@ -462,6 +561,7 @@ function chooseEvent(idx){
     ${isSpecialEvent(ev)?`<div class="special-tag">★ SPECIAL EVENT</div>`:""}
     <div class="season" style="margin-top:${isSpecialEvent(ev)?"9px":"0"}"><b>${ev.cat}</b><span>${G.year} · Week ${G.week}</span></div>
     <div class="title">${ev.title}</div>
+    ${eventImageHTML(ev)}
     <div class="dice-stage"><div id="die" class="die rolling">?</div><div class="text">命運骰子正在決定結果…</div></div>`;
   let ticks=0;
   const timer=setInterval(()=>{
@@ -506,6 +606,7 @@ function renderFightPrep(f){
   document.querySelector("#eventBox").innerHTML=`
     <div class="season"><b>${type}</b><span>${f.city}</span></div>
     <div class="title">${G.name} vs ${f.name}</div>
+    ${eventImageHTML({id:"special_tv",imageKey:"fight"})}
     <div class="text">${f.record} · OVR ${f.ovr} ${G.isPro?`· 世界 #${f.rank}`:""}<br>${f.rounds} 回合 ${G.isPro?`· ${money(f.purse)}`:"· 無酬業餘賽"}${t?` · 🏆 ${t.zh}`:""}</div>
     <div class="outcome ${G.weightRisk>55?"bad":""}">
       <b>賽前狀態</b>
@@ -576,8 +677,8 @@ function applyFight(f,winner,method,end,log){
       const jump=Math.round(rnd(50,150)*quality*(1+Math.min(2.2,oldRank/700)));
       G.rank=clamp(G.rank-jump,1,2500); G.fame=clamp(G.fame+rnd(3,7)+(method==="KO"?3:0),0,100);
       G.morale=clamp(G.morale+rnd(5,9),0,100); G.promoterInterest=clamp(G.promoterInterest+rnd(4,9),0,100);
-      trainXP("technique",rnd(3,6)); trainXP("stamina",rnd(2,5)); addLog(`擊敗 ${f.name}（${method}${["KO","TKO"].includes(method)?" R"+end:""}），世界排名 #${oldRank} → #${G.rank}。`,"good");
-      if(title&&!G.titles.includes(title.id)){G.titles.push(title.id);G.fame=clamp(G.fame+10,0,100);addLog(`🏆 贏得 ${title.zh}！`,"titlelog")}
+      trainXP("technique",rnd(3,6)); trainXP("stamina",rnd(2,5)); addSkillPoints(1,"贏下職業賽"); addLog(`擊敗 ${f.name}（${method}${["KO","TKO"].includes(method)?" R"+end:""}），世界排名 #${oldRank} → #${G.rank}。`,"good");
+      if(title&&!G.titles.includes(title.id)){G.titles.push(title.id);G.fame=clamp(G.fame+10,0,100);addSkillPoints(title.id==="world"?3:2,`贏得${title.zh}`);addLog(`🏆 贏得 ${title.zh}！`,"titlelog")}
       log.push(`\n✅ ${G.name} wins by ${method}${["KO","TKO"].includes(method)?" R"+end:""}`);
     }else if(winner==="opp"){
       G.record.l++; G.rank=clamp(G.rank+rnd(50,140),1,2500); G.morale=clamp(G.morale-rnd(6,11),0,100);
@@ -590,7 +691,7 @@ function applyFight(f,winner,method,end,log){
     log.push(`Ranking: ${winner==="me"?"up":"adjusted"}`); log.push(`Purse: ${money(f.purse)}`);
   }else{
     G.fatigue=clamp(G.fatigue+rnd(10,18),0,100); G.health=clamp(G.health-rnd(2,8),0,100); G.readiness=clamp(G.readiness+rnd(2,7),0,100);
-    if(winner==="me"){ G.amateur.w++; G.fame=clamp(G.fame+rnd(1,4),0,100); G.morale=clamp(G.morale+rnd(3,7),0,100); addLog(`你在業餘賽擊敗 ${f.name}（${method}）。`,"good"); trainXP("technique",rnd(3,5)); trainXP("stamina",rnd(2,4)); }
+    if(winner==="me"){ G.amateur.w++; G.fame=clamp(G.fame+rnd(1,4),0,100); G.morale=clamp(G.morale+rnd(3,7),0,100); addSkillPoints(1,"贏下業餘賽"); addLog(`你在業餘賽擊敗 ${f.name}（${method}）。`,"good"); trainXP("technique",rnd(3,5)); trainXP("stamina",rnd(2,4)); }
     else if(winner==="opp"){ G.amateur.l++; G.morale=clamp(G.morale-rnd(2,6),0,100); addLog(`你在業餘賽輸給 ${f.name}（${method}）。`,"bad"); trainXP("chin",rnd(2,4)); }
     else { addLog(`你與 ${f.name} 在業餘賽打成平手。`,""); }
     log.push(`\n業餘戰績：${G.amateur.w}-${G.amateur.l}`);
@@ -639,9 +740,9 @@ function phaseHTML(){
 }
 function startScreen(){
   return `<div class="hero">
-    <div class="eyebrow">BOXING LIFE · V6</div>
+    <div class="eyebrow">BOXING LIFE · V7</div>
     <h1>拳擊<br>人生</h1>
-    <p>從業餘拳擊起步，一路打到職業與世界舞台。這次不只訓練與比賽，還有戀愛、網紅合作、夜生活、自律崩盤等更多人生事件。</p>
+    <p>你是來自台灣的拳手，先選擇前往美國、日本或菲律賓留學兼學拳，從業餘起步，一步步走向職業與世界舞台。每次贏比賽都會拿到升級點數，所有事件也都附上 Q 版像素圖。</p>
   </div>
   <div class="wrap">
     <div class="panel">
@@ -664,7 +765,9 @@ function startScreen(){
           <div class="ctrl"><button onclick="changeAlloc('${k}',-1)">−</button><button onclick="changeAlloc('${k}',1)">＋</button></div></div>`).join("")}
         </div>
       </div>
-      <div class="field"><label>訓練基地</label><select id="city">${CITIES.map(x=>`<option>${x}</option>`).join("")}</select></div>
+      <div class="field"><label>出發地設定</label><div class="note">劇情固定為台灣人出國留學＋打拳。</div></div>
+      <div class="field"><label>留學起點國家</label><select id="country" onchange="updateCityOptions()">${Object.entries(START_DESTINATIONS).map(([k,v],i)=>`<option value="${k}" ${i===0?"selected":""}>${v.zh}</option>`).join("")}</select></div>
+      <div class="field"><label>落腳城市</label><select id="city"></select></div>
       <div class="field"><label>種子碼</label><input id="seed" value="${makeSeed()}"></div>
       <button class="btn" style="margin-top:16px" onclick="createGame()">從業餘開始 🥊</button>
     </div>
@@ -672,6 +775,12 @@ function startScreen(){
   </div>`;
 }
 function chipOne(cls,el){ document.querySelectorAll("."+cls).forEach(x=>x.classList.remove("on")); el.classList.add("on"); }
+function updateCityOptions(){
+  const country=document.querySelector("#country"); const city=document.querySelector("#city");
+  if(!country||!city)return;
+  const arr=(START_DESTINATIONS[country.value]||START_DESTINATIONS.USA).cities;
+  city.innerHTML=arr.map((x,i)=>`<option ${i===0?"selected":""}>${x}</option>`).join("");
+}
 function resetAlloc(){ alloc={power:0,speed:0,stamina:0,defense:0,chin:0,technique:0}; }
 function allocUsed(){ return SKILLS.reduce((s,k)=>s+(alloc[k]||0),0); }
 function changeAlloc(skill,delta){
@@ -707,12 +816,12 @@ function offersHTML(){
 }
 function render(){
   const app=document.querySelector("#app");
-  if(!G){ resetAlloc(); app.innerHTML=startScreen(); updateAllocUI(); return; }
+  if(!G){ resetAlloc(); app.innerHTML=startScreen(); updateAllocUI(); updateCityOptions(); return; }
   app.innerHTML=`
     <div class="hud">
       <div class="hud-top">
         <div class="avatar">${fullAvatar(G)}</div>
-        <div class="hud-name"><b>${esc(G.name)}</b><span>${G.weight} · ${STYLES[G.style].zh} · ${G.baseCity}</span></div>
+        <div class="hud-name"><b>${esc(G.name)}</b><span>${G.weight} · ${STYLES[G.style].zh} · 台灣 → ${(START_DESTINATIONS[G.destinationCountry]||{zh:G.destinationCountry}).zh} / ${G.baseCity}</span><div class="trip">台灣留學生拳手</div></div>
         <div class="ovr"><b>${ovr()}</b><span>OVR</span></div>
       </div>
       <div class="hud-stats">
@@ -724,7 +833,7 @@ function render(){
       </div>
     </div>
     <div class="wrap">
-      <div class="phase-banner"><b>目前階段：</b> ${currentPhase().zh} ｜ ${currentPhase().desc}<br><span class="note">下一階段門檻：${G.isPro?G.record.w:G.amateur.w}/${stageWinsNeeded()} 勝 ｜ 可用自由點數：${G.skillPoints}</span></div>
+      <div class="phase-banner"><b>目前階段：</b> ${currentPhase().zh} ｜ ${currentPhase().desc}<br><span class="note">故事背景：來自台灣，正在 ${(START_DESTINATIONS[G.destinationCountry]||{zh:G.destinationCountry}).zh} 留學兼打拳 ｜ 下一階段門檻：${G.isPro?G.record.w:G.amateur.w}/${stageWinsNeeded()} 勝 ｜ 可用自由點數：${G.skillPoints}</span></div>
       <div class="panel"><div class="label">Career Stage</div>${phaseHTML()}</div>
       <div id="eventBox" class="panel ${isSpecialEvent(G.currentEvent)?"special-panel":""}">${eventHTML()}</div>
       <div class="panel">
@@ -747,6 +856,7 @@ function eventHTML(){
   return `${isSpecialEvent(e)?`<div class="special-tag">★ SPECIAL EVENT</div>`:""}
     <div class="season" style="margin-top:${isSpecialEvent(e)?"9px":"0"}"><b>${e.cat}</b><span>${G.year} · Week ${G.week}</span></div>
     <div class="title">${e.title}</div>
+    ${eventImageHTML(e)}
     <div class="text">${e.text}</div>
     <div class="opts">${e.options.map((o,i)=>`<button class="opt" onclick="chooseEvent(${i})"><div class="ico">${o.ico}</div><div class="ot"><b>${o.label}</b><span>${o.hint}</span></div></button>`).join("")}</div>`;
 }
@@ -754,6 +864,7 @@ window.addEventListener("load",()=>{
   const raw=localStorage.getItem(SAVE_KEY);
   if(raw){ try{ G=JSON.parse(raw); setSeed(G.seed||"boxing"); if(!G.currentEvent)G.currentEvent=pickEvent(); if(!G.offers?.length)generateOffers(); }catch(e){G=null} }
   render();
+  if(!G) setTimeout(()=>{ try{ updateCityOptions(); }catch(e){} },0);
 });
 </script>
 </body>
