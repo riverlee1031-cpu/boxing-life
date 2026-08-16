@@ -1,29 +1,21 @@
-# Boxing Life USA V5
+# Boxing Life V6
 
-這版已經把事件圖檔直接綁進程式。
+## 這版新增
+- 從業餘生涯開始
+- 預設名字改為「李逍遙」
+- 對手戰績更合理：新人期不會一直遇到超高戰績對手
+- 建角後直接有像素 Q 版大頭照
+- 隨機事件更多，也更生活化：
+  - 和明星曖昧 / 交往
+  - 跟網紅合作
+  - 夜店喝酒玩樂
+  - 深夜打遊戲
+  - 感情吵架
+  - 公益活動
+  - 業餘盃賽
+  - 職業執照說明會
+- 每個生涯階段升級都會拿到少量自由能力點數
+- 開局可分配 8 點，單項最多 +3
 
-## 已綁定的圖片
-- sparring → assets/sparring.png
-- strength / champ camp → assets/gym_training.png
-- weight cut → assets/weigh_in.png
-- health / medical → assets/doctor_checkup.png
-- promoter / sponsor → assets/promotion_offer.png
-- coach talk → assets/mentor_talk.png
-- contract event → assets/contract_signing.png
-- short notice / TV fight → assets/fight_night_arena.png
-- title path → assets/world_title_belt.png
-- media viral → assets/media_interview.png
-
-## 使用方式
-請把這個新版 index.html 上傳覆蓋原本 repository 的 index.html，
-並把之前切好的 assets 資料夾一起放在 repository 根目錄。
-
-結構應該像：
-boxing-life/
-├── index.html
-├── README.md
-└── assets/
-    ├── gym_training.png
-    ├── sparring.png
-    ├── weigh_in.png
-    └── ...
+## 更新方式
+把新版 index.html 覆蓋你原本 GitHub repository 的 index.html 即可。
