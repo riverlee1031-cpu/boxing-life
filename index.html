@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>拳擊人生 · Boxing Life V7</title>
+<title>拳擊人生 · Boxing Life V10</title>
 <style>
 :root{
-  --bg:#090b10;--surface:#121722;--surface2:#191f2c;--line:#2b3444;
-  --ink:#f4f6f8;--dim:#9aa7b8;--faint:#66748a;
-  --red:#e64a4a;--gold:#f2bf54;--green:#55c985;--blue:#62a8ff;
+  --bg:#120b1d;--surface:#1b1832;--surface2:#241f42;--line:#5b4f8c;
+  --ink:#fdfbff;--dim:#c4bce7;--faint:#8f88bc;
+  --red:#ff5f66;--gold:#ffd25a;--green:#6ce7a2;--blue:#6bc6ff;--violet:#9c73ff;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI","Noto Sans TC",sans-serif}
 body{
   min-height:100vh;
   background:
-    radial-gradient(circle at 50% -80px,rgba(230,74,74,.20),transparent 330px),
+    radial-gradient(circle at 50% -80px,rgba(255,95,102,.22),transparent 330px), radial-gradient(circle at 10% 20%,rgba(107,198,255,.10),transparent 260px),
     linear-gradient(180deg,#090b10,#0c1017 55%,#090b10);
 }
 button,input,select{font:inherit}
@@ -27,26 +27,26 @@ button{border:0;color:inherit;cursor:pointer}
 .hero h1{font-size:48px;line-height:.92;margin:8px 0 8px;letter-spacing:-2px}
 .hero p{color:var(--dim);font-size:14px;margin:0 auto;max-width:360px;line-height:1.6}
 .panel{
-  background:linear-gradient(180deg,var(--surface),#0f141d);
+  background:linear-gradient(180deg,var(--surface),#14112a);
   border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px 0;
-  box-shadow:0 12px 30px rgba(0,0,0,.16)
+  box-shadow:0 10px 0 rgba(0,0,0,.20), 0 18px 30px rgba(0,0,0,.25)
 }
 .label{font-size:10px;letter-spacing:.15em;color:var(--faint);font-weight:800;text-transform:uppercase}
 .field{margin-top:13px}
 .field label{display:block;color:var(--dim);font-size:12px;margin-bottom:7px}
 input,select{
-  width:100%;border:1px solid var(--line);background:#0b1018;color:var(--ink);
+  width:100%;border:1px solid var(--line);background:#0f0c21;color:var(--ink);
   border-radius:11px;padding:11px 12px;outline:none
 }
 input:focus,select:focus{border-color:var(--red)}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
 .chip{
-  flex:1;min-width:88px;padding:10px 10px;border-radius:999px;background:#0c1119;
+  flex:1;min-width:88px;padding:10px 10px;border-radius:999px;background:#131028;
   border:1px solid var(--line);color:var(--dim);font-size:13px;font-weight:700
 }
 .chip.on{background:var(--red);border-color:var(--red);color:white}
 .btn{
-  width:100%;padding:12px 14px;border-radius:12px;background:linear-gradient(100deg,var(--red),#ff6c55);
+  width:100%;padding:12px 14px;border-radius:12px;background:linear-gradient(100deg,var(--red),#ff8d55);
   font-weight:850;color:white;box-shadow:0 8px 24px -14px var(--red)
 }
 .btn.ghost{background:transparent;border:1px solid var(--line);box-shadow:none;color:var(--ink)}
@@ -54,16 +54,16 @@ input:focus,select:focus{border-color:var(--red)}
 .btn.small{width:auto;padding:9px 12px;font-size:12px}
 .btn:disabled{opacity:.42;cursor:not-allowed}
 .hud{
-  position:sticky;top:0;z-index:30;background:rgba(9,11,16,.88);backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--line);border-top:2px solid var(--red)
+  position:sticky;top:0;z-index:30;background:rgba(18,11,29,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);border-top:3px solid var(--gold)
 }
 .hud-top{display:grid;grid-template-columns:76px 1fr auto;gap:10px;align-items:center;padding:9px 12px}
 .avatar{
-  width:76px;height:76px;border-radius:14px;background:#0b1018;border:1px solid var(--line);
+  width:76px;height:76px;border-radius:14px;background:#0f0c21;border:1px solid var(--line);
   display:flex;align-items:center;justify-content:center;overflow:hidden
 }
 .chibi{
-  width:72px;height:72px;image-rendering:pixelated;background:#10151e;position:relative;
+  width:72px;height:72px;image-rendering:pixelated;background:#16132c;position:relative;
   display:grid;place-items:center;border-radius:10px
 }
 .chibi svg{width:72px;height:72px;shape-rendering:crispEdges}
@@ -84,7 +84,7 @@ input:focus,select:focus{border-color:var(--red)}
   padding:12px;border-radius:12px;text-align:left;display:grid;grid-template-columns:35px 1fr;gap:10px;align-items:center
 }
 .opt:active{transform:scale(.99)}
-.ico{width:35px;height:35px;border-radius:9px;background:#0c1118;display:flex;align-items:center;justify-content:center;font-size:18px}
+.ico{width:35px;height:35px;border-radius:9px;background:#141028;display:flex;align-items:center;justify-content:center;font-size:18px}
 .ot b{display:block;font-size:14px}.ot span{display:block;font-size:10.5px;color:var(--faint);margin-top:2px}
 .dice-stage{text-align:center;padding:8px 0}
 .die{
@@ -97,7 +97,7 @@ input:focus,select:focus{border-color:var(--red)}
 .outcome{border:1px solid var(--line);border-left:4px solid var(--gold);background:var(--surface2);border-radius:12px;padding:12px;margin-top:10px}
 .outcome.good{border-left-color:var(--green)}.outcome.bad{border-left-color:var(--red)}
 .deltas{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
-.delta{font-size:11px;padding:3px 7px;border-radius:6px;background:#0c1118;border:1px solid var(--line)}
+.delta{font-size:11px;padding:3px 7px;border-radius:6px;background:#141028;border:1px solid var(--line)}
 .delta.pos{color:var(--green)}.delta.neg{color:#ff8989}
 .attrs{display:grid;grid-template-columns:1fr 1fr;gap:10px 13px}
 .attr .r{display:flex;justify-content:space-between;font-size:11px;color:var(--dim)}
@@ -126,7 +126,7 @@ input:focus,select:focus{border-color:var(--red)}
 .actionbar .btn{flex:1}
 .modal{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.78);display:flex;align-items:center;justify-content:center;padding:16px}
 .modal.hidden{display:none}
-.modalbox{width:min(500px,100%);max-height:90vh;overflow:auto;background:#10151e;border:1px solid var(--line);border-radius:18px;padding:16px}
+.modalbox{width:min(500px,100%);max-height:90vh;overflow:auto;background:#16132c;border:1px solid var(--line);border-radius:18px;padding:16px}
 .fightlog{white-space:pre-line;background:#090d13;border:1px solid var(--line);border-radius:12px;padding:11px;font:12px/1.6 ui-monospace,monospace;max-height:310px;overflow:auto}
 .note{font-size:11px;color:var(--faint);line-height:1.55}
 hr{border:0;border-top:1px solid var(--line);margin:14px 0}
@@ -134,19 +134,19 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 .stage{
   display:grid;grid-template-columns:repeat(4,1fr);gap:8px
 }
-.stage-card{border:1px solid var(--line);border-radius:12px;padding:10px;background:#0c1118;text-align:center}
+.stage-card{border:1px solid var(--line);border-radius:12px;padding:10px;background:#141028;text-align:center}
 .stage-card.on{border-color:var(--gold);background:#1b170e}
 .stage-card b{display:block;font-size:12px}
 .stage-card span{display:block;font-size:10px;color:var(--faint);margin-top:4px}
 .alloc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .points-left{font-size:12px;color:var(--gold);font-weight:900}
 .alloc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.alloc{background:#0c1118;border:1px solid var(--line);border-radius:11px;padding:9px}
+.alloc{background:#141028;border:1px solid var(--line);border-radius:11px;padding:9px}
 .alloc .top{display:flex;justify-content:space-between;gap:8px;align-items:center}
 .alloc .name{font-size:11px;color:var(--dim);font-weight:800}
 .alloc .value{font-size:17px;font-weight:900}
 .alloc .ctrl{display:flex;gap:5px;margin-top:7px}
-.alloc .ctrl button{flex:1;background:#171e2a;border:1px solid var(--line);border-radius:8px;padding:5px;color:var(--ink);font-weight:900}
+.alloc .ctrl button{flex:1;background:#221c42;border:1px solid var(--line);border-radius:8px;padding:5px;color:var(--ink);font-weight:900}
 .special-panel{
   border-color:#72561c!important;
   background:linear-gradient(160deg,#20190b,#111722 46%,#0f141d)!important;
@@ -160,6 +160,31 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 .event-art{margin:10px 0 12px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#0b1018}
 .event-art svg{display:block;width:100%;height:auto;image-rendering:pixelated;shape-rendering:crispEdges}
 .trip{font-size:11px;color:var(--gold);font-weight:800;margin-top:3px}
+.hero h1{text-shadow:3px 3px 0 #3a2e72,6px 6px 0 rgba(0,0,0,.25)}
+.panel,.offer,.outcome,.opt,.stage-card,.alloc,.modalbox,.event-art{image-rendering:pixelated}
+.panel{position:relative}
+.panel:before{content:"";position:absolute;inset:0;border:1px solid rgba(255,255,255,.04);border-radius:16px;pointer-events:none}
+.btn,.chip,.offer,.opt,.stage-card,.alloc{box-shadow:inset 0 -2px 0 rgba(0,0,0,.25)}
+.chibi, .avatar{box-shadow:0 0 0 2px rgba(255,210,90,.15)}
+.event-art{background:linear-gradient(180deg,#1b1832,#100d1f);box-shadow:inset 0 0 0 2px rgba(255,255,255,.03)}
+.special-tag{background:#39290d;border-color:#c39121;color:#ffd25a}
+.title{letter-spacing:-.03em}
+
+
+
+.story-card{border:2px solid #6d5ed1;background:linear-gradient(180deg,#1b1832,#100d20);border-radius:16px;overflow:hidden;margin:10px 0;box-shadow:0 10px 0 rgba(0,0,0,.23)}
+.story-head{padding:13px 14px 8px;background:linear-gradient(90deg,#2b2150,#1b1832);border-bottom:1px solid #5b4f8c}
+.story-kicker{font-size:10px;letter-spacing:.18em;color:#ffd25a;font-weight:900}
+.story-title{font-size:25px;line-height:1.1;font-weight:950;margin:4px 0;color:#fff;text-shadow:2px 2px 0 #493b85}
+.story-year{font-size:11px;color:#9b94c6}
+.story-body{padding:14px}
+.story-copy{font-size:14px;color:#d9d4ef;line-height:1.85;white-space:pre-line}
+.story-copy strong{color:#fff}
+.story-profile{display:grid;grid-template-columns:68px 1fr;gap:10px;align-items:center;margin:10px 0 13px;padding:10px;background:#131027;border:1px solid #4d4475;border-radius:12px}
+.story-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.story-stat{background:#0f0c21;border:1px solid #403862;border-radius:9px;padding:7px;text-align:center}.story-stat b{display:block;font-size:15px;color:#ffd25a}.story-stat span{font-size:8px;color:#8f88bc}
+.story-art{border-bottom:1px solid #5b4f8c;background:#0f0c20}.story-art svg{display:block;width:100%;height:auto;image-rendering:pixelated;shape-rendering:crispEdges}
+.result-art{margin:8px 0 12px;border:1px solid #5b4f8c;border-radius:12px;overflow:hidden;background:#100d20}.result-art svg{display:block;width:100%;height:auto;image-rendering:pixelated}
 
 </style>
 </head>
@@ -169,12 +194,13 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
   <div class="modalbox">
     <div class="label">Fight Night</div>
     <h2 id="fightModalTitle" style="margin:5px 0 10px"></h2>
+    <div id="fightResultArt" class="result-art"></div>
     <div id="fightLog" class="fightlog"></div>
     <button class="btn" style="margin-top:12px" onclick="closeFightModal()">繼續生涯</button>
   </div>
 </div>
 <script>
-const SAVE_KEY="boxing-life-v7-overseas";
+const SAVE_KEY="boxing-life-v10-story-pixel";
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 let rng=Math.random;
 function seedHash(s){let h=2166136261>>>0; for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)} return h>>>0;}
@@ -255,14 +281,14 @@ function advanceWeek(n=1){
 }
 function baseGame(){
   return {
-    version:7, name:"李逍遙", gender:"male", age:18, weight:"Lightweight", style:"pressure", originCountry:"台灣", destinationCountry:"USA", baseCity:"Las Vegas",
+    version:10, name:"李逍遙", gender:"male", age:18, weight:"Lightweight", style:"pressure", originCountry:"台灣", destinationCountry:"USA", baseCity:"Las Vegas",
     seed:makeSeed(), year:2026, week:1, retired:false, isPro:false,
     phaseIndex:0, skillPoints:0, milestoneShown:false,
     amateur:{w:0,l:0}, record:{w:0,l:0,d:0,ko:0}, rank:1450, money:200, fame:3, health:100, fatigue:6, morale:70,
     manager:20, promoterInterest:5, readiness:30, weightRisk:8, discipline:70,
     stats:{power:49,speed:50,stamina:50,defense:49,chin:49,technique:50},
     xp:{power:0,speed:0,stamina:0,defense:0,chin:0,technique:0},
-    potential:{}, titles:[], logs:[], offers:[], currentEvent:null, lastOutcome:null, pendingFight:null,
+    potential:{}, titles:[], logs:[], offers:[], currentEvent:null, lastOutcome:null, pendingFight:null, storyCard:null, lastFightResult:null,
     allocation:{power:0,speed:0,stamina:0,defense:0,chin:0,technique:0},
     avatar:null
   };
@@ -274,6 +300,56 @@ function defaultAvatar(){
   const eye=pick(["#222","#2c1b16","#1a1f2e"]);
   return {skin,hair,glove,eye,shirt:pick(["#ffffff","#d7e4ff","#111","#ffd34d"]),bang:rnd(0,2),brows:rnd(0,1)};
 }
+
+const STORY_CHAPTERS={
+  prologue:{kicker:"🇹🇼 TAIWAN · PROLOGUE",title:"序章 · 離鄉的第一拳",theme:"travel",button:"抵達海外，踏進拳館 ▶"},
+  amateur_local:{kicker:"AMATEUR · CHAPTER 1",title:"第一章 · 陌生拳館的新人",theme:"gym",button:"開始海外業餘生涯 ▶"},
+  amateur_elite:{kicker:"AMATEUR · CHAPTER 2",title:"第二章 · 名字開始被記住",theme:"medal",button:"挑戰更高層級的業餘賽 ▶"},
+  turn_pro:{kicker:"PRO BOXING · CHAPTER 3",title:"第三章 · 簽下職業執照",theme:"contract",button:"以 0-0 身分踏入職業拳壇 ▶"},
+  regional:{kicker:"PRO BOXING · CHAPTER 4",title:"第四章 · 墊場到主卡",theme:"fight",button:"建立真正的職業戰績 ▶"},
+  contender:{kicker:"RANKING · CHAPTER 5",title:"第五章 · 挑戰者的名字",theme:"media",button:"向世界排名逼近 ▶"},
+  world:{kicker:"WORLD STAGE · FINAL CHAPTER",title:"最終章 · 世界舞台的燈光",theme:"medal",button:"走向冠軍之路 ▶"}
+};
+function destinationZh(){ return START_DESTINATIONS[G.destinationCountry]?.zh||G.destinationCountry; }
+function storyTextFor(id){
+  const name=G.name, city=G.baseCity, dest=destinationZh();
+  const texts={
+    prologue:`${G.age} 歲那年，你第一次拖著裝有拳鞋、護齒與課本的行李離開台灣。\n\n你叫 **${name}**。在台灣，你還不是什麼明星，只是一個想知道自己到底能走多遠的業餘拳手。\n\n目的地是 **${dest} · ${city}**。白天，你是留學生；傍晚下課後，你會搭車前往一間陌生拳館。語言、生活費、課業、孤單，以及擂台上的拳頭，都會成為你新的日常。\n\n沒有人保證你能轉職業，更沒有人保證你能成為冠軍。\n\n但從今天開始，每一次選擇都會留下痕跡。`,
+    amateur_local:`拳館裡沒有人在意你以前是誰。\n\n第一次實戰，你甚至還搞不清楚教練的口令；第一次業餘賽，觀眾席也可能只有幾十個人。\n\n你的任務很簡單：**先證明自己能在這裡生存。**\n\n累積勝場、適應海外生活，也別讓課業、夜生活與傷病把夢提前結束。`,
+    amateur_elite:`幾場比賽之後，拳館裡開始有人叫得出 **${name}**。\n\n你的對手不再只是第一次參賽的新人。地方賽、公開賽與更成熟的業餘拳手開始出現。\n\n這個階段，勝負不只是紀錄——它會決定有沒有教練、經紀人或 promoter 願意多看你一眼。`,
+    turn_pro:`桌上放著職業執照文件。\n\n你的業餘戰績即將被留在身後。從下一場開始，沒有護頭，回合更長，每一拳都可能直接改變你的排名與收入。\n\n你將以 **0-0** 的身分重新開始。\n\n業餘時期得到的掌聲沒有辦法替你贏下任何一場職業賽。`,
+    regional:`你已經不是完全沒人知道的 0-0 新人。\n\n主辦方開始把你排進更正式的賽事，對手也有自己的戰績、經紀人與生涯計畫。\n\n有人會把你當墊腳石；也有人會拒絕跟你打。\n\n真正的職業拳擊，現在才開始。`,
+    contender:`你的名字開始出現在排名與拳擊媒體裡。\n\n每一次接賽都變得更難：太弱的對手沒有價值，太強的對手可能直接終結你的上升勢頭。\n\n贊助、媒體、感情與名氣也會一起變大。\n\n你不只需要會打拳，還得學會管理自己的人生。`,
+    world:`燈光不再是小型體育館裡的幾盞白燈。\n\n記者、轉播、贊助商、排名與冠軍腰帶，全部開始圍繞著你。\n\n從台灣出發的那個留學生，已經走到真正的世界舞台。\n\n接下來沒有任何一場是普通比賽。`
+  };
+  return texts[id]||texts.amateur_local;
+}
+function makeStoryCard(id){
+  const c=STORY_CHAPTERS[id]||STORY_CHAPTERS.amateur_local;
+  return {id,...c,text:storyTextFor(id)};
+}
+function renderStoryCard(){
+  const s=G.storyCard;if(!s)return "";
+  const record=G.isPro?`${G.record.w}-${G.record.l}-${G.record.d} (${G.record.ko}KO)`:`${G.amateur.w}-${G.amateur.l}`;
+  return `<div class="story-card">
+    <div class="story-head"><div class="story-kicker">${s.kicker}</div><div class="story-title">${s.title}</div><div class="story-year">${G.year} · ${G.age} 歲</div></div>
+    <div class="story-art">${pixelSceneSVG(s.theme)}</div>
+    <div class="story-body">
+      <div class="story-profile"><div class="chibi">${avatarSVG(G.avatar,G.gender)}</div><div><b style="font-size:18px">${esc(G.name)} · ${STYLES[G.style].zh}</b><div class="text" style="font-size:11px">${G.weight}｜${G.age}歲｜台灣 → ${destinationZh()} · ${G.baseCity}</div><div class="story-stats">
+        <div class="story-stat"><b>${ovr()}</b><span>OVR</span></div><div class="story-stat"><b>${G.health}</b><span>健康</span></div><div class="story-stat"><b>${G.morale}</b><span>士氣</span></div><div class="story-stat"><b>${record}</b><span>${G.isPro?"職業":"業餘"}</span></div>
+      </div></div></div>
+      <div class="story-copy">${s.text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>
+      <button class="btn gold" style="margin-top:14px" onclick="continueStory()">${s.button}</button>
+    </div>
+  </div>`;
+}
+function continueStory(){
+  G.storyCard=null;
+  if(!G.currentEvent)G.currentEvent=pickEvent();
+  if(!G.offers?.length)generateOffers();
+  save(false);render();
+}
+
 function createGame(){
   let g=baseGame();
   g.name=document.querySelector("#nm").value.trim()||"李逍遙";
@@ -292,13 +368,42 @@ function createGame(){
   SKILLS.forEach(k=>{ let p=rnd(76,88); if(chance(.16))p+=rnd(4,8); G.potential[k]=clamp(p,74,96); });
   const destZh=START_DESTINATIONS[G.destinationCountry]?.zh||G.destinationCountry;
   addLog(`${G.name} 是來自台灣的拳手，前往${destZh}的 ${G.baseCity} 留學兼學拳，從業餘生涯開始。`,"good");
-  G.currentEvent=pickEvent(); save(false); render();
+  G.storyCard=makeStoryCard("prologue"); G.currentEvent=null; save(false); render();
+}
+function countryFromCity(city){
+  if(["Las Vegas","Los Angeles","New York","Houston"].includes(city)) return "USA";
+  if(["Tokyo","Osaka","Fukuoka","Yokohama"].includes(city)) return "Japan";
+  if(["Manila","Cebu","Baguio","Davao"].includes(city)) return "Philippines";
+  return G?.destinationCountry || "USA";
+}
+const OPPONENT_NAMES={
+  USA:{
+    maleFirst:["Marcus","Darius","Andre","Jamal","Ethan","Noah","Tyler","Brandon","Miguel","Carlos","Jordan","Isaiah","Derek","Anthony"],
+    femaleFirst:["Alyssa","Maya","Kayla","Brianna","Samantha","Jasmine","Naomi","Taylor","Ariana","Bianca","Elena","Camila"],
+    last:["Johnson","Miller","Davis","Williams","Brown","Garcia","Rodriguez","Martinez","Wilson","Anderson","Thomas","Jackson","Lewis","Walker"]
+  },
+  Japan:{
+    maleFirst:["翔太","大輝","蓮","悠斗","海斗","拓海","健太","陸","颯太","直樹","武尊","隼人","亮太","和也"],
+    femaleFirst:["美咲","葵","結衣","凜","彩花","七海","美月","千尋","遥","真央","楓","さくら"],
+    last:["佐藤","鈴木","高橋","田中","伊藤","渡辺","山本","中村","小林","加藤","吉田","山田","佐々木","松本"]
+  },
+  Philippines:{
+    maleFirst:["Mark","John Paul","Jerome","Rico","Paolo","Miguel","Carlo","Jayson","Renzo","Arvin","Joshua","Rafael","Noel","Christian"],
+    femaleFirst:["Angelica","Maria","Bea","Kathryn","Mika","Alyssa","Camille","Janelle","Bianca","Patricia","Sofia","Nicole"],
+    last:["Santos","Reyes","Dela Cruz","Garcia","Mendoza","Navarro","Flores","Ramos","Castillo","Bautista","Aquino","Torres","Villanueva","Domingo"]
+  }
+};
+function opponentNameForCountry(country){
+  const pool=OPPONENT_NAMES[country] || OPPONENT_NAMES.USA;
+  const first=pick(G.gender==="female" ? pool.femaleFirst : pool.maleFirst);
+  const last=pick(pool.last);
+  return country==="Japan" ? `${last}${first}` : `${first} ${last}`;
+}
+function opponentNameForCity(city){
+  return opponentNameForCountry(countryFromCity(city));
 }
 function opponentName(){
-  const maleFirst=["阿豪","子杰","高飛","Marcus","Ivan","Luis","Noah","Takeshi","Rico","Anton","Miguel"];
-  const femaleFirst=["小柔","可晴","Maya","Alyssa","Naomi","Sofia","Elena","Bianca"];
-  const last=["陳","林","張","王","Garcia","Santos","Reyes","Kim","Dela Cruz"];
-  return pick(G.gender==="female"?femaleFirst:maleFirst)+" "+pick(last);
+  return opponentNameForCountry(G?.destinationCountry || "USA");
 }
 function addSkillPoints(n, why=""){
   G.skillPoints+=n;
@@ -312,13 +417,17 @@ function checkPhaseUp(){
     const next=currentPhase();
     addSkillPoints(next.reward, `升級到「${next.zh}」`);
     if(next.id==="turn_pro"){
-      G.isPro=true;
-      G.rank=1350; G.money+=500; G.promoterInterest+=8;
+      G.isPro=true; G.rank=1350; G.money+=500; G.promoterInterest+=8;
       addLog("你正式結束業餘生涯，簽下職業執照，成為 0-0 的職業拳手。","titlelog");
     }else{
       addLog(`生涯階段提升：${next.zh}。${next.desc}`,"titlelog");
     }
+    G.storyCard=makeStoryCard(next.id);
   }
+}
+function countryLabelFromCity(city){
+  const c=countryFromCity(city);
+  return c==="USA"?"🇺🇸 USA":c==="Japan"?"🇯🇵 日本":"🇵🇭 菲律賓";
 }
 function realisticRecord(stage, strength){
   if(stage==="amateur"){
@@ -348,9 +457,10 @@ function generateOffers(boost=0){
       stage="amateur";
       oppOvr=clamp(me + (i-1)*rnd(1,4)+rnd(-2,2),40,72);
       rounds=3; purse=0;
+      const boutCity=pick(START_DESTINATIONS[G.destinationCountry]?.cities||[G.baseCity]);
       G.offers.push({
-        id:String(Date.now())+i+String(rnd(10,99)), name:opponentName(), ovr:oppOvr, record:realisticRecord(stage,oppOvr),
-        purse, rounds, title:null, city:pick(START_DESTINATIONS[G.destinationCountry]?.cities||[G.baseCity]), rank:"業餘"
+        id:String(Date.now())+i+String(rnd(10,99)), name:opponentNameForCity(boutCity), ovr:oppOvr, record:realisticRecord(stage,oppOvr),
+        purse, rounds, title:null, city:boutCity, rank:"業餘"
       });
     }else{
       stage="pro";
@@ -364,9 +474,10 @@ function generateOffers(boost=0){
       for(const t of TITLE_DEFS){
         if(!G.titles.includes(t.id) && G.rank<=t.rank && chance(.25+i*.09)){title=t.id; rounds=Math.max(rounds,t.id==="world"?12:10); purse=Math.round(purse*1.7); break}
       }
+      const boutCity=pick(["Las Vegas","Los Angeles","New York","Tokyo","Osaka","Fukuoka","Manila","Cebu","Davao"]);
       G.offers.push({
-        id:String(Date.now())+i+String(rnd(10,99)), name:opponentName(), ovr:oppOvr, rank:oppRank,
-        record:realisticRecord(stage,oppOvr), purse, rounds, title, city:pick(["Las Vegas","Los Angeles","New York","Tokyo","Osaka","Fukuoka","Manila","Cebu","Davao"])
+        id:String(Date.now())+i+String(rnd(10,99)), name:opponentNameForCity(boutCity), ovr:oppOvr, rank:oppRank,
+        record:realisticRecord(stage,oppOvr), purse, rounds, title, city:boutCity
       });
     }
   }
@@ -381,34 +492,41 @@ function eventThemeKey(e){
   return (e&&e.imageKey)||map[e.id]||"gym";
 }
 function pixelSceneSVG(theme){
-  const sky={gym:'#243048',media:'#35284e',love:'#4d2437',nightlife:'#1b1b3b',crowd:'#18363d',coach:'#402d22',medal:'#483617',study:'#23364a',doctor:'#29434e',fight:'#402320',travel:'#2f3552',food:'#45331d',contract:'#2b3146'}[theme]||'#243048';
-  const ground={gym:'#1a2230',media:'#241c34',love:'#2a1a24',nightlife:'#141424',crowd:'#132830',coach:'#2e2119',medal:'#32270f',study:'#1a2838',doctor:'#1a3137',fight:'#2c1b1b',travel:'#20253b',food:'#312412',contract:'#202635'}[theme]||'#1a2230';
-  const accent={gym:'#e64a4a',media:'#62a8ff',love:'#ff6fa7',nightlife:'#9b7dff',crowd:'#55c985',coach:'#f2bf54',medal:'#f2bf54',study:'#62a8ff',doctor:'#7de0d3',fight:'#ff734f',travel:'#86b4ff',food:'#f2bf54',contract:'#8ec8ff'}[theme]||'#e64a4a';
+  const sky={gym:'#1f2954',media:'#35235a',love:'#5a2145',nightlife:'#241a4a',crowd:'#16384a',coach:'#4b2a24',medal:'#5c4518',study:'#203f5a',doctor:'#27465b',fight:'#5b2229',travel:'#224366',food:'#5b3d1d',contract:'#213657'}[theme]||'#1f2954';
+  const glow={gym:'#4ec2ff',media:'#8b6cff',love:'#ff78b4',nightlife:'#a975ff',crowd:'#68e7cb',coach:'#ffd25a',medal:'#ffd25a',study:'#6bc6ff',doctor:'#7fe6d6',fight:'#ff7b6d',travel:'#7eb8ff',food:'#ffcd68',contract:'#7ecbff'}[theme]||'#4ec2ff';
+  const floor='#130f24';
+  const frame='#6d5ed1';
   const prop=(p)=>({
-    gym:`<rect x="78" y="44" width="18" height="24" fill="#444"/><rect x="74" y="46" width="6" height="20" fill="#888"/><rect x="96" y="46" width="6" height="20" fill="#888"/>`,
-    media:`<rect x="76" y="44" width="22" height="16" fill="#111"/><rect x="79" y="47" width="16" height="10" fill="${accent}"/><rect x="90" y="59" width="4" height="8" fill="#666"/>`,
-    love:`<rect x="80" y="42" width="16" height="16" fill="#ff8bbb"/><rect x="76" y="46" width="8" height="8" fill="#ff8bbb"/><rect x="92" y="46" width="8" height="8" fill="#ff8bbb"/>`,
-    nightlife:`<rect x="80" y="42" width="10" height="22" fill="#ffd37a"/><rect x="90" y="48" width="8" height="14" fill="#74d2ff"/>`,
-    crowd:`<rect x="76" y="50" width="6" height="12" fill="#5b6"/><rect x="84" y="46" width="6" height="16" fill="#79c"/><rect x="92" y="50" width="6" height="12" fill="#d77"/>`,
-    coach:`<rect x="76" y="42" width="20" height="18" fill="#76543a"/><rect x="82" y="46" width="8" height="4" fill="#f2bf54"/>`,
-    medal:`<rect x="82" y="40" width="12" height="12" fill="#f2bf54"/><rect x="84" y="52" width="8" height="12" fill="#4a78d4"/>`,
-    study:`<rect x="76" y="42" width="20" height="18" fill="#20324a"/><rect x="78" y="44" width="16" height="14" fill="#fff"/>`,
-    doctor:`<rect x="76" y="42" width="20" height="18" fill="#dceff2"/><rect x="84" y="44" width="4" height="14" fill="#55bfae"/><rect x="80" y="48" width="12" height="4" fill="#55bfae"/>`,
-    fight:`<rect x="74" y="44" width="24" height="18" fill="#7d2d2d"/><rect x="76" y="46" width="20" height="14" fill="#ff734f"/>`,
-    travel:`<rect x="76" y="44" width="20" height="14" fill="#5a6aa1"/><rect x="80" y="40" width="12" height="6" fill="#86b4ff"/>`,
-    food:`<rect x="76" y="48" width="20" height="8" fill="#d09b42"/><rect x="80" y="44" width="12" height="4" fill="#fff1ba"/>`,
-    contract:`<rect x="76" y="42" width="20" height="18" fill="#dfecff"/><rect x="78" y="44" width="16" height="14" fill="#fff"/>`
+    gym:`<rect x="86" y="26" width="12" height="28" fill="#5a5a78"/><rect x="82" y="30" width="6" height="18" fill="#a8a8c4"/><rect x="98" y="30" width="6" height="18" fill="#a8a8c4"/>`,
+    media:`<rect x="84" y="26" width="18" height="12" fill="#0a0a0f"/><rect x="87" y="29" width="12" height="6" fill="${glow}"/><rect x="91" y="38" width="4" height="11" fill="#6f6f8d"/>`,
+    love:`<rect x="86" y="24" width="14" height="12" fill="#ff8dbd"/><rect x="82" y="28" width="8" height="8" fill="#ff8dbd"/><rect x="96" y="28" width="8" height="8" fill="#ff8dbd"/>`,
+    nightlife:`<rect x="88" y="22" width="8" height="30" fill="#ffd26a"/><rect x="84" y="24" width="16" height="4" fill="#fff0aa"/><rect x="98" y="30" width="6" height="16" fill="#58c3ff"/>`,
+    crowd:`<rect x="82" y="36" width="6" height="14" fill="#66d1a7"/><rect x="90" y="32" width="6" height="18" fill="#88a7ff"/><rect x="98" y="36" width="6" height="14" fill="#ff8787"/>`,
+    coach:`<rect x="84" y="26" width="18" height="18" fill="#7b5b40"/><rect x="89" y="31" width="8" height="4" fill="#ffd25a"/>`,
+    medal:`<rect x="86" y="22" width="14" height="14" fill="#ffd25a"/><rect x="89" y="36" width="8" height="14" fill="#6b8dff"/>`,
+    study:`<rect x="83" y="24" width="20" height="18" fill="#2d4a6e"/><rect x="86" y="27" width="14" height="12" fill="#fdfdfd"/>`,
+    doctor:`<rect x="84" y="24" width="18" height="18" fill="#dbeef2"/><rect x="91" y="26" width="4" height="14" fill="#58d0bf"/><rect x="87" y="31" width="12" height="4" fill="#58d0bf"/>`,
+    fight:`<rect x="82" y="24" width="22" height="18" fill="#8b2c35"/><rect x="85" y="27" width="16" height="12" fill="#ff7b6d"/><rect x="84" y="46" width="18" height="2" fill="#fff"/>`,
+    travel:`<rect x="82" y="26" width="22" height="14" fill="#5e7ec9"/><rect x="88" y="20" width="10" height="6" fill="#8ecbff"/>`,
+    food:`<rect x="82" y="36" width="22" height="8" fill="#d09b42"/><rect x="86" y="32" width="14" height="4" fill="#fff2af"/>`,
+    contract:`<rect x="84" y="24" width="18" height="20" fill="#dce8ff"/><rect x="87" y="27" width="12" height="14" fill="#fff"/>`
   }[p]||'');
   return `<svg viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg">
-    <rect width="120" height="72" fill="${sky}"/>
-    <rect y="56" width="120" height="16" fill="${ground}"/>
-    <rect x="12" y="16" width="18" height="14" fill="#f1c27d"/><rect x="10" y="10" width="22" height="8" fill="#1d1d1d"/>
-    <rect x="10" y="30" width="22" height="14" fill="#ffffff"/><rect x="10" y="42" width="8" height="10" fill="${accent}"/><rect x="24" y="42" width="8" height="10" fill="${accent}"/>
-    <rect x="18" y="22" width="3" height="3" fill="#222"/><rect x="24" y="22" width="3" height="3" fill="#222"/><rect x="19" y="27" width="8" height="2" fill="#8b5a3c"/>
-    <rect x="44" y="18" width="18" height="14" fill="#f1c27d"/><rect x="42" y="12" width="22" height="8" fill="#684126"/>
-    <rect x="42" y="32" width="22" height="14" fill="#d7e4ff"/><rect x="42" y="44" width="8" height="10" fill="#d94242"/><rect x="56" y="44" width="8" height="10" fill="#d94242"/>
-    <rect x="50" y="24" width="3" height="3" fill="#222"/><rect x="56" y="24" width="3" height="3" fill="#222"/><rect x="51" y="29" width="8" height="2" fill="#8b5a3c"/>
+    <rect width="120" height="72" fill="#0f0c20"/>
+    <rect x="2" y="2" width="116" height="68" fill="${sky}" stroke="${frame}" stroke-width="2"/>
+    <rect x="4" y="4" width="112" height="8" fill="${glow}" opacity=".35"/>
+    <rect y="56" width="120" height="16" fill="${floor}"/>
+    <rect x="11" y="12" width="22" height="8" fill="#ffd25a" opacity=".9"/><rect x="13" y="14" width="18" height="4" fill="#fff3b0"/>
+    <rect x="12" y="16" width="18" height="24" fill="#f1c27d"/><rect x="10" y="10" width="22" height="8" fill="#1d1d1d"/>
+    <rect x="8" y="40" width="26" height="12" fill="#ffffff"/><rect x="6" y="44" width="10" height="12" fill="#ff5f66"/><rect x="26" y="44" width="10" height="12" fill="#ff5f66"/>
+    <rect x="17" y="24" width="4" height="4" fill="#222"/><rect x="24" y="24" width="4" height="4" fill="#222"/><rect x="18" y="31" width="10" height="2" fill="#8b5a3c"/>
+    <rect x="42" y="18" width="18" height="24" fill="#f1c27d"/><rect x="40" y="12" width="22" height="8" fill="#684126"/>
+    <rect x="38" y="42" width="26" height="12" fill="#d7e4ff"/><rect x="37" y="46" width="10" height="12" fill="#6bc6ff"/><rect x="55" y="46" width="10" height="12" fill="#6bc6ff"/>
+    <rect x="47" y="26" width="4" height="4" fill="#222"/><rect x="54" y="26" width="4" height="4" fill="#222"/><rect x="48" y="33" width="10" height="2" fill="#8b5a3c"/>
+    <rect x="35" y="8" width="6" height="42" fill="#000" opacity=".15"/>
     ${prop(theme)}
+    <rect x="72" y="8" width="40" height="10" fill="#000" opacity=".2"/>
+    <rect x="74" y="10" width="36" height="6" fill="${glow}" opacity=".6"/>
   </svg>`;
 }
 function eventImageHTML(e){ return `<div class="event-art">${pixelSceneSVG(eventThemeKey(e))}</div>`; }
@@ -580,7 +698,7 @@ function resolveEvent(ev,op,roll){
   const [txt,delta]=op[tier];
   const labels=applyDelta(delta);
   advanceWeek();
-  G.lastOutcome={ev:ev.title,roll,final,tier,txt,labels};
+  G.lastEventId=ev.id; G.lastEventTheme=eventThemeKey(ev); G.lastOutcome={ev:ev.title,roll,final,tier,txt,labels};
   addLog(`${ev.title}：${txt}`,tier==="high"?"good":tier==="low"?"bad":"");
   if(G.week%2===0 || G.offers.length===0) generateOffers();
   G.currentEvent=pickEvent();
@@ -591,6 +709,7 @@ function renderOutcome(){
   const cls=o.tier==="high"?"good":o.tier==="low"?"bad":"";
   document.querySelector("#eventBox").innerHTML=`
     <div class="season"><b>OUTCOME</b><span>${G.year} · Week ${G.week}</span></div>
+    ${eventImageHTML({id:G.lastEventId||"sparring",imageKey:G.lastEventTheme||"gym"})}
     <div class="dice-stage"><div class="die">${o.roll}</div></div>
     <div class="outcome ${cls}">
       <b>${o.ev}</b>
@@ -698,6 +817,7 @@ function applyFight(f,winner,method,end,log){
   }
   delete G.pendingFight; advanceWeek(rnd(2,5)); generateOffers(); G.currentEvent=pickEvent(); checkPhaseUp(); save(false);
   document.querySelector("#fightModalTitle").textContent=`${G.name} vs ${f.name}`;
+  const art=document.querySelector("#fightResultArt"); if(art) art.innerHTML=pixelSceneSVG(winner==="me"?"medal":winner==="opp"?"doctor":"fight");
   document.querySelector("#fightLog").textContent=log.join("\n");
   document.querySelector("#fightModal").classList.remove("hidden"); render();
 }
@@ -714,20 +834,21 @@ function resetGame(){ if(confirm("確定要結束這次人生並重新建立拳�
 
 function avatarSVG(a, gender="male"){
   const hair2 = a.hair, skin=a.skin, glove=a.glove, shirt=a.shirt, eye=a.eye;
-  const bow = gender==="female" ? `<rect x="15" y="5" width="10" height="4" fill="#ff5aa8"/><rect x="47" y="5" width="10" height="4" fill="#ff5aa8"/><rect x="28" y="4" width="16" height="6" fill="#ffd6ea"/>` : ``;
+  const bow = gender==="female" ? `<rect x="13" y="7" width="11" height="5" fill="#ff5aa8"/><rect x="48" y="7" width="11" height="5" fill="#ff5aa8"/><rect x="28" y="6" width="16" height="6" fill="#ffd6ea"/>` : ``;
   return `<svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
-    <rect width="72" height="72" fill="#0f1721"/>
-    <rect x="12" y="42" width="48" height="18" fill="${shirt}"/>
-    <rect x="16" y="44" width="12" height="12" fill="${glove}"/>
-    <rect x="44" y="44" width="12" height="12" fill="${glove}"/>
-    <rect x="20" y="14" width="32" height="26" fill="${skin}"/>
-    <rect x="16" y="10" width="40" height="10" fill="${hair2}"/>
-    <rect x="18" y="18" width="6" height="8" fill="${hair2}"/>
-    <rect x="48" y="18" width="6" height="8" fill="${hair2}"/>
-    <rect x="26" y="24" width="4" height="4" fill="${eye}"/>
-    <rect x="42" y="24" width="4" height="4" fill="${eye}"/>
-    <rect x="31" y="31" width="10" height="3" fill="#8b5a3c"/>
-    <rect x="22" y="12" width="28" height="3" fill="${hair2}"/>
+    <rect width="72" height="72" fill="#141028"/>
+    <rect y="54" width="72" height="18" fill="#0d0a1d"/>
+    <rect x="11" y="14" width="50" height="36" fill="${skin}"/>
+    <rect x="8" y="10" width="56" height="12" fill="${hair2}"/>
+    <rect x="7" y="18" width="8" height="12" fill="${hair2}"/>
+    <rect x="57" y="18" width="8" height="12" fill="${hair2}"/>
+    <rect x="12" y="48" width="48" height="12" fill="${shirt}"/>
+    <rect x="7" y="49" width="12" height="12" fill="${glove}"/>
+    <rect x="53" y="49" width="12" height="12" fill="${glove}"/>
+    <rect x="25" y="28" width="5" height="5" fill="${eye}"/>
+    <rect x="42" y="28" width="5" height="5" fill="${eye}"/>
+    <rect x="29" y="38" width="14" height="3" fill="#8b5a3c"/>
+    <rect x="23" y="23" width="10" height="2" fill="#000" opacity=".25"/><rect x="40" y="23" width="10" height="2" fill="#000" opacity=".25"/>
     ${bow}
   </svg>`;
 }
@@ -740,9 +861,9 @@ function phaseHTML(){
 }
 function startScreen(){
   return `<div class="hero">
-    <div class="eyebrow">BOXING LIFE · V7</div>
+    <div class="eyebrow">BOXING LIFE · V10 STORY MODE</div>
     <h1>拳擊<br>人生</h1>
-    <p>你是來自台灣的拳手，先選擇前往美國、日本或菲律賓留學兼學拳，從業餘起步，一步步走向職業與世界舞台。每次贏比賽都會拿到升級點數，所有事件也都附上 Q 版像素圖。</p>
+    <p>你是來自台灣的拳手，先選擇前往美國、日本或菲律賓留學兼學拳，從業餘起步，一步步走向職業與世界舞台。整體視覺改成 Q版復古像素風格，致敬 90 年代街機格鬥遊戲的熱血感。</p>
   </div>
   <div class="wrap">
     <div class="panel">
@@ -754,7 +875,7 @@ function startScreen(){
       </div></div>
       <div class="field"><label>起始年齡（業餘）</label><select id="age">${Array.from({length:13},(_,i)=>`<option ${i===0?"selected":""}>${18+i}</option>`).join("")}</select></div>
       <div class="field"><label>量級</label><select id="weight">${WEIGHTS.map(x=>`<option ${x==="Lightweight"?"selected":""}>${x}</option>`).join("")}</select></div>
-      <div class="field"><label>拳風</label><div class="chips">
+      <div class="field"><label>拳風</label><div class="note">所有序章、章節升級、隨機事件、賽前與賽後畫面都支援 Q版復古像素場景。</div><div class="chips">
         ${Object.entries(STYLES).map(([k,s],i)=>`<button class="chip style ${i===0?"on":""}" data-v="${k}" onclick="chipOne('style',this)">${s.zh}</button>`).join("")}
       </div></div>
       <div class="field">
@@ -808,7 +929,7 @@ function offersHTML(){
     const t=TITLE_DEFS.find(x=>x.id===f.title);
     const oppMini = `<div class="small-chibi">${miniAvatar({avatar:defaultAvatar(),gender:G.gender})}</div>`;
     return `<div class="offer ${t?"titlefight":""}">
-      <div class="offer-h"><b>${f.name}</b><span>${t?"🏆 "+t.zh:(G.isPro?`WORLD #${f.rank}`:"業餘對手")}</span></div>
+      <div class="offer-h"><b>${f.name}</b><span>${countryLabelFromCity(f.city)} · ${t?"🏆 "+t.zh:(G.isPro?`#${f.rank}`:"業餘")}</span></div>
       <div class="offer-meta">${f.record} · OVR ${f.ovr}<br>${f.city} · ${f.rounds} 回合 ${G.isPro?`· ${money(f.purse)}`:""}</div>
       <div class="offer-actions"><button class="btn small" onclick="acceptFight('${f.id}')">接下比賽</button></div>
     </div>`;
@@ -833,6 +954,7 @@ function render(){
       </div>
     </div>
     <div class="wrap">
+      ${G.storyCard ? renderStoryCard() : `
       <div class="phase-banner"><b>目前階段：</b> ${currentPhase().zh} ｜ ${currentPhase().desc}<br><span class="note">故事背景：來自台灣，正在 ${(START_DESTINATIONS[G.destinationCountry]||{zh:G.destinationCountry}).zh} 留學兼打拳 ｜ 下一階段門檻：${G.isPro?G.record.w:G.amateur.w}/${stageWinsNeeded()} 勝 ｜ 可用自由點數：${G.skillPoints}</span></div>
       <div class="panel"><div class="label">Career Stage</div>${phaseHTML()}</div>
       <div id="eventBox" class="panel ${isSpecialEvent(G.currentEvent)?"special-panel":""}">${eventHTML()}</div>
@@ -843,7 +965,8 @@ function render(){
       </div>
       <div class="panel"><div class="season"><b>${G.isPro?"FIGHT OFFERS":"AMATEUR BOUTS"}</b><span>${G.isPro?"職業賽場":"業餘賽場"}</span></div>${offersHTML()}</div>
       <div class="panel"><div class="label">Titles</div><div class="badges" style="margin-top:8px">${G.titles.length?G.titles.map(id=>{const t=TITLE_DEFS.find(x=>x.id===id);return `<span class="badge">🏆 ${t.zh}</span>`}).join(""):`<span class="note">尚未取得冠軍</span>`}</div></div>
-      <div class="panel"><div class="label">Career Log</div><div class="timeline">${G.logs.map(l=>`<div class="log ${l.type}"><span class="when">${l.when}</span>${esc(l.text)}</div>`).join("")}</div></div>
+      <div class="panel"><div class="label">Arcade Career Log</div><div class="timeline">${G.logs.map(l=>`<div class="log ${l.type}"><span class="when">${l.when}</span>${esc(l.text)}</div>`).join("")}</div></div>
+      `}
     </div>
     <div class="actionbar"><div class="inner">
       <button class="btn ghost" onclick="save()">儲存</button>
