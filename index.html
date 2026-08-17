@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Boxing Life V34 · 國家文化劇情版</title>
+<title>Boxing Life V35 · 電腦手機響應式版</title>
 <style>
 :root{
   --bg:#061911; --bg2:#09251b; --panel:#0f3427; --panel2:#153d2f;
@@ -364,11 +364,518 @@ const MAIN_BOXER_ART = COUNTRY_BOXER_ART.usa;
 .lifeIntro .miniIcon b{color:#f1c553}
 </style>
 
+
+<style id="v35-responsive-css">
+/* =========================================================
+   V35 RESPONSIVE LAYOUT
+   Desktop / Laptop / Tablet / Phone
+   ========================================================= */
+
+:root{
+  --v35-side-left:clamp(220px,16vw,285px);
+  --v35-side-right:clamp(320px,25vw,420px);
+}
+html{
+  width:100%;
+  min-width:0;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
+body{
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  overscroll-behavior-y:none;
+}
+*,*:before,*:after{box-sizing:border-box}
+img,canvas,svg{max-width:100%}
+button,input,select{max-width:100%}
+
+/* ---------- Desktop: true 3-column management layout ---------- */
+#app{height:100dvh;min-height:100vh}
+.shell{
+  width:100%;
+  max-width:1920px;
+  height:100dvh;
+  min-height:0;
+  grid-template-columns:var(--v35-side-left) minmax(0,1fr) var(--v35-side-right);
+}
+.left,.center,.right{min-width:0}
+.left{padding:clamp(14px,1.2vw,20px)}
+.right{padding:clamp(12px,1.1vw,18px)}
+.header{padding:12px clamp(16px,1.7vw,28px) 11px}
+.content{padding:clamp(14px,1.4vw,22px) clamp(16px,1.8vw,30px) 42px}
+
+.brand{font-size:clamp(34px,2.55vw,46px)}
+.name b{font-size:clamp(21px,1.55vw,27px)}
+.card h2{font-size:clamp(21px,1.55vw,27px)}
+.card h3{font-size:clamp(17px,1.25vw,21px)}
+.card p,.storyProse{font-size:clamp(14px,.96vw,16px)}
+.metric b{font-size:clamp(17px,1.25vw,21px)}
+.choice b{font-size:clamp(15px,1.08vw,17px)}
+.choice{min-height:58px}
+.action button{min-height:52px}
+
+/* prevent long names / labels from forcing columns wider */
+.name,.affil,.metric,.card,.choice,.historyText{min-width:0}
+.name b,.affil b,.card h2,.card h3,.choice b{
+  overflow-wrap:anywhere;
+}
+.card p,.resultText,.storyProse,.log div{
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+
+/* career track should scroll rather than break page width */
+.careerMap{
+  max-width:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scrollbar-width:thin;
+  -webkit-overflow-scrolling:touch;
+}
+.careerTrack{
+  min-width:650px;
+}
+.careerNode{scroll-snap-align:center}
+.careerMap{scroll-snap-type:x proximity}
+
+/* start screen */
+.start{
+  width:min(1100px,100%);
+  max-width:1100px;
+  min-height:100dvh;
+  height:100dvh;
+  padding:clamp(24px,3vw,46px) clamp(16px,3vw,32px);
+}
+.start h1{font-size:clamp(38px,4vw,58px)}
+.startIntro{font-size:clamp(14px,1.25vw,17px)}
+.lifeIntro{font-size:clamp(14px,1.1vw,16px)}
+.lifeIntroTitle{font-size:clamp(17px,1.35vw,20px)}
+.countryPortrait img{width:100%;height:auto}
+
+/* modal and share image */
+.careerSheet{width:min(980px,96vw)}
+.sharePreview canvas,.careerSheet canvas{
+  display:block;
+  width:min(100%,600px)!important;
+  height:auto!important;
+  margin-inline:auto;
+}
+
+/* compact navigation shown when desktop left rail disappears */
+.mobileQuickbar{display:none}
+
+/* ---------- Laptop / smaller desktop ---------- */
+@media (max-width:1399px) and (min-width:1101px){
+  :root{
+    --v35-side-left:clamp(210px,17vw,240px);
+    --v35-side-right:clamp(315px,27vw,370px);
+  }
+  .left{padding:14px}
+  .right{padding:13px}
+  .content{padding-left:18px;padding-right:18px}
+  .brandSub{letter-spacing:.16em}
+  .menu div{padding:8px;font-size:12px}
+  .node{padding-bottom:11px}
+}
+
+/* ---------- Tablet: main game + operation rail ---------- */
+@media (max-width:1100px) and (min-width:861px){
+  body{overflow:hidden}
+  #app,.shell{height:100dvh}
+  .shell{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) clamp(300px,34vw,355px)!important;
+    grid-template-areas:"center right";
+    max-width:none;
+  }
+  .left{display:none!important}
+  .center{
+    grid-area:center;
+    overflow-y:auto!important;
+    border-right:1px solid #264c3d;
+  }
+  .right{
+    grid-area:right;
+    overflow-y:auto!important;
+  }
+  .header{position:sticky!important;top:0}
+  .content{padding:16px 18px 34px}
+  .profile{grid-template-columns:64px minmax(0,1fr)}
+  .affil{display:none}
+  .metrics{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .metric{padding:6px 4px}
+  .metric b{font-size:17px}
+  .metric span{font-size:9px}
+  .mobileQuickbar{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    overflow-x:auto;
+    padding:8px 12px;
+    border-bottom:1px solid #284f40;
+    background:#09281e;
+    scrollbar-width:none;
+  }
+  .mobileQuickbar::-webkit-scrollbar{display:none}
+  .mobileQuickbar .mqPhase{
+    margin-right:auto;
+    min-width:max-content;
+    color:#bdcbc3;
+    font-size:11px;
+    font-weight:850;
+  }
+  .mobileQuickbar button{
+    min-width:max-content;
+    min-height:36px;
+    border:1px solid #466958;
+    border-radius:8px;
+    padding:7px 10px;
+    background:#12382b;
+    color:#dce4df;
+    font-size:11px;
+    font-weight:900;
+  }
+}
+
+/* ---------- Phone / narrow tablet: single-column game flow ---------- */
+@media (max-width:860px){
+  html,body{
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+  }
+  body{
+    background:#061b13;
+    overscroll-behavior-y:auto;
+  }
+  #app{
+    width:100%;
+    height:auto!important;
+    min-height:100dvh;
+  }
+  .shell{
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:100dvh;
+    border:0!important;
+  }
+  .left{display:none!important}
+  .center{
+    width:100%;
+    overflow:visible!important;
+    border:0!important;
+  }
+  .header{
+    position:relative!important;
+    top:auto!important;
+    padding:10px 12px 9px;
+    backdrop-filter:none;
+  }
+  .profile{
+    grid-template-columns:58px minmax(0,1fr)!important;
+    gap:9px;
+  }
+  .fighterAvatar{width:58px!important;height:58px!important}
+  .name b{font-size:20px}
+  .tags{gap:4px;margin-top:3px}
+  .tag{font-size:9px;padding:2px 5px}
+  .affil{display:none!important}
+  .metrics{
+    grid-template-columns:repeat(5,minmax(0,1fr))!important;
+    gap:5px;
+    margin-top:8px;
+  }
+  .metric{
+    min-width:0;
+    border-radius:7px;
+    padding:6px 2px;
+  }
+  .metric b{font-size:15px}
+  .metric span{
+    font-size:8px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .mobileQuickbar{
+    display:flex;
+    position:sticky;
+    top:0;
+    z-index:8;
+    align-items:center;
+    gap:7px;
+    width:100%;
+    overflow-x:auto;
+    padding:7px 10px;
+    border-bottom:1px solid #2a5443;
+    background:rgba(8,35,26,.98);
+    scrollbar-width:none;
+  }
+  .mobileQuickbar::-webkit-scrollbar{display:none}
+  .mobileQuickbar .mqPhase{
+    min-width:max-content;
+    margin-right:auto;
+    color:#c7d2cc;
+    font-size:10px;
+    font-weight:900;
+  }
+  .mobileQuickbar button{
+    min-width:max-content;
+    min-height:35px;
+    padding:6px 9px;
+    border:1px solid #436655;
+    border-radius:8px;
+    background:#12382b;
+    color:#e4e9e5;
+    font-size:10px;
+    font-weight:900;
+  }
+
+  .content{
+    width:100%;
+    padding:11px 10px max(28px,env(safe-area-inset-bottom));
+  }
+  .date{
+    margin:3px 0 10px;
+    font-size:10px;
+    letter-spacing:.11em;
+  }
+  .card{
+    border-radius:11px;
+    padding:13px 13px;
+    margin-bottom:10px;
+  }
+  .card h2{font-size:20px;line-height:1.28}
+  .card h3{font-size:17px}
+  .card p,.storyProse{font-size:14px;line-height:1.75}
+  .storyProse .bigLead{font-size:19px}
+  .progressBox{
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+  .turnDots{justify-content:flex-start}
+
+  /* On mobile JS moves .right directly under the active story/event,
+     so choices and dice no longer sit below the entire page. */
+  .right.mobileEmbedded{
+    width:100%;
+    padding:0!important;
+    margin:0 0 10px;
+    overflow:visible!important;
+    background:transparent!important;
+  }
+  .right.mobileEmbedded .rhythm{
+    margin-bottom:9px;
+  }
+  .rightTitle{font-size:10px}
+  .rhythm,.pointsBox,.attr{
+    border-radius:10px;
+  }
+  .rhythm{padding:10px}
+  .rhythmRow{font-size:11px}
+  .pointsBox{padding:11px}
+  .pointsHead b{font-size:21px}
+  .choice{
+    min-height:58px;
+    padding:12px;
+    border-radius:10px;
+    touch-action:manipulation;
+  }
+  .choice b{font-size:15px}
+  .choice span{font-size:11px;line-height:1.5}
+  .choice em{font-size:9px}
+  .die{
+    width:64px;height:64px;
+    font-size:32px;
+  }
+  .resultText{font-size:13px;line-height:1.7}
+  .action{
+    position:sticky;
+    bottom:0;
+    z-index:7;
+    padding:12px 0 max(8px,env(safe-area-inset-bottom));
+    background:linear-gradient(180deg,transparent,#061b13 22%,#061b13);
+  }
+  .action button{
+    min-height:54px;
+    padding:12px 14px;
+    font-size:16px;
+    touch-action:manipulation;
+  }
+
+  .careerMap{
+    margin-bottom:10px;
+    padding:11px 8px 10px;
+    border-radius:11px;
+  }
+  .careerMapHead{
+    position:sticky;
+    left:0;
+    gap:8px;
+  }
+  .careerMapHead b{font-size:10px}
+  .careerMapHead span{font-size:10px}
+  .careerTrack{
+    grid-template-columns:repeat(7,78px)!important;
+    min-width:546px!important;
+    gap:0;
+    padding:0 2px 5px;
+  }
+  .careerCircle{
+    width:54px!important;height:54px!important;
+    margin-bottom:6px;
+  }
+  .careerCircle svg{width:27px;height:27px}
+  .careerMiniPortrait{width:44px!important;height:44px!important}
+  .careerNode .careerTitle{font-size:9px}
+  .careerNode .careerSub{font-size:8px}
+
+  .log{
+    padding:8px 0;
+  }
+  .log small{font-size:9px}
+  .log div{font-size:12px;line-height:1.55}
+
+  /* start page on phone */
+  .start{
+    width:100%;
+    max-width:none;
+    min-height:100dvh;
+    height:auto!important;
+    padding:24px 12px max(30px,env(safe-area-inset-bottom));
+    overflow:visible;
+  }
+  .start h1{
+    font-size:38px;
+    letter-spacing:-1.5px;
+    line-height:1.05;
+  }
+  .startIntro{
+    margin:10px auto 16px;
+    font-size:14px;
+    line-height:1.65;
+  }
+  .lifeIntro{
+    padding:14px;
+    margin:12px 0 14px;
+    font-size:13px;
+    line-height:1.75;
+  }
+  .lifeIntroTitle{
+    font-size:17px;
+    line-height:1.35;
+  }
+  .lifeIntroTitle .icon{
+    min-width:30px;
+  }
+  .lifeIntro .miniIcons{
+    gap:6px;
+  }
+  .lifeIntro .miniIcon{
+    padding:5px 7px;
+    font-size:9px;
+  }
+  .startGrid{
+    grid-template-columns:1fr!important;
+    gap:10px;
+  }
+  .panel{padding:13px}
+  .row2{grid-template-columns:1fr 1fr}
+  .startBtn{
+    min-height:54px;
+    margin-top:10px;
+    font-size:16px;
+  }
+
+  .countryPortraits{
+    grid-template-columns:1fr!important;
+    gap:9px;
+  }
+  .countryPortrait{
+    display:grid!important;
+    grid-template-columns:112px minmax(0,1fr)!important;
+    min-height:112px;
+  }
+  .countryPortrait img{
+    width:112px!important;
+    height:112px!important;
+    object-fit:cover;
+    aspect-ratio:1/1!important;
+  }
+  .countryPortraitInfo{
+    padding:10px;
+    text-align:left;
+  }
+  .countryPortraitInfo b{font-size:14px}
+  .countryPortraitInfo span{font-size:10px}
+
+  /* modal on phone */
+  .careerModal{
+    align-items:flex-end;
+    padding:0!important;
+  }
+  .careerSheet{
+    width:100vw!important;
+    max-width:100vw!important;
+    max-height:92dvh!important;
+    border-radius:16px 16px 0 0!important;
+    border-left:0!important;
+    border-right:0!important;
+    border-bottom:0!important;
+    padding:13px!important;
+  }
+  .careerTop h2{font-size:21px}
+  .careerSummary{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+  .careerMetric b{font-size:17px}
+  .historyItem{grid-template-columns:1fr!important}
+}
+
+/* ---------- Very small phones ---------- */
+@media (max-width:420px){
+  .header{padding-left:9px;padding-right:9px}
+  .content{padding-left:8px;padding-right:8px}
+  .profile{grid-template-columns:52px minmax(0,1fr)!important}
+  .fighterAvatar{width:52px!important;height:52px!important}
+  .name b{font-size:18px}
+  .metrics{gap:3px}
+  .metric b{font-size:14px}
+  .metric span{font-size:7.5px}
+  .card{padding:12px 11px}
+  .card h2{font-size:19px}
+  .card p,.storyProse{font-size:13.5px}
+  .row2{grid-template-columns:1fr}
+  .countryPortrait{
+    grid-template-columns:96px minmax(0,1fr)!important;
+    min-height:96px;
+  }
+  .countryPortrait img{
+    width:96px!important;height:96px!important;
+  }
+}
+
+/* ---------- Short landscape phones ---------- */
+@media (max-width:860px) and (max-height:520px) and (orientation:landscape){
+  .header{padding-top:7px;padding-bottom:6px}
+  .profile{grid-template-columns:46px minmax(0,1fr)!important}
+  .fighterAvatar{width:46px!important;height:46px!important}
+  .metrics{margin-top:5px}
+  .metric{padding:4px 2px}
+  .content{padding-top:8px}
+  .mobileQuickbar{padding-top:5px;padding-bottom:5px}
+  .action button{min-height:46px}
+}
+</style>
+
 </head>
 <body>
 <div id="app"></div>
 <script>
-const SAVE_KEY="boxing-life-v34-country-culture-events";
+const SAVE_KEY="boxing-life-v35-responsive-desktop-mobile";
 const COUNTRIES={usa:{name:"美國",base:"Las Vegas",route:"旅美"},japan:{name:"日本",base:"東京",route:"旅日"},philippines:{name:"菲律賓",base:"宿霧",route:"旅菲"}};
 const STYLES={pressure:"壓迫型",boxer:"技巧型",puncher:"重砲型"};
 const SKILLS=["power","speed","stamina","defense","chin","technique"];
@@ -593,7 +1100,7 @@ function apply(k,v){
 function spendPoint(k){const c=statCost(k);if(G.skillPoints<c||G.stats[k]>=95)return;G.skillPoints-=c;G.stats[k]++;log(`分配能力點：${NAMES[k]} +1（花費 ${c} 點）。`);save();render()}
 function createGame(){
  const country=document.getElementById("country").value;
- G={version:34,name:document.getElementById("name").value.trim()||"李逍遙",style:document.getElementById("style").value,country,base:COUNTRIES[country].base,
+ G={version:35,name:document.getElementById("name").value.trim()||"李逍遙",style:document.getElementById("style").value,country,base:COUNTRIES[country].base,
     lifePath:null,phaseIndex:0,turnInPhase:0,age:16,year:2026,health:100,morale:72,fame:3,income:0,skillPoints:3,
     stats:{power:rnd(43,49),speed:rnd(43,49),stamina:rnd(43,49),defense:rnd(42,48),chin:rnd(44,50),technique:rnd(43,49)},
     amateur:{w:0,l:0},pro:{w:0,l:0,d:0,ko:0},current:null,result:null,stageStory:false,logs:[],lastEvent:null,usedSpecial:{}};
@@ -741,7 +1248,7 @@ function render(){
  const action=mode==="idle"?`<button onclick="drawEvent()">${G.stageStory?`進入重大劇情：${p.story}`:`開始第 ${G.turnInPhase+1} / ${p.turns} 回合`}<small>${G.stageStory?"完成後進下一個人生階段":"每個人生階段都有不同事件池，且會避開最近抽過的內容"}</small></button>`:mode==="result"?`<button onclick="continueAfterResult()">${G.result.stageDone?"進入下一階段":"繼續"}<small>${G.result.stageDone?`下一站：${nextName}`:"回到下一個事件回合"}</small></button>`:"";
  const center=mode==="event"?`<div class="card ${G.current.story||G.current.special?"major":""}"><div class="kicker ${G.current.story||G.current.special?"gold":""}">■ ${G.current.cat}</div><h2>${G.current.title}</h2><p>${G.current.desc}</p></div>`:mode==="result"?`<div class="card ${G.result.stageDone?"major":""}"><div class="kicker ${G.result.stageDone?"gold":""}">■ ${G.result.stageDone?"重大劇情結果":"事件結果"}</div><h2>${G.result.title}</h2><p>${G.result.text}</p><div class="deltaWrap">${G.result.deltas.map(x=>`<span class="delta ${x.includes("能力點")?"point":x.includes("+")?"good":x.includes("-")?"bad":""}">${esc(x)}</span>`).join("")}</div></div>`:`<div class="card"><div class="kicker">■ ${p.name}</div><h2>${G.stageStory?`4 回合完成：${p.story}`:`第 ${G.turnInPhase+1} 回合準備開始`}</h2><p>${G.stageStory?`這個人生階段的日常事件已完成，現在進入重大劇情。`:p.desc}</p><div class="progressBox"><div class="progressText">本階段進度 <b>${G.turnInPhase} / ${p.turns}</b></div><div class="turnDots">${Array.from({length:p.turns},(_,i)=>`<i class="${i<G.turnInPhase?"done":""}"></i>`).join("")}</div></div></div>`;
  app.innerHTML=`<div class="shell">
- <aside class="left"><div class="brand">Boxing <em>Life</em></div><div class="brandSub">拳 擊 人 生 模 擬 器</div><div class="school">台灣高中・拳擊部<small>${country.route}｜${country.name}・${G.base}</small></div><div class="timeline">${timelineHTML()}</div><div class="menu"><div class="active">▣ 生涯事件</div><div>◆ 能力點</div><div>♜ 劇情比賽</div><div>▦ 人生年表</div><div>★ 技能</div><div>▥ 數據</div><div>◉ 成就</div><div onclick="save()">▣ 儲存</div><div onclick="resetGame()">⚙ 重開人生</div></div><div class="version"><b>v3.4.0</b><br>${G.lifePath==="college"?"大學人生線":G.lifePath==="work"?"工作人生線":"高中人生線"}<br>4 回合推進・大量階段限定事件</div></aside>
+ <aside class="left"><div class="brand">Boxing <em>Life</em></div><div class="brandSub">拳 擊 人 生 模 擬 器</div><div class="school">台灣高中・拳擊部<small>${country.route}｜${country.name}・${G.base}</small></div><div class="timeline">${timelineHTML()}</div><div class="menu"><div class="active">▣ 生涯事件</div><div>◆ 能力點</div><div>♜ 劇情比賽</div><div>▦ 人生年表</div><div>★ 技能</div><div>▥ 數據</div><div>◉ 成就</div><div onclick="save()">▣ 儲存</div><div onclick="resetGame()">⚙ 重開人生</div></div><div class="version"><b>v3.5.0</b><br>${G.lifePath==="college"?"大學人生線":G.lifePath==="work"?"工作人生線":"高中人生線"}<br>4 回合推進・大量階段限定事件</div></aside>
  <main class="center"><header class="header"><div class="profile"><div class="no">1</div><div class="name"><b>${esc(G.name)}</b><div class="tags"><span class="tag">${p.identity}</span><span class="tag gold">${STYLES[G.style]}</span></div></div><div class="affil">所屬地區<b>${country.name}・${G.base}</b></div></div><div class="metrics"><div class="metric"><b>${G.age}</b><span>年齡</span></div><div class="metric"><b>${G.year}</b><span>年份</span></div><div class="metric"><b>${ovr()}</b><span>綜合</span></div><div class="metric"><b>${G.skillPoints}</b><span>能力點</span></div><div class="metric"><b>${G.pro.w}-${G.pro.l}</b><span>職業戰績</span></div></div></header><div class="content"><div class="card"><div class="kicker">■ 人生主線</div><p>左側會永久保留走過的年級／人生階段。高中畢業後會真正分成 <b>大學線</b> 或 <b>工作線</b>；每條線都有自己的特殊事件，再於 23 歲左右匯入職業拳擊。</p></div><div class="date">${G.year} 年 ・ ${G.age} 歲 ・ ${p.name}</div>${center}<div class="card"><div class="kicker">■ 最近紀錄</div>${G.logs.slice(0,7).map(l=>`<div class="log"><small>${l.when}</small><div>${esc(l.text)}</div></div>`).join("")}</div></div></main>
  <aside class="right"><div class="rhythm"><div class="rightTitle">LIFE RHYTHM</div><div class="rhythmRow ${!G.stageStory&&!G.current&&!G.result?"on":""}"><i></i>${p.name}：${G.turnInPhase}/${p.turns} 回合</div><div class="rhythmRow ${G.current?"on":""}"><i></i>階段專屬事件／特殊事件</div><div class="rhythmRow ${G.result?"on":""}"><i></i>命運骰結算</div><div class="rhythmRow ${G.stageStory?"on":""}"><i></i>第 4 回合後：${p.story}</div></div>${rightAttrs()}${choices}${res}<div class="action">${action}</div></aside>
  </div>`;
@@ -1857,6 +2364,77 @@ render=function(){
         </div>`);
     }
   }
+};
+</script>
+
+
+<script id="v35-responsive-js">
+function v35BuildQuickbar(){
+  if(!G)return "";
+  const p=phase();
+  const route=G.lifePath==="college"?"大學線":G.lifePath==="work"?"工作線":"高中線";
+  return `<div class="mobileQuickbar" id="mobileQuickbar">
+    <span class="mqPhase">🥊 ${G.year}・${G.age}歲・${p.name}｜${route}</span>
+    <button type="button" onclick="careerRecordModal()">生涯紀錄</button>
+    <button type="button" onclick="save()">儲存</button>
+  </div>`;
+}
+
+function v35ArrangeLayout(){
+  if(!G)return;
+  const shell=document.querySelector(".shell");
+  const center=document.querySelector(".center");
+  const header=center?.querySelector(".header");
+  let right=document.querySelector(".right");
+  if(!shell||!center||!right)return;
+
+  // Insert compact controls when the desktop left rail is unavailable.
+  if(window.innerWidth<=1100 && !document.getElementById("mobileQuickbar")){
+    if(header)header.insertAdjacentHTML("afterend",v35BuildQuickbar());
+  }else if(window.innerWidth>1100){
+    document.getElementById("mobileQuickbar")?.remove();
+  }
+
+  // Phone: put interaction rail immediately before recent logs.
+  if(window.innerWidth<=860){
+    const content=center.querySelector(".content");
+    if(content && right.parentElement!==content){
+      const cards=[...content.querySelectorAll(":scope > .card")];
+      const recent=cards.find(c=>(c.querySelector(".kicker")?.textContent||"").includes("最近紀錄"));
+      if(recent)content.insertBefore(right,recent);
+      else content.appendChild(right);
+    }
+    right.classList.add("mobileEmbedded");
+
+    // Center current career node on narrow screens.
+    requestAnimationFrame(()=>{
+      const map=document.querySelector(".careerMap");
+      const current=map?.querySelector(".careerNode.current");
+      if(map&&current){
+        const target=current.offsetLeft-(map.clientWidth-current.clientWidth)/2;
+        map.scrollLeft=Math.max(0,target);
+      }
+    });
+  }else{
+    // Restore normal DOM order on tablet/desktop after an orientation/resize change.
+    if(right.parentElement!==shell)shell.appendChild(right);
+    right.classList.remove("mobileEmbedded");
+  }
+}
+
+let v35ResizeTimer=null;
+window.addEventListener("resize",()=>{
+  clearTimeout(v35ResizeTimer);
+  v35ResizeTimer=setTimeout(v35ArrangeLayout,100);
+});
+window.addEventListener("orientationchange",()=>{
+  setTimeout(v35ArrangeLayout,140);
+});
+
+const V35_prevRender=render;
+render=function(){
+  V35_prevRender();
+  requestAnimationFrame(v35ArrangeLayout);
 };
 </script>
 
