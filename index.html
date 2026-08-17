@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Boxing Life V35 · 電腦手機響應式版</title>
+<title>Boxing Life V37 · 拳擊圖示品牌版</title>
 <style>
 :root{
   --bg:#061911; --bg2:#09251b; --panel:#0f3427; --panel2:#153d2f;
@@ -871,11 +871,208 @@ button,input,select{max-width:100%}
 }
 </style>
 
+
+<style id="v36-prologue-css">
+.lifeIntroV36{
+  position:relative;
+  overflow:hidden;
+  padding:22px 22px 20px;
+  background:
+    radial-gradient(circle at 90% 10%,rgba(241,197,83,.08),transparent 26%),
+    linear-gradient(180deg,#12382b,#0c2b21 68%,#09251c);
+}
+.lifeIntroV36:before{
+  content:"";
+  position:absolute;
+  left:0;top:0;bottom:0;
+  width:4px;
+  background:linear-gradient(#f1c553,#5ccf7c,#f1c553);
+  opacity:.9;
+}
+.lifeIntroV36 .lifeIntroTitle{
+  align-items:flex-start;
+  margin-bottom:14px;
+}
+.lifeIntroV36 .lifeIntroTitle small{
+  display:block;
+  margin-bottom:2px;
+  color:#7fa391;
+  font-size:9px;
+  letter-spacing:.18em;
+  font-weight:900;
+}
+.lifeIntroV36 .prologueLead{
+  margin:4px 0 17px;
+  padding:13px 15px;
+  border-left:2px solid #8f7930;
+  background:rgba(6,27,19,.55);
+}
+.prologueQuote{
+  color:#e7d89d;
+  font-size:15px;
+  line-height:1.7;
+  font-weight:850;
+}
+.lifeIntroV36 p{
+  margin-bottom:14px;
+  line-height:1.95;
+}
+.prologueScene{
+  display:grid;
+  grid-template-columns:48px 1fr;
+  gap:12px;
+  align-items:center;
+  margin:15px 0;
+  padding:12px 14px;
+  border:1px solid #315a49;
+  border-radius:11px;
+  background:linear-gradient(90deg,#14372b,#102f25);
+}
+.prologueSceneIcon{
+  width:48px;height:48px;
+  display:grid;place-items:center;
+  border-radius:10px;
+  border:1px solid #756329;
+  background:#203a29;
+  font-size:25px;
+}
+.prologueScene b{
+  display:block;
+  margin-bottom:3px;
+  color:#f1c553;
+  font-size:13px;
+}
+.prologueScene span{
+  display:block;
+  color:#aebfb6;
+  font-size:12px;
+  line-height:1.65;
+}
+.prologueEnding{
+  margin-top:18px!important;
+  padding:14px 15px;
+  border:1px solid #7c692b;
+  border-radius:10px;
+  background:linear-gradient(90deg,#203a28,#15362a);
+  color:#efe3b2;
+  text-align:center;
+  font-size:15px!important;
+}
+.prologueHint{
+  margin-top:14px;
+  padding:12px 13px;
+  border-radius:10px;
+  background:#081f18;
+  border:1px dashed #496b5b;
+  color:#98aea2;
+  font-size:11px;
+  line-height:1.7;
+}
+.prologueHint span{
+  display:block;
+  color:#5ed27e;
+  margin-bottom:4px;
+  font-size:9px;
+  font-weight:1000;
+  letter-spacing:.14em;
+}
+.prologueHint b{
+  color:#e5ebe7;
+  margin-right:4px;
+}
+@media(max-width:860px){
+  .lifeIntroV36{padding:16px 14px}
+  .prologueQuote{font-size:13px}
+  .prologueScene{
+    grid-template-columns:40px 1fr;
+    padding:10px 11px;
+  }
+  .prologueSceneIcon{
+    width:40px;height:40px;
+    font-size:21px;
+  }
+  .prologueScene b{font-size:12px}
+  .prologueScene span{font-size:11px}
+  .prologueEnding{font-size:13.5px!important}
+}
+</style>
+
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE0IiBmaWxsPSIjMDgyNzFkIi8+CjxwYXRoIGQ9Ik0xOCAzNGMtNC00LTMtMTEgMi0xNCA0LTMgOC0xIDEwIDIgMS01IDctNyAxMS0zIDItMyA3LTMgMTAgMSA0IDUgMSAxMi0zIDE3bC04IDEwSDI1Yy03IDAtMTItNS0xMi0xMSAwLTEgMC0yIDEtM2w0IDFaIiBmaWxsPSIjZDk0YTQyIiBzdHJva2U9IiNmMWM1NTMiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CjxwYXRoIGQ9Ik0yMiA0NmgxOXY5SDIyeiIgZmlsbD0iI2I5MzUzMSIgc3Ryb2tlPSIjZjFjNTUzIiBzdHJva2Utd2lkdGg9IjIuNSIvPgo8L3N2Zz4=">
+<link rel="shortcut icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE0IiBmaWxsPSIjMDgyNzFkIi8+CjxwYXRoIGQ9Ik0xOCAzNGMtNC00LTMtMTEgMi0xNCA0LTMgOC0xIDEwIDIgMS01IDctNyAxMS0zIDItMyA3LTMgMTAgMSA0IDUgMSAxMi0zIDE3bC04IDEwSDI1Yy03IDAtMTItNS0xMi0xMSAwLTEgMC0yIDEtM2w0IDFaIiBmaWxsPSIjZDk0YTQyIiBzdHJva2U9IiNmMWM1NTMiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CjxwYXRoIGQ9Ik0yMiA0NmgxOXY5SDIyeiIgZmlsbD0iI2I5MzUzMSIgc3Ryb2tlPSIjZjFjNTUzIiBzdHJva2Utd2lkdGg9IjIuNSIvPgo8L3N2Zz4=">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE0IiBmaWxsPSIjMDgyNzFkIi8+CjxwYXRoIGQ9Ik0xOCAzNGMtNC00LTMtMTEgMi0xNCA0LTMgOC0xIDEwIDIgMS01IDctNyAxMS0zIDItMyA3LTMgMTAgMSA0IDUgMSAxMi0zIDE3bC04IDEwSDI1Yy03IDAtMTItNS0xMi0xMSAwLTEgMC0yIDEtM2w0IDFaIiBmaWxsPSIjZDk0YTQyIiBzdHJva2U9IiNmMWM1NTMiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CjxwYXRoIGQ9Ik0yMiA0NmgxOXY5SDIyeiIgZmlsbD0iI2I5MzUzMSIgc3Ryb2tlPSIjZjFjNTUzIiBzdHJva2Utd2lkdGg9IjIuNSIvPgo8L3N2Zz4=">
+<meta name="theme-color" content="#08271d">
+
+
+<style id="v37-boxing-brand-css">
+.boxingGloveIcon{
+  display:inline-grid;
+  place-items:center;
+  flex:0 0 auto;
+  vertical-align:middle;
+}
+.boxingGloveIcon svg{
+  width:100%;
+  height:100%;
+  overflow:visible;
+}
+.boxingGloveIcon svg path:first-child{
+  fill:#d84b43;
+  stroke:#f1c553;
+  stroke-width:2.6;
+  stroke-linejoin:round;
+}
+.boxingGloveIcon svg path:last-child{
+  fill:#a93431;
+  stroke:#f1c553;
+  stroke-width:2.6;
+}
+.v37BrandIcon{
+  width:34px;
+  height:34px;
+  margin-right:8px;
+  filter:drop-shadow(0 3px 5px rgba(0,0,0,.28));
+}
+.brand{
+  display:flex!important;
+  align-items:center;
+}
+.boxingTitleIconBox{
+  overflow:visible!important;
+  background:#173a2c!important;
+}
+.v37IntroIcon{
+  width:29px;
+  height:29px;
+}
+.v37InlineGlove{
+  width:24px;
+  height:24px;
+  margin-right:8px;
+  transform:translateY(-1px);
+}
+.lifeIntroTitle .v37InlineGlove{
+  display:none;
+}
+@media(max-width:860px){
+  .v37BrandIcon{
+    width:28px;
+    height:28px;
+    margin-right:6px;
+  }
+  .v37InlineGlove{
+    width:20px;
+    height:20px;
+    margin-right:6px;
+  }
+}
+</style>
+
 </head>
 <body>
 <div id="app"></div>
 <script>
-const SAVE_KEY="boxing-life-v35-responsive-desktop-mobile";
+const SAVE_KEY="boxing-life-v37-boxing-icon-branding";
 const COUNTRIES={usa:{name:"美國",base:"Las Vegas",route:"旅美"},japan:{name:"日本",base:"東京",route:"旅日"},philippines:{name:"菲律賓",base:"宿霧",route:"旅菲"}};
 const STYLES={pressure:"壓迫型",boxer:"技巧型",puncher:"重砲型"};
 const SKILLS=["power","speed","stamina","defense","chin","technique"];
@@ -1100,7 +1297,7 @@ function apply(k,v){
 function spendPoint(k){const c=statCost(k);if(G.skillPoints<c||G.stats[k]>=95)return;G.skillPoints-=c;G.stats[k]++;log(`分配能力點：${NAMES[k]} +1（花費 ${c} 點）。`);save();render()}
 function createGame(){
  const country=document.getElementById("country").value;
- G={version:35,name:document.getElementById("name").value.trim()||"李逍遙",style:document.getElementById("style").value,country,base:COUNTRIES[country].base,
+ G={version:37,name:document.getElementById("name").value.trim()||"李逍遙",style:document.getElementById("style").value,country,base:COUNTRIES[country].base,
     lifePath:null,phaseIndex:0,turnInPhase:0,age:16,year:2026,health:100,morale:72,fame:3,income:0,skillPoints:3,
     stats:{power:rnd(43,49),speed:rnd(43,49),stamina:rnd(43,49),defense:rnd(42,48),chin:rnd(44,50),technique:rnd(43,49)},
     amateur:{w:0,l:0},pro:{w:0,l:0,d:0,ko:0},current:null,result:null,stageStory:false,logs:[],lastEvent:null,usedSpecial:{}};
@@ -1248,7 +1445,7 @@ function render(){
  const action=mode==="idle"?`<button onclick="drawEvent()">${G.stageStory?`進入重大劇情：${p.story}`:`開始第 ${G.turnInPhase+1} / ${p.turns} 回合`}<small>${G.stageStory?"完成後進下一個人生階段":"每個人生階段都有不同事件池，且會避開最近抽過的內容"}</small></button>`:mode==="result"?`<button onclick="continueAfterResult()">${G.result.stageDone?"進入下一階段":"繼續"}<small>${G.result.stageDone?`下一站：${nextName}`:"回到下一個事件回合"}</small></button>`:"";
  const center=mode==="event"?`<div class="card ${G.current.story||G.current.special?"major":""}"><div class="kicker ${G.current.story||G.current.special?"gold":""}">■ ${G.current.cat}</div><h2>${G.current.title}</h2><p>${G.current.desc}</p></div>`:mode==="result"?`<div class="card ${G.result.stageDone?"major":""}"><div class="kicker ${G.result.stageDone?"gold":""}">■ ${G.result.stageDone?"重大劇情結果":"事件結果"}</div><h2>${G.result.title}</h2><p>${G.result.text}</p><div class="deltaWrap">${G.result.deltas.map(x=>`<span class="delta ${x.includes("能力點")?"point":x.includes("+")?"good":x.includes("-")?"bad":""}">${esc(x)}</span>`).join("")}</div></div>`:`<div class="card"><div class="kicker">■ ${p.name}</div><h2>${G.stageStory?`4 回合完成：${p.story}`:`第 ${G.turnInPhase+1} 回合準備開始`}</h2><p>${G.stageStory?`這個人生階段的日常事件已完成，現在進入重大劇情。`:p.desc}</p><div class="progressBox"><div class="progressText">本階段進度 <b>${G.turnInPhase} / ${p.turns}</b></div><div class="turnDots">${Array.from({length:p.turns},(_,i)=>`<i class="${i<G.turnInPhase?"done":""}"></i>`).join("")}</div></div></div>`;
  app.innerHTML=`<div class="shell">
- <aside class="left"><div class="brand">Boxing <em>Life</em></div><div class="brandSub">拳 擊 人 生 模 擬 器</div><div class="school">台灣高中・拳擊部<small>${country.route}｜${country.name}・${G.base}</small></div><div class="timeline">${timelineHTML()}</div><div class="menu"><div class="active">▣ 生涯事件</div><div>◆ 能力點</div><div>♜ 劇情比賽</div><div>▦ 人生年表</div><div>★ 技能</div><div>▥ 數據</div><div>◉ 成就</div><div onclick="save()">▣ 儲存</div><div onclick="resetGame()">⚙ 重開人生</div></div><div class="version"><b>v3.5.0</b><br>${G.lifePath==="college"?"大學人生線":G.lifePath==="work"?"工作人生線":"高中人生線"}<br>4 回合推進・大量階段限定事件</div></aside>
+ <aside class="left"><div class="brand">Boxing <em>Life</em></div><div class="brandSub">拳 擊 人 生 模 擬 器</div><div class="school">台灣高中・拳擊部<small>${country.route}｜${country.name}・${G.base}</small></div><div class="timeline">${timelineHTML()}</div><div class="menu"><div class="active">▣ 生涯事件</div><div>◆ 能力點</div><div>♜ 劇情比賽</div><div>▦ 人生年表</div><div>★ 技能</div><div>▥ 數據</div><div>◉ 成就</div><div onclick="save()">▣ 儲存</div><div onclick="resetGame()">⚙ 重開人生</div></div><div class="version"><b>v3.7.0</b><br>${G.lifePath==="college"?"大學人生線":G.lifePath==="work"?"工作人生線":"高中人生線"}<br>4 回合推進・大量階段限定事件</div></aside>
  <main class="center"><header class="header"><div class="profile"><div class="no">1</div><div class="name"><b>${esc(G.name)}</b><div class="tags"><span class="tag">${p.identity}</span><span class="tag gold">${STYLES[G.style]}</span></div></div><div class="affil">所屬地區<b>${country.name}・${G.base}</b></div></div><div class="metrics"><div class="metric"><b>${G.age}</b><span>年齡</span></div><div class="metric"><b>${G.year}</b><span>年份</span></div><div class="metric"><b>${ovr()}</b><span>綜合</span></div><div class="metric"><b>${G.skillPoints}</b><span>能力點</span></div><div class="metric"><b>${G.pro.w}-${G.pro.l}</b><span>職業戰績</span></div></div></header><div class="content"><div class="card"><div class="kicker">■ 人生主線</div><p>左側會永久保留走過的年級／人生階段。高中畢業後會真正分成 <b>大學線</b> 或 <b>工作線</b>；每條線都有自己的特殊事件，再於 23 歲左右匯入職業拳擊。</p></div><div class="date">${G.year} 年 ・ ${G.age} 歲 ・ ${p.name}</div>${center}<div class="card"><div class="kicker">■ 最近紀錄</div>${G.logs.slice(0,7).map(l=>`<div class="log"><small>${l.when}</small><div>${esc(l.text)}</div></div>`).join("")}</div></div></main>
  <aside class="right"><div class="rhythm"><div class="rightTitle">LIFE RHYTHM</div><div class="rhythmRow ${!G.stageStory&&!G.current&&!G.result?"on":""}"><i></i>${p.name}：${G.turnInPhase}/${p.turns} 回合</div><div class="rhythmRow ${G.current?"on":""}"><i></i>階段專屬事件／特殊事件</div><div class="rhythmRow ${G.result?"on":""}"><i></i>命運骰結算</div><div class="rhythmRow ${G.stageStory?"on":""}"><i></i>第 4 回合後：${p.story}</div></div>${rightAttrs()}${choices}${res}<div class="action">${action}</div></aside>
  </div>`;
@@ -2091,30 +2288,73 @@ v29CareerMap=function(){
 
 <script id="v31-intro-js">
 function v31LifeIntro(){
-  return `<div class="lifeIntro">
-    <div class="lifeIntroTitle"><span class="icon">🥊</span>從台灣出發，寫下屬於你的拳擊人生</div>
+  return `<div class="lifeIntro lifeIntroV36">
+    <div class="lifeIntroTitle">
+      <span class="icon">🥊</span>
+      <div>
+        <small>YOUR BOXING LIFE BEGINS HERE</small>
+        <div>展開你的拳擊人生</div>
+      </div>
+    </div>
 
-    <p>你還年輕，沒有漂亮的職業戰績，也沒有任何人能保證你會成功。你帶著幾雙拳鞋、一副拳套，以及想看看自己到底能走多遠的念頭，離開台灣，到陌生的國家開始新的生活。</p>
+    <div class="prologueLead">
+      <span class="prologueQuote">「如果沒有人知道你是誰，那就用一拳一拳，讓世界記住。」</span>
+    </div>
 
-    <p>白天，你要學著適應新的環境，認識新的人，面對長大之後一個接一個出現的選擇；晚上，你會走進拳館，在汗水、挨打與一次次重新站起來之間，慢慢把自己磨成真正的拳手。</p>
+    <p>你還只是個離開台灣、到海外念書的普通高中生。行李裡沒有冠軍腰帶，只有幾件衣服、課本、一雙拳鞋和那副已經有點舊的拳套。沒有人知道你最後會走到哪裡，甚至連你自己也不知道。</p>
 
-    <p>你選擇的旅外國家也不只是背景。當地的飲食、交通、校園、拳館、人情與生活習慣，都可能在某一個回合突然闖進你的拳擊人生，帶來意想不到的好運或麻煩。</p>
+    <p>第一天走進新的拳館時，旁邊的人講著你還聽不太懂的語言。沙包的聲音、跳繩落地的節奏、教練的吼聲全混在一起。你站在角落，心裡只有一個想法：<strong>「我想試試看，我到底可以打到哪裡。」</strong></p>
 
-    <p>你的路不會按照固定劇本前進。也許某個決定會讓你遇見重要的人，也許一場失敗會逼你改變打法；也可能原本順利的生涯，因為傷病、壓力、金錢或一次錯誤選擇突然轉向。那些看起來和拳擊無關的事情，最後都可能影響你站上擂台時的狀態。</p>
+    <div class="prologueScene">
+      <div class="prologueSceneIcon">🌏</div>
+      <div>
+        <b>新的國家，新的生活</b>
+        <span>你選擇旅日、旅美或旅菲，不只是換了一張地圖。不同的文化、拳館、人情與生活方式，都會慢慢改變你的故事。</span>
+      </div>
+    </div>
 
-    <p>有人可以從默默無名一路打進世界舞台，最後真正舉起冠軍腰帶；但更多時候，拳擊人生不會這麼完美。你可能卡在地區排名，可能連續輸掉幾場關鍵比賽，也可能因為身體累積太多傷勢，不得不比自己想像中更早離開擂台。</p>
+    <p>你的生活不會只有訓練。你會上課、交朋友、談戀愛，也可能失戀；可能遇到一個願意幫你的教練，也可能碰到一個只想從你身上賺錢的經理。你可能因為一支影片突然被很多人看見，也可能在最重要的一場比賽前受傷。</p>
 
-    <p>🎲 每一次選擇之後，命運骰都會留下不同結果。能力、健康、士氣、戰績和運氣會一起決定你能走多遠。每四個回合，你的人生就會走進下一個重要階段，但<strong>沒有任何一條路保證通往冠軍</strong>。</p>
+    <p>有些日子，你會覺得自己離夢想越來越近；有些時候，你會開始懷疑是不是選錯了路。可能才剛拿下一場漂亮的勝利，下一回合就遇到生活費不夠、工作加班、感情出問題，甚至身體亮起紅燈。</p>
 
-    <p><strong>這不是一場「一定會成功」的拳王養成遊戲，而是一段有可能成功、有可能失敗，也有可能因傷提早結束的拳擊人生。</strong></p>
+    <div class="prologueScene">
+      <div class="prologueSceneIcon">🎲</div>
+      <div>
+        <b>人生不照劇本走</b>
+        <span>每次做出選擇後，命運骰都可能把故事推向完全不同的方向。好的決定不一定有好結果，壞運氣也不代表人生就此結束。</span>
+      </div>
+    </div>
+
+    <p>你也不一定會成為冠軍。也許你會一路從業餘打進職業、闖進世界排名，最後真的把腰帶舉過頭頂；但也有可能幾場關鍵失利後就再也爬不上去，或是因為長期累積的傷病，不得不比預期更早退休。</p>
+
+    <p>有的人最後留下的是冠軍頭銜，有的人留下的是十幾場職業比賽，有的人只留下幾場永遠忘不了的勝利。<strong>成功沒有固定樣子，失敗也不代表這段人生沒有價值。</strong></p>
+
+    <div class="prologueScene">
+      <div class="prologueSceneIcon">🏆</div>
+      <div>
+        <b>冠軍不是終點，是其中一種結局</b>
+        <span>真正要留下的是你的戰績、選擇、傷痕、關係，以及最後回頭看時，那條只有你走過的拳擊人生。</span>
+      </div>
+    </div>
+
+    <p>每四個回合，你的人生會走進下一個重要階段。高中畢業後，你可能繼續讀大學，也可能先去工作；再往後，你會正式進入職業拳壇，面對排名、贊助、媒體、經理、對手與身體極限。</p>
+
+    <p class="prologueEnding"><strong>現在，選擇你要前往的國家。從第一天開始，寫下你的拳擊人生。</strong></p>
 
     <div class="miniIcons">
-      <span class="miniIcon">🥊 <b>成長</b> 從無名拳手開始</span>
-      <span class="miniIcon">🎲 <b>命運</b> 每個選擇都有結果</span>
-      <span class="miniIcon">🩹 <b>傷病</b> 身體也有極限</span>
-      <span class="miniIcon">📉 <b>失敗</b> 連敗也可能發生</span>
-      <span class="miniIcon">🏆 <b>冠軍</b> 是可能，不是保證</span>
-      <span class="miniIcon">🥀 <b>退休</b> 有時會比預期更早</span>
+      <span class="miniIcon">🥊 <b>拳擊</b> 訓練、比賽與成長</span>
+      <span class="miniIcon">❤️ <b>關係</b> 朋友、戀愛與家人</span>
+      <span class="miniIcon">💼 <b>現實</b> 工作、收入與壓力</span>
+      <span class="miniIcon">📸 <b>名氣</b> 社群、媒體與曝光</span>
+      <span class="miniIcon">🩹 <b>身體</b> 傷病與生涯風險</span>
+      <span class="miniIcon">🎲 <b>命運</b> 每一次選擇都算數</span>
+      <span class="miniIcon">🏆 <b>結局</b> 冠軍只是其中一條路</span>
+    </div>
+
+    <div class="prologueHint">
+      <span>▶ GAME NOTE</span>
+      <b>沒有標準答案。</b>
+      有時候休息比加練更重要，有時候拒絕一份工作會換來更大的拳擊機會，也可能什麼都沒有發生。你只能做出當下最相信的選擇。
     </div>
   </div>`;
 }
@@ -2435,6 +2675,46 @@ const V35_prevRender=render;
 render=function(){
   V35_prevRender();
   requestAnimationFrame(v35ArrangeLayout);
+};
+</script>
+
+
+<script id="v37-boxing-brand-js">
+function v37GloveIcon(cls="boxingGloveIcon"){
+  return `<span class="${cls}" aria-hidden="true">
+    <svg viewBox="0 0 64 64">
+      <path d="M18 34c-4-4-3-11 2-14 4-3 8-1 10 2 1-5 7-7 11-3 2-3 7-3 10 1 4 5 1 12-3 17l-8 10H25c-7 0-12-5-12-11 0-1 0-2 1-3l4 1Z"/>
+      <path d="M22 46h19v9H22z"/>
+    </svg>
+  </span>`;
+}
+
+const V37_prevRender=render;
+render=function(){
+  V37_prevRender();
+
+  // Left-side / top brand logo.
+  document.querySelectorAll(".brand").forEach(brand=>{
+    if(!brand.querySelector(".v37BrandIcon")){
+      brand.insertAdjacentHTML("afterbegin",v37GloveIcon("boxingGloveIcon v37BrandIcon"));
+    }
+  });
+
+  // Opening "展開你的拳擊人生" title.
+  document.querySelectorAll(".lifeIntroTitle").forEach(title=>{
+    const old=title.querySelector(".icon");
+    if(old){
+      old.innerHTML=v37GloveIcon("boxingGloveIcon v37IntroIcon");
+      old.classList.add("boxingTitleIconBox");
+    }
+  });
+
+  // Main title / headings containing 拳擊人生.
+  [...document.querySelectorAll("h1,h2,h3,.kicker,.sectionTitle")].forEach(el=>{
+    if((el.textContent||"").includes("拳擊人生") && !el.querySelector(".v37InlineGlove")){
+      el.insertAdjacentHTML("afterbegin",v37GloveIcon("boxingGloveIcon v37InlineGlove"));
+    }
+  });
 };
 </script>
 
