@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Boxing Life V33 · 真正人生序章版</title>
+<title>Boxing Life V34 · 國家文化劇情版</title>
 <style>
 :root{
   --bg:#061911; --bg2:#09251b; --panel:#0f3427; --panel2:#153d2f;
@@ -368,7 +368,7 @@ const MAIN_BOXER_ART = COUNTRY_BOXER_ART.usa;
 <body>
 <div id="app"></div>
 <script>
-const SAVE_KEY="boxing-life-v33-clean-story-prologue";
+const SAVE_KEY="boxing-life-v34-country-culture-events";
 const COUNTRIES={usa:{name:"美國",base:"Las Vegas",route:"旅美"},japan:{name:"日本",base:"東京",route:"旅日"},philippines:{name:"菲律賓",base:"宿霧",route:"旅菲"}};
 const STYLES={pressure:"壓迫型",boxer:"技巧型",puncher:"重砲型"};
 const SKILLS=["power","speed","stamina","defense","chin","technique"];
@@ -544,6 +544,19 @@ Object.entries(EXTRA_PHASE_EVENTS).forEach(([phaseId,items])=>{
   PHASE_EVENTS[phaseId].push(...items);
 });
 
+
+// ===== V34: country-specific culture and life events =====
+const COUNTRY_EVENTS={"japan":[{"id":"jp_ramen_stomach","tags":["hs","uni","work","pro"],"localCulture":true,"cat":"🇯🇵 日本生活｜休假日","title":"休假去吃排隊拉麵，半夜卻開始狂拉肚子","desc":"難得沒有訓練，你跟朋友去吃一間排隊名店。當晚腸胃突然出狀況，隔天偏偏排了重要體能課。","choices":[{"label":"直接休養一天","sub":"補水、吃清淡，先讓身體恢復","rate":"70% 安全","mode":"safe","good":[["health",3],["morale",1]],"mid":[["health",1]],"bad":[["stamina",-1]],"outcomes":{"good":"你認命躺了一天，喝水休息。隔天雖然還有點虛，但身體總算慢慢恢復。","mid":"腸胃沒有立刻好，不過至少沒有惡化。你把這次休假當成一次意外的小插曲。","bad":"症狀拖得比想像久，體能課完全跟不上，這週的訓練品質明顯下降。"}},{"label":"照樣去拳館","sub":"不想因為一碗拉麵缺席","rate":"35% 高風險","mode":"risk","good":[["chin",1],["stamina",1]],"mid":[["health",-2]],"bad":[["health",-6],["morale",-2]],"outcomes":{"good":"你居然硬撐完整堂課，教練都笑你『肚子比下巴還硬』。","mid":"你撐完一半就開始冒冷汗，只能降低強度。","bad":"暖身還沒結束你就衝去廁所，教練直接把你趕回去休息。"}},{"label":"去診所拿藥","sub":"花點錢換快一點恢復","rate":"50% 標準","mode":"normal","good":[["health",4],["income",-300]],"mid":[["health",2],["income",-300]],"bad":[["income",-500]],"outcomes":{"good":"藥很有效，隔天食慾恢復，體重與狀態也沒有被拖太久。","mid":"症狀慢慢緩下來，至少沒有影響下一週的訓練。","bad":"檢查比預期多花了一些錢，還是得多休息幾天。"}}]},{"id":"jp_train_delay","tags":["hs","uni","work"],"localCulture":true,"cat":"🇯🇵 日本生活｜電車","title":"通勤電車臨時大延誤，重要行程快遲到了","desc":"月台塞滿人，廣播一遍又一遍道歉。日本生活裡最可靠的交通，今天偏偏在你最忙的時候出問題。","choices":[{"label":"一路轉車狂奔","sub":"想辦法準時出現","rate":"35% 高風險","mode":"risk","good":[["stamina",2],["morale",1]],"mid":[["health",-1]],"bad":[["health",-3],["morale",-1]],"outcomes":{"good":"你一路換線加狂奔，最後居然踩著時間到場，連自己都覺得不可思議。","mid":"你晚了幾分鐘，但至少有趕上主要內容。","bad":"一路狂奔把自己累壞，到了現場反而完全沒有精神。"}},{"label":"先傳訊息說明","sub":"把延誤證明拍下來","rate":"70% 安全","mode":"safe","good":[["morale",2]],"mid":[["morale",1]],"bad":[["fame",-1]],"outcomes":{"good":"對方完全理解，甚至回你『辛苦了』。你第一次覺得自己真的適應了當地生活。","mid":"事情平穩解決，沒有留下太大影響。","bad":"雖然有證明，但重要安排還是錯過了一部分。"}},{"label":"改搭計程車","sub":"花錢換時間","rate":"50% 標準","mode":"normal","good":[["morale",1],["income",-500]],"mid":[["income",-700]],"bad":[["income",-1100]],"outcomes":{"good":"你成功把遲到控制在幾分鐘內，代價只是錢包有點痛。","mid":"總算趕到，但這趟車資讓你整天都在心疼。","bad":"塞車一樣沒躲過，錢花了還是遲到。"}}]},{"id":"jp_school_festival","tags":["hs"],"localCulture":true,"special":true,"cat":"🇯🇵 日本校園｜文化祭","title":"文化祭班上想把你變成『拳擊挑戰攤位』主角","desc":"同學知道你在拳館訓練，提議讓大家戴上大手套挑戰打靶。突然之間，你變成班上最有話題的人。","choices":[{"label":"全力配合","sub":"把攤位做得像小型拳館","rate":"35% 高曝光","mode":"risk","good":[["fame",4],["morale",2]],"mid":[["fame",2]],"bad":[["health",-2],["morale",-1]],"outcomes":{"good":"攤位排起長隊，你的名字第一次在整個校園傳開。","mid":"活動順利結束，很多人開始知道你是拳擊留學生。","bad":"忙了一整天又示範太多次，手腕和肩膀都開始不舒服。"}},{"label":"只做簡單示範","sub":"留體力給訓練","rate":"50% 標準","mode":"normal","good":[["fame",2],["technique",1]],"mid":[["fame",1]],"bad":[["morale",-1]],"outcomes":{"good":"你把活動做得剛剛好，既有存在感也沒打亂訓練。","mid":"文化祭留下不錯回憶，沒有太大波動。","bad":"同學覺得你太保守，攤位熱度很快就散掉。"}},{"label":"婉拒當主角","sub":"只幫忙準備器材","rate":"70% 安全","mode":"safe","good":[["morale",1],["stamina",1]],"mid":[["morale",1]],"bad":[["fame",-1]],"outcomes":{"good":"你沒有站到最前面，但跟同學的關係反而變得更自然。","mid":"平穩過完文化祭，也保住訓練節奏。","bad":"有人覺得你有點難相處，錯過一次融入班級的機會。"}}]},{"id":"jp_senpai_gym","tags":["hs","uni","pro"],"localCulture":true,"cat":"🇯🇵 日本拳館｜前後輩","title":"拳館前輩突然留下來陪你多打三回合","desc":"平常話不多的前輩今天主動叫住你。他沒有稱讚，只淡淡說了一句：『你的左手還能更好。』","choices":[{"label":"全部照做","sub":"把前輩的要求吃到底","rate":"35% 高強度","mode":"risk","good":[["technique",3],["chin",1]],"mid":[["technique",1]],"bad":[["health",-4]],"outcomes":{"good":"三回合後你幾乎站不穩，但左手的節奏真的被重新打開。","mid":"你學到幾個很實用的細節，也開始理解拳館裡的默契。","bad":"你為了逞強吃了太多重拳，隔天整個人像被卡車撞過。"}},{"label":"邊打邊問","sub":"把重點弄懂","rate":"50% 標準","mode":"normal","good":[["technique",2],["defense",1]],"mid":[["technique",1]],"bad":[["morale",-1]],"outcomes":{"good":"前輩難得多講了幾句，你得到一堂比付費課還值的指導。","mid":"你吸收到幾個細節，關係也慢慢變熟。","bad":"前輩覺得你問太多、動得太少，最後叫你自己回去想。"}},{"label":"今天先收","sub":"尊重身體狀況","rate":"70% 安全","mode":"safe","good":[["health",2],["morale",1]],"mid":[["health",1]],"bad":[["fame",-1]],"outcomes":{"good":"前輩沒有生氣，只點頭說『會休息也是實力』。","mid":"你保持恢復，沒有多拿好處也沒有付出代價。","bad":"你錯過一次少見的指導機會。"}}]},{"id":"jp_onsen_recovery","tags":["uni","work","pro"],"localCulture":true,"cat":"🇯🇵 日本生活｜溫泉","title":"休息日大家揪去泡溫泉恢復","desc":"連續幾週高強度訓練後，全身都很緊。隊友說泡完再吃飯，保證隔天像換一副身體。","choices":[{"label":"好好放鬆","sub":"控制時間、補足水分","rate":"70% 安全","mode":"safe","good":[["health",4],["morale",2]],"mid":[["health",2]],"bad":[["health",-1]],"outcomes":{"good":"你整個人鬆下來，晚上睡得特別沉，隔天恢復感非常明顯。","mid":"身體確實舒服不少，至少疲勞沒有再往上堆。","bad":"你泡太久有點脫水，隔天反而覺得腿軟。"}},{"label":"泡完再吃大餐","sub":"難得放假就徹底休息","rate":"50% 標準","mode":"normal","good":[["morale",3],["health",1]],"mid":[["morale",1]],"bad":[["stamina",-1]],"outcomes":{"good":"這一天讓你重新找回生活感，心情跟食慾都回來了。","mid":"放鬆效果不錯，只是隔天體重稍微重了一點。","bad":"吃得太放縱，接下來幾天都在補救體重。"}},{"label":"不去，自己加練","sub":"覺得休息很浪費","rate":"35% 高風險","mode":"risk","good":[["stamina",2],["technique",1]],"mid":[["stamina",1]],"bad":[["health",-4]],"outcomes":{"good":"你一個人完成漂亮的加練，狀態意外很好。","mid":"加練有做完，但身體緊繃感沒有改善。","bad":"疲勞終於爆出來，隔天肩背痛到連打靶都不舒服。"}}]},{"id":"jp_nomikai_work","tags":["work","pro"],"localCulture":true,"cat":"🇯🇵 日本職場｜聚餐","title":"工作夥伴辦聚餐，隔天早上卻有重要訓練","desc":"大家都說這只是『吃個飯』，但你知道這種場合很難準時離開。太早走可能顯得不合群，待太晚又會直接影響備戰。","choices":[{"label":"露面一下就走","sub":"把界線先說清楚","rate":"50% 標準","mode":"normal","good":[["morale",2],["income",300]],"mid":[["morale",1]],"bad":[["fame",-1]],"outcomes":{"good":"大家雖然虧你一下，但也慢慢接受『拳擊就是你的第二份工作』。","mid":"你成功兩邊都顧到，沒有特別好也沒有壞。","bad":"有人覺得你總是掃興，氣氛有點尷尬。"}},{"label":"陪到最後","sub":"先做人際再說","rate":"35% 高風險","mode":"risk","good":[["income",900],["morale",2]],"mid":[["stamina",-1]],"bad":[["health",-4],["morale",-1]],"outcomes":{"good":"你跟工作夥伴關係大幅拉近，之後排班反而更好談。","mid":"人際有顧到，但隔天訓練明顯沒力。","bad":"睡眠不足直接炸掉，實戰課被教練罵到不敢抬頭。"}},{"label":"直接婉拒","sub":"備戰優先","rate":"70% 安全","mode":"safe","good":[["stamina",1],["technique",1]],"mid":[["morale",1]],"bad":[["income",-300]],"outcomes":{"good":"你隔天狀態很好，主管也開始理解你的生涯規劃。","mid":"訓練照表完成，人際沒有特別變化。","bad":"你錯過一次跟重要人物建立關係的機會。"}}]},{"id":"jp_newyear_shrine","tags":["uni","work","pro"],"localCulture":true,"cat":"🇯🇵 日本生活｜新年","title":"新年去神社抽籤，竟然抽到『大凶』","desc":"你盯著手上的籤笑不出來。旁邊的人叫你把壞籤綁起來就好，但下週偏偏就是重要比賽。","choices":[{"label":"當成笑話","sub":"拍照發限動","rate":"35% 高曝光","mode":"risk","good":[["fame",3],["morale",2]],"mid":[["fame",1]],"bad":[["morale",-2]],"outcomes":{"good":"粉絲覺得超有梗，留言全在叫你『逆天改命』。","mid":"大家笑一笑就過去，你也沒再放在心上。","bad":"留言越看越在意，你開始把每個小失誤都怪到那張籤上。"}},{"label":"把籤綁好就走","sub":"照傳統做完，回去訓練","rate":"70% 安全","mode":"safe","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["morale",-1]],"outcomes":{"good":"儀式感反而讓你把心定下來，回拳館後特別專注。","mid":"你很快忘掉這件事，生活照常前進。","bad":"嘴上說不信，心裡還是有一點疙瘩。"}},{"label":"再抽一次","sub":"想抽到好籤才甘心","rate":"50% 標準","mode":"normal","good":[["morale",3],["income",-200]],"mid":[["income",-200]],"bad":[["morale",-2],["income",-300]],"outcomes":{"good":"第二張真的變成吉籤，你整個人瞬間有精神。","mid":"結果普普通通，你笑自己怎麼會這麼認真。","bad":"第二張更差，你開始懷疑今天是不是不該出門。"}}]}],"usa":[{"id":"us_homecoming","tags":["hs"],"localCulture":true,"special":true,"cat":"🇺🇸 美國校園｜Homecoming","title":"Homecoming 週，全班都在問你要不要一起去","desc":"球賽、舞會、朋友聚會塞滿整個週末，但你星期一早上有重要實戰。第一次，你真正感受到美國高中生活的熱鬧。","choices":[{"label":"整晚都去","sub":"不想錯過學生生活","rate":"35% 高波動","mode":"risk","good":[["morale",4],["fame",2]],"mid":[["morale",2],["stamina",-1]],"bad":[["health",-3],["stamina",-2]],"outcomes":{"good":"你玩得很開心，也第一次真正融進朋友圈。","mid":"回憶很多，但星期一的腳步明顯慢半拍。","bad":"睡太少直接影響實戰，教練一眼就看出你週末玩過頭。"}},{"label":"去一半就走","sub":"兼顧朋友與訓練","rate":"50% 標準","mode":"normal","good":[["morale",2],["fame",1]],"mid":[["morale",1]],"bad":[["stamina",-1]],"outcomes":{"good":"你既出現了，也準時回家睡覺，朋友和教練都沒話說。","mid":"一切平順，算是學會怎麼兩邊兼顧。","bad":"你還是比預計晚回家，隔天有點疲累。"}},{"label":"完全不去","sub":"拳擊優先","rate":"70% 安全","mode":"safe","good":[["stamina",2],["technique",1]],"mid":[["stamina",1]],"bad":[["morale",-2]],"outcomes":{"good":"星期一你的狀態全場最好，教練明顯很滿意。","mid":"訓練照常，但你也錯過了一段校園生活。","bad":"朋友的合照刷滿社群，你突然有點後悔。"}}]},{"id":"us_robbery_viral","tags":["uni","work","pro"],"localCulture":true,"special":true,"cat":"🇺🇸 美國生活｜街頭意外","title":"路上有人想搶你的手機，你本能閃開後把人制伏","desc":"整件事只發生十幾秒。旁邊路人把畫面拍下來，影片當晚就開始瘋傳，但警方也要你留下來說明經過。","choices":[{"label":"出手制伏","sub":"相信自己的反應","rate":"35% 高風險","mode":"risk","good":[["fame",6],["morale",2]],"mid":[["fame",3],["health",-1]],"bad":[["health",-7],["morale",-2]],"outcomes":{"good":"影片爆紅，大家開始叫你『真正會打的拳手』。經理電話一整晚沒停過。","mid":"你確實阻止了對方，但手臂也擦傷，還花很多時間做筆錄。","bad":"混亂中你受了傷，雖然事情結束，卻直接影響下一週訓練。"}},{"label":"拉開距離報警","sub":"避免把街頭衝突變成比賽","rate":"70% 安全","mode":"safe","good":[["morale",2],["fame",1]],"mid":[["morale",1]],"bad":[["income",-500]],"outcomes":{"good":"警方很快到場，旁人反而稱讚你夠冷靜，影片也小小傳了一波。","mid":"事情安全結束，你沒有成為英雄，也沒有把自己送進麻煩。","bad":"手機還是沒保住，至少人沒有受傷。"}},{"label":"交出手機","sub":"安全第一","rate":"50% 標準","mode":"normal","good":[["health",1],["morale",1]],"mid":[["income",-900]],"bad":[["income",-1400],["morale",-2]],"outcomes":{"good":"你很快接受『東西可以再買』，沒有讓一場意外毀掉拳擊生涯。","mid":"人沒事，但買新手機讓你荷包大失血。","bad":"事後越想越不甘心，情緒好幾天都卡著。"}}]},{"id":"us_open_spar_viral","tags":["hs","uni","pro"],"localCulture":true,"cat":"🇺🇸 美國拳館｜Open Sparring","title":"拳館 Open Sparring，有人把你對打片段上傳社群","desc":"原本只是普通實戰，沒想到你的一段閃躲反擊被剪成短影片，留言數開始快速往上跳。","choices":[{"label":"自己轉發","sub":"順勢經營個人品牌","rate":"35% 高曝光","mode":"risk","good":[["fame",5],["income",800]],"mid":[["fame",2]],"bad":[["morale",-2]],"outcomes":{"good":"影片真的起飛，附近幾間拳館都開始知道你的名字。","mid":"流量不錯，你多了一些追蹤者與關注。","bad":"留言區開始挑你毛病，你越看越在意。"}},{"label":"讓影片自然跑","sub":"不刻意炒作","rate":"50% 標準","mode":"normal","good":[["fame",3],["morale",1]],"mid":[["fame",1]],"bad":[["fame",-1]],"outcomes":{"good":"影片穩定擴散，帶來一些剛剛好的曝光。","mid":"有些人看見你，但沒有形成太大話題。","bad":"熱度一天就過，幾乎沒有留下什麼。"}},{"label":"請對方下架","sub":"不想公開實戰內容","rate":"70% 安全","mode":"safe","good":[["technique",1],["morale",1]],"mid":[["morale",1]],"bad":[["fame",-1]],"outcomes":{"good":"你把備戰資訊守住，教練很認同你的判斷。","mid":"事情平靜結束，沒有後續。","bad":"有人覺得你太敏感，社群上小小酸了一波。"}}]},{"id":"us_thanksgiving","tags":["hs","uni","work"],"localCulture":true,"cat":"🇺🇸 美國生活｜Thanksgiving","title":"寄宿家庭邀你一起過 Thanksgiving","desc":"桌上全是高熱量食物，你也第一次真正被當成家裡的一份子。但下週剛好要控體重。","choices":[{"label":"今天先好好吃","sub":"一年一次，不想掃興","rate":"35% 高波動","mode":"risk","good":[["morale",4],["health",1]],"mid":[["morale",2],["stamina",-1]],"bad":[["stamina",-2],["health",-1]],"outcomes":{"good":"這頓飯讓你第一次有『在異鄉也有家』的感覺，心情大幅回升。","mid":"吃得很開心，但接下來幾天得更小心體重。","bad":"你完全失控，隔天站上體重計時沉默了好幾秒。"}},{"label":"控制份量","sub":"每樣都吃一點","rate":"50% 標準","mode":"normal","good":[["morale",3],["health",1]],"mid":[["morale",2]],"bad":[["morale",-1]],"outcomes":{"good":"你既參與了家庭聚餐，也沒有讓飲食完全失控。","mid":"很平衡的一晚，留下不錯回憶。","bad":"你一直算熱量，反而沒辦法真正放鬆。"}},{"label":"自己準備備戰餐","sub":"一起坐桌但照計畫吃","rate":"70% 安全","mode":"safe","good":[["stamina",1],["morale",2]],"mid":[["morale",1]],"bad":[["morale",-1]],"outcomes":{"good":"大家反而很支持你的紀律，甚至幫你把食物分開準備。","mid":"你維持備戰節奏，也沒有破壞聚餐氣氛。","bad":"有人一直勸你多吃，整晚都有點尷尬。"}}]},{"id":"us_medical_bill","tags":["uni","work","pro"],"localCulture":true,"cat":"🇺🇸 美國生活｜醫療帳單","title":"訓練扭到腳，看到醫療費用後你瞬間清醒","desc":"傷勢未必嚴重，但檢查、影像與復健費用加起來讓你開始計算：這個月到底還剩多少生活費。","choices":[{"label":"完整檢查","sub":"先把傷勢弄清楚","rate":"70% 安全","mode":"safe","good":[["health",5],["income",-1200]],"mid":[["health",3],["income",-1500]],"bad":[["income",-2200]],"outcomes":{"good":"結果只是小傷，你花了不少錢，卻換到很大的安心。","mid":"傷勢需要幾天恢復，至少你知道該怎麼處理。","bad":"帳單比預估更高，接下來幾個月都得縮衣節食。"}},{"label":"只做基本處理","sub":"先觀察幾天","rate":"50% 標準","mode":"normal","good":[["health",3],["income",-500]],"mid":[["health",1],["income",-500]],"bad":[["health",-3]],"outcomes":{"good":"幸好只是輕微扭傷，省下一大筆費用。","mid":"恢復速度普通，還得小心觀察。","bad":"你低估傷勢，幾天後疼痛反而變嚴重。"}},{"label":"硬撐不看","sub":"把錢留給訓練和房租","rate":"35% 高風險","mode":"risk","good":[["chin",1],["income",200]],"mid":[["health",-2]],"bad":[["health",-7],["morale",-2]],"outcomes":{"good":"運氣很好，傷勢自己慢慢退掉。","mid":"你勉強能練，但動作一直不順。","bad":"原本的小傷被拖成大問題，最後反而花更多時間恢復。"}}]},{"id":"us_roadtrip_gym","tags":["uni","work","pro"],"localCulture":true,"cat":"🇺🇸 美國拳擊｜Road Trip","title":"教練臨時說：週末開車去外地拳館找高手對打","desc":"幾個小時車程、廉價旅館、陌生拳館。這種移動式實戰，是你第一次真正感覺自己在追逐更大的拳擊圈。","choices":[{"label":"馬上跟","sub":"什麼都不問先上車","rate":"35% 高風險","mode":"risk","good":[["technique",3],["fame",2]],"mid":[["technique",1],["health",-1]],"bad":[["health",-5]],"outcomes":{"good":"你遇到完全不同風格的對手，回程一路都在回想剛學到的東西。","mid":"實戰有收穫，但長途移動讓身體很疲累。","bad":"旅途和高強度對打一起壓上來，你整週恢復都很差。"}},{"label":"先確認住宿與強度","sub":"做好準備再去","rate":"50% 標準","mode":"normal","good":[["technique",2],["morale",1]],"mid":[["technique",1]],"bad":[["income",-400]],"outcomes":{"good":"準備充分讓你發揮很好，也認識幾個新的拳擊圈人脈。","mid":"行程穩定，得到正常的實戰價值。","bad":"臨時費用還是比預估高了一點。"}},{"label":"這次不去","sub":"留在熟悉拳館完成課表","rate":"70% 安全","mode":"safe","good":[["stamina",1],["health",1]],"mid":[["stamina",1]],"bad":[["fame",-1]],"outcomes":{"good":"你穩穩完成自己的訓練週，身體狀態保持很好。","mid":"沒有新刺激，但也沒有風險。","bad":"你錯過了跟更高層級拳手接觸的機會。"}}]},{"id":"us_brand_call","tags":["pro"],"localCulture":true,"cat":"🇺🇸 美國職業｜商業曝光","title":"運動品牌想找你拍一支『從海外打進美國』的短片","desc":"酬勞不錯，但拍攝要占掉整整一天，而且品牌希望你講出更戲劇化的故事。","choices":[{"label":"接受劇本","sub":"把商業價值拉到最大","rate":"35% 高回報","mode":"risk","good":[["income",3500],["fame",5]],"mid":[["income",1800],["fame",2]],"bad":[["morale",-3]],"outcomes":{"good":"影片大爆，品牌還追加合作，你的知名度第一次超出純拳擊圈。","mid":"合作有賺到錢，也帶來不錯曝光。","bad":"影片被質疑太造作，你開始不太喜歡自己被包裝的樣子。"}},{"label":"要求照真實故事拍","sub":"少一點戲劇、多一點自己","rate":"50% 標準","mode":"normal","good":[["income",2200],["fame",3]],"mid":[["income",1200],["fame",1]],"bad":[["income",-500]],"outcomes":{"good":"品牌最後接受你的版本，成品反而更有說服力。","mid":"合作順利完成，曝光中規中矩。","bad":"雙方來回修改太久，最後合作縮水。"}},{"label":"婉拒","sub":"比賽優先","rate":"70% 安全","mode":"safe","good":[["technique",2],["morale",1]],"mid":[["morale",1]],"bad":[["income",-800]],"outcomes":{"good":"你把整天拿回來訓練，狀態確實因此更完整。","mid":"沒有賺到商業收入，但備戰沒有被打亂。","bad":"經理覺得你錯過一次很好的市場機會。"}}]}],"philippines":[{"id":"ph_jeepney","tags":["hs","uni","work"],"localCulture":true,"cat":"🇵🇭 菲律賓生活｜Jeepney","title":"Jeepney 塞在路上，你眼看就要錯過訓練","desc":"車裡很擠、外面很熱，交通幾乎不動。你已經慢慢習慣這種節奏，但今天拳館安排的是重要實戰。","choices":[{"label":"提前下車用跑的","sub":"把街道當暖身","rate":"35% 高風險","mode":"risk","good":[["stamina",2],["morale",1]],"mid":[["health",-1]],"bad":[["health",-3]],"outcomes":{"good":"你滿身汗衝進拳館，居然剛好趕上第一回合。","mid":"你遲到一點，但至少沒有完全錯過。","bad":"還沒開始實戰你就先跑到沒力，整堂課都很虛。"}},{"label":"傳訊息給教練","sub":"接受今天會遲到","rate":"70% 安全","mode":"safe","good":[["morale",2]],"mid":[["morale",1]],"bad":[["fame",-1]],"outcomes":{"good":"教練只回一句『Traffic, I know』，你鬆了一大口氣。","mid":"你晚到但順利加入後半段訓練。","bad":"剛好今天教練脾氣很差，還是被念了一頓。"}},{"label":"改叫車","sub":"多花錢換時間","rate":"50% 標準","mode":"normal","good":[["morale",1],["income",-350]],"mid":[["income",-500]],"bad":[["income",-700]],"outcomes":{"good":"你成功提早到拳館，甚至還有時間完整熱身。","mid":"雖然趕到，但交通費讓你有點心痛。","bad":"車一樣卡在車陣裡，錢花了卻沒省多少時間。"}}]},{"id":"ph_brownout","tags":["hs","uni","work","pro"],"localCulture":true,"cat":"🇵🇭 菲律賓拳館｜Brownout","title":"拳館突然停電，風扇全停，裡面像烤箱一樣","desc":"大家只是笑一笑，把門全部打開繼續練。你第一次發現，在這裡『環境不好』常常不代表訓練會取消。","choices":[{"label":"照練不誤","sub":"跟大家一起硬扛","rate":"35% 高風險","mode":"risk","good":[["stamina",3],["chin",1]],"mid":[["stamina",1],["health",-1]],"bad":[["health",-6]],"outcomes":{"good":"你撐完整堂課，之後普通高溫訓練都變得像小菜一碟。","mid":"你完成大部分內容，但整個人被熱氣榨乾。","bad":"你出現明顯脫水，教練趕緊讓你停下來補水。"}},{"label":"降低強度","sub":"維持動作、不硬拚","rate":"50% 標準","mode":"normal","good":[["stamina",2],["technique",1]],"mid":[["stamina",1]],"bad":[["health",-2]],"outcomes":{"good":"你把課表調得剛剛好，既有訓練量也沒把自己榨乾。","mid":"訓練普通完成，至少沒有受影響太多。","bad":"熱度還是讓你後半段完全沒精神。"}},{"label":"先去外面補水","sub":"等電力恢復再說","rate":"70% 安全","mode":"safe","good":[["health",3],["morale",1]],"mid":[["health",1]],"bad":[["fame",-1]],"outcomes":{"good":"你補足水分再回來，狀態比很多硬撐的人還好。","mid":"你避開最熱的時段，身體沒出問題。","bad":"停電直到晚上，你乾脆錯過整堂課。"}}]},{"id":"ph_fiesta","tags":["hs","uni","work"],"localCulture":true,"special":true,"cat":"🇵🇭 菲律賓生活｜Fiesta","title":"朋友家 Fiesta，桌上的食物多到像沒有盡頭","desc":"整條街都很熱鬧，朋友一家人一直叫你再吃一點。這是你最喜歡的當地生活之一，但你最近剛好在控制體重。","choices":[{"label":"今天放開吃","sub":"難得一起過節","rate":"35% 高波動","mode":"risk","good":[["morale",4],["fame",1]],"mid":[["morale",2],["stamina",-1]],"bad":[["stamina",-2],["health",-1]],"outcomes":{"good":"你跟大家混得更熟，整晚笑到肚子痛，異鄉感瞬間少很多。","mid":"氣氛很好，只是接下來幾天得多注意飲食。","bad":"你吃得太過頭，隔天訓練整個人又重又脹。"}},{"label":"每樣吃一點","sub":"享受氣氛但控制份量","rate":"50% 標準","mode":"normal","good":[["morale",3],["health",1]],"mid":[["morale",2]],"bad":[["morale",-1]],"outcomes":{"good":"你既沒有掃興，也守住自己的狀態。","mid":"一切剛剛好，留下很好的回憶。","bad":"你一直拒絕加菜，長輩們開始輪流問你是不是沒吃飽。"}},{"label":"只聊天不多吃","sub":"體重第一","rate":"70% 安全","mode":"safe","good":[["stamina",1],["morale",2]],"mid":[["morale",1]],"bad":[["fame",-1]],"outcomes":{"good":"大家最後理解你在備戰，還特別幫你留了比較清淡的食物。","mid":"你平穩度過聚會，沒有影響體重。","bad":"你太早離開，朋友有一點失望。"}}]},{"id":"ph_bagyo","tags":["hs","uni","work","pro"],"localCulture":true,"cat":"🇵🇭 菲律賓生活｜颱風","title":"颱風把整天行程打亂，拳館也開始進水","desc":"外面風雨大到幾乎不能移動。教練群組裡有人在搬沙包，有人在問哪裡還能安全訓練。","choices":[{"label":"去拳館幫忙","sub":"先救器材再說","rate":"35% 高風險","mode":"risk","good":[["morale",3],["fame",2]],"mid":[["health",-1],["morale",1]],"bad":[["health",-5]],"outcomes":{"good":"你跟大家一起把器材搬高，拳館老闆之後一直記得這件事。","mid":"你幫上不少忙，但全身濕透、很疲累。","bad":"路況比想像危險，你回家後整個人不舒服好幾天。"}},{"label":"在家做替代訓練","sub":"安全第一","rate":"70% 安全","mode":"safe","good":[["stamina",2],["health",1]],"mid":[["stamina",1]],"bad":[["morale",-1]],"outcomes":{"good":"你把房間變成臨時拳館，沒有浪費整天。","mid":"簡單完成體能，至少維持節奏。","bad":"環境太吵太亂，你根本沒辦法專心。"}},{"label":"完全休息","sub":"把颱風天當恢復日","rate":"50% 標準","mode":"normal","good":[["health",4],["morale",2]],"mid":[["health",2]],"bad":[["stamina",-1]],"outcomes":{"good":"這次被迫休息反而讓累積疲勞消掉不少。","mid":"你睡了一整天，身體有恢復但心裡有點罪惡感。","bad":"休太久加上一直吃東西，隔天狀態變得有點鈍。"}}]},{"id":"ph_barangay_bout","tags":["hs","uni","pro"],"localCulture":true,"special":true,"cat":"🇵🇭 菲律賓拳擊｜Barangay","title":"Barangay 活動想請你上台打一場拳擊示範","desc":"場地不豪華，觀眾卻圍得滿滿。小朋友一直往前擠，主持人不停介紹『來自台灣的拳手』。","choices":[{"label":"打得精彩一點","sub":"主動做出有觀賞性的內容","rate":"35% 高曝光","mode":"risk","good":[["fame",5],["morale",2]],"mid":[["fame",2]],"bad":[["health",-3]],"outcomes":{"good":"全場氣氛被你點燃，活動結束後一堆人排隊找你拍照。","mid":"你得到不錯的當地曝光，也更熟悉這種熱鬧場面。","bad":"你為了效果打得太激烈，手腕回去後開始疼。"}},{"label":"照教練安排","sub":"把它當正常示範","rate":"50% 標準","mode":"normal","good":[["fame",3],["technique",1]],"mid":[["fame",1]],"bad":[["morale",-1]],"outcomes":{"good":"活動很順，教練覺得你已經開始懂得如何面對觀眾。","mid":"平穩完成，留下正常的曝光。","bad":"場面比預期冷一點，沒有形成什麼話題。"}},{"label":"只做打靶互動","sub":"避免受傷","rate":"70% 安全","mode":"safe","good":[["morale",2],["health",1]],"mid":[["morale",1]],"bad":[["fame",-1]],"outcomes":{"good":"小朋友反而很喜歡，整場變得很有親和力。","mid":"安全完成，也沒有影響備戰。","bad":"主辦覺得內容太保守，下次不一定還會找你。"}}]},{"id":"ph_family_lunch","tags":["hs","uni","work"],"localCulture":true,"cat":"🇵🇭 菲律賓生活｜家庭","title":"隊友家人硬是把你留下來吃星期日午餐","desc":"你原本只想送東西過去，結果一坐下就被塞滿整桌食物。大家不停問台灣、拳擊和你的家人。","choices":[{"label":"留下來慢慢吃","sub":"把這天當真正休息日","rate":"50% 標準","mode":"normal","good":[["morale",4],["health",1]],"mid":[["morale",2]],"bad":[["stamina",-1]],"outcomes":{"good":"你忽然有種『在這裡也有人把我當家人』的感覺。","mid":"心情很好，只是訓練量少了一點。","bad":"聊得太晚，原本安排的恢復和睡眠都亂掉。"}},{"label":"吃一點就走","sub":"還要回去訓練","rate":"70% 安全","mode":"safe","good":[["morale",2],["stamina",1]],"mid":[["morale",1]],"bad":[["fame",-1]],"outcomes":{"good":"大家理解你的訓練生活，還幫你打包一些食物。","mid":"兩邊都顧到，關係沒有受到影響。","bad":"長輩一直叫你留下，你離開時多少有點不好意思。"}},{"label":"乾脆取消下午訓練","sub":"難得有人陪伴","rate":"35% 高波動","mode":"risk","good":[["morale",5],["fame",1]],"mid":[["morale",2],["stamina",-1]],"bad":[["stamina",-2]],"outcomes":{"good":"這天變成你旅外生活最溫暖的一段記憶。","mid":"心情大好，但少了一堂重要課。","bad":"休得太放鬆，下一次訓練整個節奏都慢了。"}}]},{"id":"ph_videoke","tags":["uni","work"],"localCulture":true,"cat":"🇵🇭 菲律賓生活｜Videoke","title":"朋友說只唱一首，結果 Videoke 唱到半夜","desc":"你本來只是去露個面，不知道為什麼最後連你都拿著麥克風。明天早上教練排了長跑。","choices":[{"label":"唱到大家散場","sub":"今天先做人再做拳手","rate":"35% 高波動","mode":"risk","good":[["morale",4],["fame",1]],"mid":[["morale",2],["stamina",-1]],"bad":[["health",-3],["stamina",-2]],"outcomes":{"good":"你意外成為全場氣氛王，朋友圈瞬間拉近。","mid":"玩得很開心，但隔天跑步真的很痛苦。","bad":"睡太少加上疲勞，早上直接被教練叫回去補眠。"}},{"label":"唱兩首就走","sub":"有參與就好","rate":"50% 標準","mode":"normal","good":[["morale",2],["fame",1]],"mid":[["morale",1]],"bad":[["stamina",-1]],"outcomes":{"good":"朋友很開心你有來，你也準時回去休息。","mid":"平衡得不錯，隔天還能正常訓練。","bad":"最後還是被拖晚了一點，早上有些疲勞。"}},{"label":"今晚不去","sub":"長跑優先","rate":"70% 安全","mode":"safe","good":[["stamina",2],["health",1]],"mid":[["stamina",1]],"bad":[["morale",-1]],"outcomes":{"good":"隔天你跑出近期最好狀態，教練很滿意。","mid":"訓練正常，但社交完全沒有進展。","bad":"朋友群組整晚都在傳影片，你多少有點孤單。"}}]},{"id":"ph_local_tv","tags":["pro"],"localCulture":true,"cat":"🇵🇭 菲律賓職業｜地方媒體","title":"地方節目邀你上鏡，主持人突然要你講幾句 Tagalog","desc":"你只會幾句平常拳館裡學到的話。鏡頭已經對著你，主持人笑著等你開口。","choices":[{"label":"硬著頭皮講","sub":"能講多少算多少","rate":"35% 高曝光","mode":"risk","good":[["fame",5],["morale",2]],"mid":[["fame",3]],"bad":[["morale",-2]],"outcomes":{"good":"你的口音反而變成節目笑點，觀眾覺得很可愛，片段很快被轉發。","mid":"雖然講得不完美，但大家感受到你的誠意。","bad":"你講錯一句意思完全不同的詞，回拳館被笑了一整週。"}},{"label":"先用英文再補一句","sub":"穩穩完成訪問","rate":"50% 標準","mode":"normal","good":[["fame",3],["morale",1]],"mid":[["fame",1]],"bad":[["fame",-1]],"outcomes":{"good":"訪問自然順利，最後那句 Tagalog 還得到掌聲。","mid":"正常曝光，沒有特別爆也沒有失誤。","bad":"主持人一直想逗你多講，你顯得有點拘謹。"}},{"label":"請教練幫忙翻譯","sub":"不要亂講","rate":"70% 安全","mode":"safe","good":[["morale",1],["technique",1]],"mid":[["morale",1]],"bad":[["fame",-1]],"outcomes":{"good":"訪問雖然保守，但沒有出錯，教練也替你說了很多好話。","mid":"安全完成節目，曝光普通。","bad":"節目效果不夠強，剪輯後你的片段很短。"}}]}]};
+
+function countryEventPool(){
+  if(!G) return [];
+  const g=phaseGroup(), id=phase().id;
+  return (COUNTRY_EVENTS[G.country]||[]).filter(e =>
+    (Array.isArray(e.phases)&&e.phases.includes(id)) ||
+    (Array.isArray(e.tags)&&e.tags.includes(g))
+  );
+}
+
 let G=null;
 const rnd=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
 const pick=a=>a[rnd(0,a.length-1)];
@@ -580,7 +593,7 @@ function apply(k,v){
 function spendPoint(k){const c=statCost(k);if(G.skillPoints<c||G.stats[k]>=95)return;G.skillPoints-=c;G.stats[k]++;log(`分配能力點：${NAMES[k]} +1（花費 ${c} 點）。`);save();render()}
 function createGame(){
  const country=document.getElementById("country").value;
- G={version:33,name:document.getElementById("name").value.trim()||"李逍遙",style:document.getElementById("style").value,country,base:COUNTRIES[country].base,
+ G={version:34,name:document.getElementById("name").value.trim()||"李逍遙",style:document.getElementById("style").value,country,base:COUNTRIES[country].base,
     lifePath:null,phaseIndex:0,turnInPhase:0,age:16,year:2026,health:100,morale:72,fame:3,income:0,skillPoints:3,
     stats:{power:rnd(43,49),speed:rnd(43,49),stamina:rnd(43,49),defense:rnd(42,48),chin:rnd(44,50),technique:rnd(43,49)},
     amateur:{w:0,l:0},pro:{w:0,l:0,d:0,ko:0},current:null,result:null,stageStory:false,logs:[],lastEvent:null,usedSpecial:{}};
@@ -591,13 +604,16 @@ function eventPool(){
  const id=phase().id,g=phaseGroup();
  const specific=(PHASE_EVENTS[id]||[]);
  const general=GENERAL_EVENTS.filter(e=>e.tags.includes(g));
- return [...specific,...general];
+ const local=countryEventPool();
+ return [...specific,...general,...local];
 }
 function forcedSpecial(){
  const id=phase().id;
- const specials=(PHASE_EVENTS[id]||[]).filter(e=>e.special&&!G.usedSpecial[e.id]);
+ const phaseSpecials=(PHASE_EVENTS[id]||[]).filter(e=>e.special&&!G.usedSpecial[e.id]);
+ const localSpecials=countryEventPool().filter(e=>e.special&&!G.usedSpecial[e.id]);
+ const specials=[...phaseSpecials,...localSpecials];
  if(!specials.length)return null;
- // 四回合中第 2、4 回合優先出現階段限定特殊事件；每階段最多可遇到兩個。
+ // 第 2、4 回合優先觸發特殊劇情，國家文化特殊事件也會加入候選。
  if(G.turnInPhase===1 || G.turnInPhase===3) return pick(specials);
  return null;
 }
@@ -611,16 +627,30 @@ function drawEvent(){
    ev=special;
    G.usedSpecial[ev.id]=true;
  }else{
-   const recent=new Set(G.recentEvents.slice(-3));
-   let pool=eventPool().filter(e=>!e.special && !recent.has(e.id));
-   if(!pool.length)pool=eventPool().filter(e=>!e.special && e.id!==G.lastEvent);
-   if(!pool.length)pool=eventPool().filter(e=>!e.special);
-   ev=pick(pool);
+   const recent=new Set(G.recentEvents.slice(-4));
+   let local=countryEventPool().filter(e=>!e.special&&!recent.has(e.id));
+   if(!local.length)local=countryEventPool().filter(e=>!e.special&&e.id!==G.lastEvent);
+
+   const id=phase().id,g=phaseGroup();
+   let normal=[
+     ...(PHASE_EVENTS[id]||[]).filter(e=>!e.special),
+     ...GENERAL_EVENTS.filter(e=>e.tags.includes(g))
+   ].filter(e=>!recent.has(e.id));
+   if(!normal.length){
+     normal=[
+       ...(PHASE_EVENTS[id]||[]).filter(e=>!e.special),
+       ...GENERAL_EVENTS.filter(e=>e.tags.includes(g))
+     ].filter(e=>e.id!==G.lastEvent);
+   }
+
+   // 約 55% 的一般回合優先抽到旅外國家的在地文化事件。
+   if(local.length && Math.random()<0.55) ev=pick(local);
+   else ev=pick(normal.length?normal:(local.length?local:eventPool().filter(e=>!e.special)));
  }
  G.current=JSON.parse(JSON.stringify(ev));
  G.lastEvent=ev.id;
  G.recentEvents.push(ev.id);
- G.recentEvents=G.recentEvents.slice(-5);
+ G.recentEvents=G.recentEvents.slice(-6);
  save();render();
 }
 function buildStageStory(){
@@ -711,7 +741,7 @@ function render(){
  const action=mode==="idle"?`<button onclick="drawEvent()">${G.stageStory?`進入重大劇情：${p.story}`:`開始第 ${G.turnInPhase+1} / ${p.turns} 回合`}<small>${G.stageStory?"完成後進下一個人生階段":"每個人生階段都有不同事件池，且會避開最近抽過的內容"}</small></button>`:mode==="result"?`<button onclick="continueAfterResult()">${G.result.stageDone?"進入下一階段":"繼續"}<small>${G.result.stageDone?`下一站：${nextName}`:"回到下一個事件回合"}</small></button>`:"";
  const center=mode==="event"?`<div class="card ${G.current.story||G.current.special?"major":""}"><div class="kicker ${G.current.story||G.current.special?"gold":""}">■ ${G.current.cat}</div><h2>${G.current.title}</h2><p>${G.current.desc}</p></div>`:mode==="result"?`<div class="card ${G.result.stageDone?"major":""}"><div class="kicker ${G.result.stageDone?"gold":""}">■ ${G.result.stageDone?"重大劇情結果":"事件結果"}</div><h2>${G.result.title}</h2><p>${G.result.text}</p><div class="deltaWrap">${G.result.deltas.map(x=>`<span class="delta ${x.includes("能力點")?"point":x.includes("+")?"good":x.includes("-")?"bad":""}">${esc(x)}</span>`).join("")}</div></div>`:`<div class="card"><div class="kicker">■ ${p.name}</div><h2>${G.stageStory?`4 回合完成：${p.story}`:`第 ${G.turnInPhase+1} 回合準備開始`}</h2><p>${G.stageStory?`這個人生階段的日常事件已完成，現在進入重大劇情。`:p.desc}</p><div class="progressBox"><div class="progressText">本階段進度 <b>${G.turnInPhase} / ${p.turns}</b></div><div class="turnDots">${Array.from({length:p.turns},(_,i)=>`<i class="${i<G.turnInPhase?"done":""}"></i>`).join("")}</div></div></div>`;
  app.innerHTML=`<div class="shell">
- <aside class="left"><div class="brand">Boxing <em>Life</em></div><div class="brandSub">拳 擊 人 生 模 擬 器</div><div class="school">台灣高中・拳擊部<small>${country.route}｜${country.name}・${G.base}</small></div><div class="timeline">${timelineHTML()}</div><div class="menu"><div class="active">▣ 生涯事件</div><div>◆ 能力點</div><div>♜ 劇情比賽</div><div>▦ 人生年表</div><div>★ 技能</div><div>▥ 數據</div><div>◉ 成就</div><div onclick="save()">▣ 儲存</div><div onclick="resetGame()">⚙ 重開人生</div></div><div class="version"><b>v3.3.0</b><br>${G.lifePath==="college"?"大學人生線":G.lifePath==="work"?"工作人生線":"高中人生線"}<br>4 回合推進・大量階段限定事件</div></aside>
+ <aside class="left"><div class="brand">Boxing <em>Life</em></div><div class="brandSub">拳 擊 人 生 模 擬 器</div><div class="school">台灣高中・拳擊部<small>${country.route}｜${country.name}・${G.base}</small></div><div class="timeline">${timelineHTML()}</div><div class="menu"><div class="active">▣ 生涯事件</div><div>◆ 能力點</div><div>♜ 劇情比賽</div><div>▦ 人生年表</div><div>★ 技能</div><div>▥ 數據</div><div>◉ 成就</div><div onclick="save()">▣ 儲存</div><div onclick="resetGame()">⚙ 重開人生</div></div><div class="version"><b>v3.4.0</b><br>${G.lifePath==="college"?"大學人生線":G.lifePath==="work"?"工作人生線":"高中人生線"}<br>4 回合推進・大量階段限定事件</div></aside>
  <main class="center"><header class="header"><div class="profile"><div class="no">1</div><div class="name"><b>${esc(G.name)}</b><div class="tags"><span class="tag">${p.identity}</span><span class="tag gold">${STYLES[G.style]}</span></div></div><div class="affil">所屬地區<b>${country.name}・${G.base}</b></div></div><div class="metrics"><div class="metric"><b>${G.age}</b><span>年齡</span></div><div class="metric"><b>${G.year}</b><span>年份</span></div><div class="metric"><b>${ovr()}</b><span>綜合</span></div><div class="metric"><b>${G.skillPoints}</b><span>能力點</span></div><div class="metric"><b>${G.pro.w}-${G.pro.l}</b><span>職業戰績</span></div></div></header><div class="content"><div class="card"><div class="kicker">■ 人生主線</div><p>左側會永久保留走過的年級／人生階段。高中畢業後會真正分成 <b>大學線</b> 或 <b>工作線</b>；每條線都有自己的特殊事件，再於 23 歲左右匯入職業拳擊。</p></div><div class="date">${G.year} 年 ・ ${G.age} 歲 ・ ${p.name}</div>${center}<div class="card"><div class="kicker">■ 最近紀錄</div>${G.logs.slice(0,7).map(l=>`<div class="log"><small>${l.when}</small><div>${esc(l.text)}</div></div>`).join("")}</div></div></main>
  <aside class="right"><div class="rhythm"><div class="rightTitle">LIFE RHYTHM</div><div class="rhythmRow ${!G.stageStory&&!G.current&&!G.result?"on":""}"><i></i>${p.name}：${G.turnInPhase}/${p.turns} 回合</div><div class="rhythmRow ${G.current?"on":""}"><i></i>階段專屬事件／特殊事件</div><div class="rhythmRow ${G.result?"on":""}"><i></i>命運骰結算</div><div class="rhythmRow ${G.stageStory?"on":""}"><i></i>第 4 回合後：${p.story}</div></div>${rightAttrs()}${choices}${res}<div class="action">${action}</div></aside>
  </div>`;
@@ -1561,6 +1591,8 @@ function v31LifeIntro(){
 
     <p>白天，你要學著適應新的環境，認識新的人，面對長大之後一個接一個出現的選擇；晚上，你會走進拳館，在汗水、挨打與一次次重新站起來之間，慢慢把自己磨成真正的拳手。</p>
 
+    <p>你選擇的旅外國家也不只是背景。當地的飲食、交通、校園、拳館、人情與生活習慣，都可能在某一個回合突然闖進你的拳擊人生，帶來意想不到的好運或麻煩。</p>
+
     <p>你的路不會按照固定劇本前進。也許某個決定會讓你遇見重要的人，也許一場失敗會逼你改變打法；也可能原本順利的生涯，因為傷病、壓力、金錢或一次錯誤選擇突然轉向。那些看起來和拳擊無關的事情，最後都可能影響你站上擂台時的狀態。</p>
 
     <p>有人可以從默默無名一路打進世界舞台，最後真正舉起冠軍腰帶；但更多時候，拳擊人生不會這麼完美。你可能卡在地區排名，可能連續輸掉幾場關鍵比賽，也可能因為身體累積太多傷勢，不得不比自己想像中更早離開擂台。</p>
@@ -1782,6 +1814,47 @@ render=function(){
       if(intro){
         intro.innerHTML="從高一留學開始，讓每一次選擇、每一顆骰子、每一場比賽，慢慢寫出屬於你的拳擊人生。";
       }
+    }
+  }
+};
+</script>
+
+
+<script id="v34-country-culture-js">
+const V34_prevResolveEvent=resolveEvent;
+resolveEvent=function(ev,ch,roll){
+  V34_prevResolveEvent(ev,ch,roll);
+  if(ev?.localCulture && G.result){
+    const story=ch?.outcomes?.[G.result.tier];
+    if(story) G.result.text=story;
+  }
+};
+
+const V34_prevRender=render;
+render=function(){
+  V34_prevRender();
+
+  if(!G){
+    const start=document.querySelector(".start");
+    if(start){
+      const chooser=document.getElementById("countryPortraitChooser");
+      if(chooser && !document.getElementById("v34CountryHint")){
+        chooser.insertAdjacentHTML("afterbegin",
+          `<div id="v34CountryHint" style="margin:0 0 10px;padding:9px 11px;border-left:3px solid #f1c553;background:#102f25;color:#aec2b6;font-size:12px;line-height:1.65">
+            🌏 選擇的不只是國旗。旅日、旅美、旅菲都擁有不同的當地生活、校園與拳館劇情，而且好壞結果都會影響你的生涯。
+          </div>`);
+      }
+    }
+    return;
+  }
+
+  if(G.current?.localCulture){
+    const eventCard=document.querySelector(".eventCard,.event");
+    if(eventCard && !eventCard.querySelector(".v34LocalTag")){
+      eventCard.insertAdjacentHTML("afterbegin",
+        `<div class="v34LocalTag" style="display:inline-flex;align-items:center;gap:5px;margin-bottom:8px;padding:4px 8px;border:1px solid #806d2b;border-radius:999px;background:#203a28;color:#f1c553;font-size:10px;font-weight:900">
+          🌏 當地文化劇情
+        </div>`);
     }
   }
 };
