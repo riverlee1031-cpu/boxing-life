@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Boxing Life V24 · 人生分流時間線</title>
+<title>Boxing Life V26 · 生涯紀錄與分享卡</title>
 <style>
 :root{
   --bg:#061911; --bg2:#09251b; --panel:#0f3427; --panel2:#153d2f;
@@ -85,11 +85,60 @@ button{cursor:pointer}
 @media(max-width:1280px){.shell{grid-template-columns:245px minmax(520px,1fr) 390px}.brand{font-size:36px}.content{padding-left:18px;padding-right:18px}}
 @media(max-width:980px){body{overflow:auto}#app{height:auto}.shell{height:auto;display:block}.left{display:none}.center,.right{overflow:visible}.header{position:static}.startGrid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(3,1fr)}}
 </style>
+
+<style id="v26-career-css">
+.careerBtn{cursor:pointer}
+.careerBtn:hover{background:#1b4434!important;color:var(--gold)!important}
+.careerModal{
+  position:fixed;inset:0;z-index:100;background:rgba(1,9,6,.88);
+  display:flex;align-items:center;justify-content:center;padding:22px
+}
+.careerModal.hidden{display:none}
+.careerSheet{
+  width:min(980px,96vw);max-height:92vh;overflow:auto;
+  background:linear-gradient(180deg,#0d3024,#071e16);
+  border:1px solid #4b745f;border-radius:16px;padding:18px;
+  box-shadow:0 30px 80px rgba(0,0,0,.45)
+}
+.careerTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}
+.careerTop h2{margin:0;font-size:27px}
+.careerTop p{margin:5px 0 0;color:#90a69a;font-size:12px}
+.closeX{border:1px solid #496b5a;background:#12382b;color:#e1e7e1;border-radius:9px;padding:8px 12px;font-weight:900}
+.careerSummary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.careerMetric{background:#143a2d;border:1px solid #315949;border-radius:10px;text-align:center;padding:10px}
+.careerMetric b{display:block;color:var(--gold);font-size:21px}.careerMetric span{display:block;color:#839b8f;font-size:10px;margin-top:4px}
+.historyList{display:grid;gap:8px}
+.historyItem{display:grid;grid-template-columns:95px 1fr;gap:10px;background:#103429;border:1px solid #2e5848;border-radius:10px;padding:10px}
+.historyWhen{font-size:10px;color:#80998c;line-height:1.6}
+.historyWhen b{display:block;color:var(--gold);font-size:12px}
+.historyText{font-size:13px;line-height:1.65;color:#d5ddd7}
+.historyText strong{display:block;color:#edf0e6;font-size:14px;margin-bottom:2px}
+.shareArea{margin-top:14px;padding-top:14px;border-top:1px solid #315547}
+.shareButtons{display:flex;gap:8px;flex-wrap:wrap}
+.shareButtons button{border:1px solid #7d6a2a;background:#264933;color:#f0cc5e;border-radius:9px;padding:10px 13px;font-weight:900}
+.retireCard{border-color:#91792a!important}
+.retireBtn{
+  width:100%;border:1px solid #8c7429;background:linear-gradient(180deg,#3e5839,#2b4431);
+  color:#f2d168;border-radius:11px;padding:13px;font-size:16px;font-weight:1000;margin-top:10px
+}
+.sharePreview{
+  margin-top:12px;background:#081d15;border:1px solid #315747;border-radius:11px;padding:10px;
+  text-align:center
+}
+.sharePreview canvas{max-width:100%;height:auto;border-radius:8px}
+.endHero{background:linear-gradient(180deg,#183d2e,#102c22);border:1px solid #8a742a;border-radius:14px;padding:18px;margin-bottom:14px}
+.endHero h2{margin:0;color:#f0cf61;font-size:28px}.endHero p{color:#cbd7cf;line-height:1.7}
+@media(max-width:760px){
+  .careerSummary{grid-template-columns:repeat(2,1fr)}
+  .historyItem{grid-template-columns:1fr}.careerModal{padding:8px}.careerSheet{padding:12px}
+}
+</style>
+
 </head>
 <body>
 <div id="app"></div>
 <script>
-const SAVE_KEY="boxing-life-v24-life-branch-timeline";
+const SAVE_KEY="boxing-life-v26-career-record-share";
 const COUNTRIES={usa:{name:"美國",base:"Las Vegas",route:"旅美"},japan:{name:"日本",base:"東京",route:"旅日"},philippines:{name:"菲律賓",base:"宿霧",route:"旅菲"}};
 const STYLES={pressure:"壓迫型",boxer:"技巧型",puncher:"重砲型"};
 const SKILLS=["power","speed","stamina","defense","chin","technique"];
@@ -259,6 +308,12 @@ const PHASE_EVENTS={
  ]
 };
 
+const EXTRA_PHASE_EVENTS={"hs1":[{"id":"language_mixup","special":false,"cat":"高中事件｜語言","title":"你把教練的指令完全聽反了","desc":"第一次團體實戰時，你把『退一步』聽成『壓上去』，整個回合打得亂七八糟。大家笑了，但教練其實在看你怎麼處理尷尬。","choices":[{"label":"硬著頭皮繼續","sub":"靠觀察把後半段撐完","rate":"35% 高壓","mode":"risk","good":[["technique",2],["morale",2]],"mid":[["morale",-1]],"bad":[["health",-3],["morale",-2]]},{"label":"下課後去問清楚","sub":"把每個口令記起來","rate":"50% 標準","mode":"normal","good":[["technique",1],["morale",1]],"mid":[["morale",1]],"bad":[["stamina",-1]]},{"label":"直接承認沒聽懂","sub":"請教練當場重講","rate":"70% 穩定","mode":"safe","good":[["morale",2]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"cafeteria","special":false,"cat":"高中事件｜校園","title":"學校餐廳的食物讓你完全吃不習慣","desc":"你連續幾天只挑自己敢吃的東西，體力開始受影響。拳館助教注意到你訓練後常常沒精神。","choices":[{"label":"繼續硬吃","sub":"逼自己快點適應","rate":"35% 高風險","mode":"risk","good":[["stamina",2],["chin",1]],"mid":[["stamina",1]],"bad":[["health",-5],["morale",-2]]},{"label":"自己準備簡單餐盒","sub":"先穩定營養","rate":"50% 標準","mode":"normal","good":[["health",2],["stamina",1]],"mid":[["health",1]],"bad":[["health",-2]]},{"label":"去找熟悉的亞洲超市","sub":"多花時間換穩定飲食","rate":"70% 安全","mode":"safe","good":[["health",3],["morale",1]],"mid":[["health",1]],"bad":[["fame",-1]]}]},{"id":"local_friend","special":false,"cat":"高中事件｜友情","title":"班上第一個主動跟你說話的人邀你週末出去","desc":"你終於開始有當地朋友。只是週末原本排了長跑與恢復，這是你第一次在『生活』和『拳擊』之間做小選擇。","choices":[{"label":"整天一起出去","sub":"先把朋友關係建立起來","rate":"35% 高曝光","mode":"risk","good":[["fame",3],["morale",2]],"mid":[["fame",1]],"bad":[["morale",-3],["fame",-1]]},{"label":"中午見面、晚上訓練","sub":"兩邊都留時間","rate":"50% 標準","mode":"normal","good":[["fame",2],["morale",1]],"mid":[["fame",1]],"bad":[["morale",-1]]},{"label":"婉拒這次邀請","sub":"先把訓練節奏穩住","rate":"70% 低波動","mode":"safe","good":[["morale",2]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"school_demo","special":true,"cat":"特殊事件｜校慶表演","title":"學校要你在校慶做拳擊示範","desc":"導師覺得『從台灣來的拳擊留學生』很有話題，想讓你在全校面前示範打靶。這可能是第一次讓很多同學記住你。","choices":[{"label":"把表演做到最滿","sub":"主動設計一段有記憶點的演出","rate":"35% 高曝光","mode":"risk","good":[["fame",4],["income",1200]],"mid":[["fame",2]],"bad":[["morale",-3],["fame",-1]]},{"label":"正常示範","sub":"完成學校安排","rate":"50% 標準","mode":"normal","good":[["fame",2],["income",500]],"mid":[["fame",1]],"bad":[["morale",-1]]},{"label":"只做簡單動作","sub":"避免影響備戰","rate":"70% 低調","mode":"safe","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]}],"hs2":[{"id":"teacher_warning","special":false,"cat":"高中事件｜出席","title":"導師提醒你的缺席次數快到警戒線","desc":"比賽、遠征和訓練讓你請假越來越多。如果再這樣下去，學校可能要求你補課甚至限制出賽。","choices":[{"label":"比賽照打、課後補完","sub":"什麼都不放棄","rate":"35% 高壓","mode":"risk","good":[["technique",2],["morale",2]],"mid":[["morale",-1]],"bad":[["health",-3],["morale",-2]]},{"label":"先跟老師排補課","sub":"把風險控制住","rate":"50% 標準","mode":"normal","good":[["technique",1],["morale",1]],"mid":[["morale",1]],"bad":[["stamina",-1]]},{"label":"這個月減少出賽","sub":"先顧學校紀錄","rate":"70% 穩定","mode":"safe","good":[["morale",2]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"rival_school","special":false,"cat":"高中事件｜宿敵","title":"隔壁學校出現一個跟你同量級的新拳手","desc":"社群上開始有人比較你們兩個，連拳館學員都在問誰比較強。你第一次有了真正的同齡宿敵。","choices":[{"label":"主動約他對練","sub":"直接碰一碰","rate":"35% 高回報","mode":"risk","good":[["technique",2],["fame",1]],"mid":[["stamina",1]],"bad":[["health",-3],["morale",-2]]},{"label":"先看他的比賽影片","sub":"準備後再說","rate":"50% 標準","mode":"normal","good":[["technique",1],["stamina",1]],"mid":[["technique",1]],"bad":[["morale",-1]]},{"label":"不理比較","sub":"照自己的節奏走","rate":"70% 安全","mode":"safe","good":[["health",1],["morale",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"festival_date","special":true,"cat":"特殊事件｜校園戀情","title":"文化祭那天，你們第一次像真正情侶一樣約會","desc":"拳擊讓你的生活一直很緊繃，這一天卻像普通高中生。問題是隔天有重要對練，回宿舍時間會影響恢復。","choices":[{"label":"玩到最後","sub":"難得就好好約會","rate":"35% 高波動","mode":"risk","good":[["morale",3],["fame",1]],"mid":[["morale",1]],"bad":[["morale",-3],["stamina",-1]]},{"label":"提早離開","sub":"保留明天狀態","rate":"50% 標準","mode":"normal","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["morale",-1]]},{"label":"乾脆取消","sub":"重要對練優先","rate":"70% 穩定","mode":"safe","good":[["stamina",1],["morale",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"clip_viral","special":false,"cat":"高中事件｜社群","title":"一段你在校隊訓練的影片突然小爆紅","desc":"同學把你對打的片段剪成短影片，幾天內累積不少觀看。有人開始叫你『台灣交換拳手』。","choices":[{"label":"主動經營帳號","sub":"趁這波把自己推出去","rate":"35% 高曝光","mode":"risk","good":[["fame",4],["income",1200]],"mid":[["fame",2]],"bad":[["morale",-3],["fame",-1]]},{"label":"偶爾回留言","sub":"保留曝光但不沉迷","rate":"50% 標準","mode":"normal","good":[["fame",2],["income",500]],"mid":[["fame",1]],"bad":[["morale",-1]]},{"label":"完全不理","sub":"專心準備下一場","rate":"70% 低調","mode":"safe","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]}],"hs3":[{"id":"scholarship_offer","special":false,"cat":"高中事件｜升學","title":"一所大學願意給你部分獎學金","desc":"條件不算頂尖，但可以讓你繼續留在這座城市念書，也能留在現在的拳館。這是你第一次看到『大學＋拳擊』的具體可能。","choices":[{"label":"積極爭取更多條件","sub":"主動談獎學金與訓練資源","rate":"35% 高回報","mode":"risk","good":[["income",2200],["fame",3]],"mid":[["income",700]],"bad":[["morale",-2],["income",-500]]},{"label":"先保留選項","sub":"比較其他學校","rate":"50% 標準","mode":"normal","good":[["income",1200],["morale",2]],"mid":[["income",500]],"bad":[["morale",-1]]},{"label":"不被獎學金綁住","sub":"畢業後再決定","rate":"70% 穩定","mode":"safe","good":[["technique",1],["morale",1]],"mid":[["morale",1]],"bad":[["income",-200]]}]},{"id":"parttime_offer","special":false,"cat":"高中事件｜打工","title":"拳館附近的店家問你畢業後要不要來打工","desc":"老闆知道你常訓練，願意給比較彈性的排班。這讓『工作邊練拳』第一次變得具體。","choices":[{"label":"先答應卡位","sub":"畢業就能開始賺錢","rate":"35% 高回報","mode":"risk","good":[["income",1600],["fame",2]],"mid":[["income",500]],"bad":[["income",-600],["morale",-2]]},{"label":"先談工時","sub":"確認不影響拳館","rate":"50% 標準","mode":"normal","good":[["income",900],["morale",1]],"mid":[["income",400]],"bad":[["morale",-1]]},{"label":"暫時不答應","sub":"先把畢業賽打完","rate":"70% 穩定","mode":"safe","good":[["morale",1],["health",1]],"mid":[["morale",1]],"bad":[["income",-200]]}]},{"id":"parents_call","special":true,"cat":"特殊事件｜家庭","title":"家人開始認真問你畢業後到底要做什麼","desc":"電話那頭不是反對拳擊，只是擔心你沒有穩定方向。『讀大學？工作？還是只打拳？』你第一次必須把未來說出口。","choices":[{"label":"堅持自己的拳擊計畫","sub":"先讓家人知道你的決心","rate":"35% 高風險","mode":"risk","good":[["morale",2],["fame",1]],"mid":[["morale",-1]],"bad":[["morale",-3],["fame",-1]]},{"label":"把大學與工作方案都說清楚","sub":"讓家人放心","rate":"50% 標準","mode":"normal","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["morale",-1]]},{"label":"先不談太多","sub":"等畢業後再決定","rate":"70% 安全","mode":"safe","good":[["morale",1],["health",1]],"mid":[["morale",1]],"bad":[["morale",-1]]}]},{"id":"last_school_trip","special":false,"cat":"高中事件｜畢業","title":"畢業旅行撞上最後一週重要訓練","desc":"這是可能一輩子只有一次的高中畢旅，但教練也說這週是年度大賽前最後完整訓練週。","choices":[{"label":"照去畢旅","sub":"留下高中回憶","rate":"35% 高波動","mode":"risk","good":[["morale",3],["fame",1]],"mid":[["morale",1]],"bad":[["morale",-3],["stamina",-1]]},{"label":"只參加前半段","sub":"兩邊兼顧","rate":"50% 標準","mode":"normal","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["morale",-1]]},{"label":"完全不去","sub":"把最後一週留給拳擊","rate":"70% 穩定","mode":"safe","good":[["stamina",1],["morale",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]}],"uni1":[{"id":"new_romance","special":false,"cat":"大學事件｜戀愛","title":"系上一位同學開始常陪你吃晚餐","desc":"高中戀情已經成為過去或變成遠距離，而大學裡又有人靠近。你開始發現感情不只影響士氣，也影響每天的時間。","choices":[{"label":"試著交往","sub":"讓大學生活多一點普通感","rate":"35% 高波動","mode":"risk","good":[["morale",3],["fame",1]],"mid":[["morale",1]],"bad":[["morale",-3],["stamina",-1]]},{"label":"先保持曖昧","sub":"慢慢了解","rate":"50% 標準","mode":"normal","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["morale",-1]]},{"label":"不發展","sub":"拳擊和課業已經夠滿","rate":"70% 穩定","mode":"safe","good":[["stamina",1],["morale",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"missed_lecture","special":false,"cat":"大學事件｜課業","title":"你因為外地比賽連續錯過三堂必修","desc":"教授點名時直接問：『你到底是學生還是運動員？』全班都在看你。","choices":[{"label":"課後直接找教授談","sub":"把拳擊計畫說清楚","rate":"35% 高壓","mode":"risk","good":[["technique",2],["morale",2]],"mid":[["morale",-1]],"bad":[["health",-3],["morale",-2]]},{"label":"借筆記自己補","sub":"低調把進度追回來","rate":"50% 標準","mode":"normal","good":[["technique",1],["morale",1]],"mid":[["morale",1]],"bad":[["stamina",-1]]},{"label":"先不理會","sub":"比賽比較重要","rate":"70% 穩定","mode":"safe","good":[["morale",2]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"club_recruit","special":false,"cat":"大學事件｜社團","title":"拳擊社希望你掛名當技術顧問","desc":"你平常已經在外面拳館訓練，但校內拳擊社覺得你的經驗很有幫助。這也可能讓你在校園變得更有名。","choices":[{"label":"正式加入幫忙","sub":"建立校園人脈","rate":"35% 高曝光","mode":"risk","good":[["fame",3],["morale",2]],"mid":[["fame",1]],"bad":[["morale",-3],["fame",-1]]},{"label":"偶爾去指導","sub":"不固定承諾","rate":"50% 標準","mode":"normal","good":[["fame",2],["morale",1]],"mid":[["fame",1]],"bad":[["morale",-1]]},{"label":"婉拒","sub":"避免增加行程","rate":"70% 低波動","mode":"safe","good":[["morale",2]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"freshman_party","special":true,"cat":"特殊事件｜大學派對","title":"新生派對喝到太晚，隔天還有實戰","desc":"你原本只打算露個臉，結果氣氛比想像中熱。現在要決定什麼時候離開。","choices":[{"label":"留下來玩到底","sub":"真正融入大學生活","rate":"35% 高風險","mode":"risk","good":[["stamina",2],["chin",1]],"mid":[["stamina",1]],"bad":[["health",-5],["morale",-2]]},{"label":"喝一點就走","sub":"兩邊兼顧","rate":"50% 標準","mode":"normal","good":[["health",2],["stamina",1]],"mid":[["health",1]],"bad":[["health",-2]]},{"label":"直接回宿舍","sub":"明早訓練優先","rate":"70% 安全","mode":"safe","good":[["health",3],["morale",1]],"mid":[["health",1]],"bad":[["fame",-1]]}]}],"uni2":[{"id":"scholarship_review","special":false,"cat":"大學事件｜獎學金","title":"學校要重新審核你的運動獎學金","desc":"成績、出席與比賽表現都會被看。這次不是單純考試，而是會直接影響你明年的生活成本。","choices":[{"label":"這學期拼成績","sub":"把課業拉上來","rate":"35% 高壓","mode":"risk","good":[["technique",2],["morale",2]],"mid":[["morale",-1]],"bad":[["health",-3],["morale",-2]]},{"label":"維持現在平衡","sub":"不要因審核打亂拳擊","rate":"50% 標準","mode":"normal","good":[["technique",1],["morale",1]],"mid":[["morale",1]],"bad":[["stamina",-1]]},{"label":"靠比賽成績爭取","sub":"讓運動表現說話","rate":"70% 穩定","mode":"safe","good":[["morale",2]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"dating_fight","special":true,"cat":"特殊事件｜大學感情","title":"交往對象抱怨你永遠把拳擊排第一","desc":"對方沒有要你放棄拳擊，只是覺得每次約會都得配合你的課表與比賽。你們第一次吵得很兇。","choices":[{"label":"答應調整行程","sub":"讓感情真正有位置","rate":"35% 高波動","mode":"risk","good":[["morale",3],["fame",1]],"mid":[["morale",1]],"bad":[["morale",-3],["stamina",-1]]},{"label":"把底線講清楚","sub":"拳擊仍然是核心","rate":"50% 標準","mode":"normal","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["morale",-1]]},{"label":"暫時分開","sub":"先處理自己的生涯","rate":"70% 穩定","mode":"safe","good":[["stamina",1],["morale",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"group_project","special":false,"cat":"大學事件｜分組","title":"你又被分到一個最難搞的組員","desc":"對方認為你太常因為訓練提早離開，你則覺得他完全不會分配工作。氣氛慢慢又僵起來。","choices":[{"label":"直接重分工作","sub":"把問題攤開","rate":"35% 高風險","mode":"risk","good":[["morale",2],["fame",1]],"mid":[["morale",-1]],"bad":[["morale",-3],["fame",-1]]},{"label":"私下協調","sub":"先解決實際問題","rate":"50% 標準","mode":"normal","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["morale",-1]]},{"label":"自己多做一點","sub":"不要再吵","rate":"70% 安全","mode":"safe","good":[["morale",1],["health",1]],"mid":[["morale",1]],"bad":[["morale",-1]]}]},{"id":"cheap_room","special":false,"cat":"大學事件｜生活費","title":"房租突然上漲，你開始考慮搬家","desc":"便宜的新地方離拳館更遠，但能省下一大筆生活費。住哪裡，開始直接影響訓練與恢復。","choices":[{"label":"搬到便宜區","sub":"省錢但通勤變長","rate":"35% 高回報","mode":"risk","good":[["income",1600],["fame",2]],"mid":[["income",500]],"bad":[["income",-600],["morale",-2]]},{"label":"留在原地","sub":"用其他地方省錢","rate":"50% 標準","mode":"normal","good":[["income",900],["morale",1]],"mid":[["income",400]],"bad":[["morale",-1]]},{"label":"找室友分租","sub":"生活品質靠運氣","rate":"70% 穩定","mode":"safe","good":[["morale",1],["health",1]],"mid":[["morale",1]],"bad":[["income",-200]]}]}],"uni3":[{"id":"small_sponsor","special":false,"cat":"大學事件｜贊助","title":"本地運動品牌想送你裝備換貼文","desc":"金額不大，但這是第一個正式找上門的品牌。你開始接觸到『拳擊也可以換來資源』。","choices":[{"label":"談成固定合作","sub":"開始建立商業履歷","rate":"35% 高曝光","mode":"risk","good":[["fame",4],["income",1200]],"mid":[["fame",2]],"bad":[["morale",-3],["fame",-1]]},{"label":"先合作一次","sub":"看看效果","rate":"50% 標準","mode":"normal","good":[["fame",2],["income",500]],"mid":[["fame",1]],"bad":[["morale",-1]]},{"label":"不接","sub":"保持帳號單純","rate":"70% 低調","mode":"safe","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"professor_support","special":false,"cat":"大學事件｜教授","title":"一位教授主動說願意幫你調整出席","desc":"他看過你的比賽，覺得你是真的在追求一件事。這是少數學校開始主動配合拳擊的時刻。","choices":[{"label":"坦白自己的全年賽程","sub":"建立長期合作","rate":"35% 高壓","mode":"risk","good":[["technique",2],["morale",2]],"mid":[["morale",-1]],"bad":[["health",-3],["morale",-2]]},{"label":"只談最近一場","sub":"先解決眼前問題","rate":"50% 標準","mode":"normal","good":[["technique",1],["morale",1]],"mid":[["morale",1]],"bad":[["stamina",-1]]},{"label":"不想欠人情","sub":"照一般規則來","rate":"70% 穩定","mode":"safe","good":[["morale",2]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"away_tournament","special":false,"cat":"大學事件｜遠征","title":"外地邀請賽需要請四天假","desc":"這場比賽的對手不錯，但會撞到課堂、打工與約會。你要不要為了拳擊把整週生活都移開？","choices":[{"label":"直接去打","sub":"把機會放第一","rate":"35% 高回報","mode":"risk","good":[["income",2200],["fame",3]],"mid":[["income",700]],"bad":[["morale",-2],["income",-500]]},{"label":"先談妥請假再去","sub":"降低後座力","rate":"50% 標準","mode":"normal","good":[["income",1200],["morale",2]],"mid":[["income",500]],"bad":[["morale",-1]]},{"label":"放棄這場","sub":"等下一個更適合的機會","rate":"70% 穩定","mode":"safe","good":[["technique",1],["morale",1]],"mid":[["morale",1]],"bad":[["income",-200]]}]},{"id":"rumor_romance","special":true,"cat":"特殊事件｜緋聞","title":"校園匿名版開始傳你跟網紅正在交往","desc":"其實你們只是合作比較多，但照片、留言和猜測越傳越真。連同學都開始拿這件事問你。","choices":[{"label":"順勢玩梗","sub":"讓話題繼續發酵","rate":"35% 高曝光","mode":"risk","good":[["fame",4],["income",1200]],"mid":[["fame",2]],"bad":[["morale",-3],["fame",-1]]},{"label":"正式澄清","sub":"把關係說清楚","rate":"50% 標準","mode":"normal","good":[["fame",2],["income",500]],"mid":[["fame",1]],"bad":[["morale",-1]]},{"label":"完全不回應","sub":"讓熱度自然下去","rate":"70% 低調","mode":"safe","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]}],"uni4":[{"id":"job_offer","special":false,"cat":"大學事件｜求職","title":"一家公司願意在畢業前先給你 offer","desc":"薪水不錯，也願意讓你偶爾請假比賽。這讓『畢業直接工作』突然變得很有吸引力。","choices":[{"label":"先把工作拿下","sub":"保留安全感","rate":"35% 高回報","mode":"risk","good":[["income",2200],["fame",3]],"mid":[["income",700]],"bad":[["morale",-2],["income",-500]]},{"label":"談更彈性的條件","sub":"確認拳擊不會被犧牲","rate":"50% 標準","mode":"normal","good":[["income",1200],["morale",2]],"mid":[["income",500]],"bad":[["morale",-1]]},{"label":"拒絕","sub":"畢業後想全力打拳","rate":"70% 穩定","mode":"safe","good":[["technique",1],["morale",1]],"mid":[["morale",1]],"bad":[["income",-200]]}]},{"id":"graduation_trip","special":false,"cat":"大學事件｜畢旅","title":"大學畢旅碰上重要備戰週","desc":"同學說這可能是最後一次全班一起旅行。你知道去了會很開心，也知道教練會不爽。","choices":[{"label":"完整參加","sub":"留下大學最後回憶","rate":"35% 高波動","mode":"risk","good":[["morale",3],["fame",1]],"mid":[["morale",1]],"bad":[["morale",-3],["stamina",-1]]},{"label":"只去兩天","sub":"折衷","rate":"50% 標準","mode":"normal","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["morale",-1]]},{"label":"不去","sub":"把狀態留給拳擊","rate":"70% 穩定","mode":"safe","good":[["stamina",1],["morale",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"alumni_help","special":false,"cat":"大學事件｜校友","title":"一位校友看完你的比賽後想幫你介紹贊助商","desc":"他不是拳擊圈的人，但在商業上很有人脈。這可能是你畢業前最後一個意外機會。","choices":[{"label":"積極跟進","sub":"主動把簡介和計畫準備好","rate":"35% 高回報","mode":"risk","good":[["income",2200],["fame",3]],"mid":[["income",700]],"bad":[["morale",-2],["income",-500]]},{"label":"先請他介紹一次","sub":"慢慢建立關係","rate":"50% 標準","mode":"normal","good":[["income",1200],["morale",2]],"mid":[["income",500]],"bad":[["morale",-1]]},{"label":"先不麻煩他","sub":"畢業後再說","rate":"70% 穩定","mode":"safe","good":[["technique",1],["morale",1]],"mid":[["morale",1]],"bad":[["income",-200]]}]},{"id":"farewell_romance","special":true,"cat":"特殊事件｜畢業感情","title":"畢業後你們可能要去不同城市","desc":"感情、工作與拳擊把未來拉向不同方向。你們坐在校園最後一次認真談長距離。","choices":[{"label":"承諾遠距離","sub":"努力維持","rate":"35% 高波動","mode":"risk","good":[["morale",3],["fame",1]],"mid":[["morale",1]],"bad":[["morale",-3],["stamina",-1]]},{"label":"先走一步看一步","sub":"不要把話說死","rate":"50% 標準","mode":"normal","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["morale",-1]]},{"label":"和平結束","sub":"讓兩個人各自前進","rate":"70% 穩定","mode":"safe","good":[["stamina",1],["morale",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]}],"work1":[{"id":"first_salary","special":false,"cat":"工作事件｜第一份薪水","title":"第一份完整薪水入帳，你很想換一套更好的裝備","desc":"拳鞋、護具、營養與交通都在花錢。這是你第一次用工作收入直接支撐拳擊。","choices":[{"label":"一次買齊好裝備","sub":"把錢變成訓練品質","rate":"35% 高回報","mode":"risk","good":[["income",1600],["fame",2]],"mid":[["income",500]],"bad":[["income",-600],["morale",-2]]},{"label":"只換最需要的","sub":"保留現金","rate":"50% 標準","mode":"normal","good":[["income",900],["morale",1]],"mid":[["income",400]],"bad":[["morale",-1]]},{"label":"先全部存下來","sub":"為未來全職拳擊準備","rate":"70% 穩定","mode":"safe","good":[["morale",1],["health",1]],"mid":[["morale",1]],"bad":[["income",-200]]}]},{"id":"boss_bruise","special":false,"cat":"工作事件｜主管","title":"主管注意到你臉上的瘀青","desc":"他本來只知道你『有在運動』，現在才發現你是真的會上擂台。他開始擔心你影響工作。","choices":[{"label":"坦白比賽計畫","sub":"直接說清楚","rate":"35% 高風險","mode":"risk","good":[["morale",2],["fame",1]],"mid":[["morale",-1]],"bad":[["morale",-3],["fame",-1]]},{"label":"只說是訓練小傷","sub":"不要讓事情變大","rate":"50% 標準","mode":"normal","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["morale",-1]]},{"label":"先不解釋","sub":"工作表現最重要","rate":"70% 安全","mode":"safe","good":[["morale",1],["health",1]],"mid":[["morale",1]],"bad":[["morale",-1]]}]},{"id":"coworker_boxing","special":false,"cat":"工作事件｜同事","title":"同事知道你打拳後，天天問能不能帶他去拳館","desc":"這可能變成一段新友情，也可能讓你的私人訓練時間越來越碎。","choices":[{"label":"真的帶他去","sub":"建立同事關係","rate":"35% 高曝光","mode":"risk","good":[["fame",3],["morale",2]],"mid":[["fame",1]],"bad":[["morale",-3],["fame",-1]]},{"label":"偶爾教基本動作","sub":"保留自己的訓練","rate":"50% 標準","mode":"normal","good":[["fame",2],["morale",1]],"mid":[["fame",1]],"bad":[["morale",-1]]},{"label":"婉拒","sub":"拳館時間只留給自己","rate":"70% 低波動","mode":"safe","good":[["morale",2]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"burnout","special":true,"cat":"特殊事件｜疲勞","title":"連續上班六天後，你在拳館完全提不起速度","desc":"教練直接把你叫下來：『你不是不努力，是根本沒恢復。』工作＋拳擊的現實第一次狠狠打在身上。","choices":[{"label":"照樣把課表做完","sub":"用意志撐","rate":"35% 高風險","mode":"risk","good":[["stamina",2],["chin",1]],"mid":[["stamina",1]],"bad":[["health",-5],["morale",-2]]},{"label":"減量訓練","sub":"保住節奏","rate":"50% 標準","mode":"normal","good":[["health",2],["stamina",1]],"mid":[["health",1]],"bad":[["health",-2]]},{"label":"直接休一天","sub":"先恢復再說","rate":"70% 安全","mode":"safe","good":[["health",3],["morale",1]],"mid":[["health",1]],"bad":[["fame",-1]]}]}],"work2":[{"id":"rent_up","special":false,"cat":"工作事件｜生活費","title":"房東通知下個月要漲房租","desc":"多出的支出剛好等於一個月拳館費。你開始計算到底要從哪裡省。","choices":[{"label":"多接加班","sub":"用時間換錢","rate":"35% 高回報","mode":"risk","good":[["income",1600],["fame",2]],"mid":[["income",500]],"bad":[["income",-600],["morale",-2]]},{"label":"搬到便宜一點的地方","sub":"犧牲通勤","rate":"50% 標準","mode":"normal","good":[["income",900],["morale",1]],"mid":[["income",400]],"bad":[["morale",-1]]},{"label":"砍掉其他娛樂","sub":"拳館費不能動","rate":"70% 穩定","mode":"safe","good":[["morale",1],["health",1]],"mid":[["morale",1]],"bad":[["income",-200]]}]},{"id":"sick_leave","special":false,"cat":"工作事件｜病假","title":"你在比賽後全身痠痛，隔天還得上班","desc":"不是嚴重受傷，但每一步都讓你想請假。公司這個月已經很忙。","choices":[{"label":"硬著頭皮上班","sub":"不要留下紀錄","rate":"35% 高風險","mode":"risk","good":[["stamina",2],["chin",1]],"mid":[["stamina",1]],"bad":[["health",-5],["morale",-2]]},{"label":"請半天假","sub":"折衷恢復","rate":"50% 標準","mode":"normal","good":[["health",2],["stamina",1]],"mid":[["health",1]],"bad":[["health",-2]]},{"label":"直接休一天","sub":"身體優先","rate":"70% 安全","mode":"safe","good":[["health",3],["morale",1]],"mid":[["health",1]],"bad":[["fame",-1]]}]},{"id":"department_move","special":false,"cat":"工作事件｜調職","title":"公司想把你調去另一個部門","desc":"新部門薪水更好，但下班時間更晚，跟拳館課表幾乎完全撞在一起。","choices":[{"label":"接受調職","sub":"收入提升","rate":"35% 高回報","mode":"risk","good":[["income",2200],["fame",3]],"mid":[["income",700]],"bad":[["morale",-2],["income",-500]]},{"label":"談保留原時段","sub":"試著兩邊兼顧","rate":"50% 標準","mode":"normal","good":[["income",1200],["morale",2]],"mid":[["income",500]],"bad":[["morale",-1]]},{"label":"拒絕調職","sub":"拳擊節奏優先","rate":"70% 穩定","mode":"safe","good":[["technique",1],["morale",1]],"mid":[["morale",1]],"bad":[["income",-200]]}]},{"id":"office_romance","special":true,"cat":"特殊事件｜職場感情","title":"公司同事開始跟你越走越近","desc":"午餐、下班、聊天都變多。你知道辦公室戀情會讓工作生活更複雜，但也確實讓每天沒那麼累。","choices":[{"label":"正式交往","sub":"接受這段關係","rate":"35% 高波動","mode":"risk","good":[["morale",3],["fame",1]],"mid":[["morale",1]],"bad":[["morale",-3],["stamina",-1]]},{"label":"先保持曖昧","sub":"不要太快","rate":"50% 標準","mode":"normal","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["morale",-1]]},{"label":"維持同事關係","sub":"不要再增加變數","rate":"70% 穩定","mode":"safe","good":[["stamina",1],["morale",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]}],"work3":[{"id":"company_sponsor","special":false,"cat":"工作事件｜公司曝光","title":"公司想把你放進員工故事做宣傳","desc":"『白天上班、晚上打拳』很有話題。公司甚至願意提供一點比賽贊助。","choices":[{"label":"接受完整拍攝","sub":"把公司也變成資源","rate":"35% 高曝光","mode":"risk","good":[["fame",4],["income",1200]],"mid":[["fame",2]],"bad":[["morale",-3],["fame",-1]]},{"label":"只做簡短訪談","sub":"控制曝光","rate":"50% 標準","mode":"normal","good":[["fame",2],["income",500]],"mid":[["fame",1]],"bad":[["morale",-1]]},{"label":"拒絕","sub":"不想工作和拳擊混在一起","rate":"70% 低調","mode":"safe","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"viral_ko","special":false,"cat":"工作事件｜社群","title":"一段你在比賽中重拳擊倒對手的影片爆紅","desc":"幾天內，追蹤數突然往上。你第一次發現自己的拳擊身分可能真的超過工作身分。","choices":[{"label":"趁機大量更新","sub":"把熱度吃滿","rate":"35% 高曝光","mode":"risk","good":[["fame",4],["income",1200]],"mid":[["fame",2]],"bad":[["morale",-3],["fame",-1]]},{"label":"維持正常頻率","sub":"慢慢轉化","rate":"50% 標準","mode":"normal","good":[["fame",2],["income",500]],"mid":[["fame",1]],"bad":[["morale",-1]]},{"label":"先不管社群","sub":"下一場更重要","rate":"70% 低調","mode":"safe","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"transfer_city","special":false,"cat":"工作事件｜城市選擇","title":"公司給你去另一個城市的升遷機會","desc":"薪水更好，但意味著要離開現在的拳館。你會帶著拳擊人生一起搬嗎？","choices":[{"label":"接受搬遷","sub":"從新城市重新開始","rate":"35% 高回報","mode":"risk","good":[["income",2200],["fame",3]],"mid":[["income",700]],"bad":[["morale",-2],["income",-500]]},{"label":"要求遠端或彈性","sub":"想留下拳館","rate":"50% 標準","mode":"normal","good":[["income",1200],["morale",2]],"mid":[["income",500]],"bad":[["morale",-1]]},{"label":"拒絕","sub":"現在的拳擊環境優先","rate":"70% 穩定","mode":"safe","good":[["technique",1],["morale",1]],"mid":[["morale",1]],"bad":[["income",-200]]}]},{"id":"family_pressure","special":true,"cat":"特殊事件｜家庭","title":"家人問你：到底還要一邊工作一邊打多久？","desc":"你已經不是學生，收入也有了，但拳擊還沒有完全變成職業。家人開始擔心你一直卡在中間。","choices":[{"label":"說明全職拳擊計畫","sub":"給出明確時間表","rate":"35% 高風險","mode":"risk","good":[["morale",2],["fame",1]],"mid":[["morale",-1]],"bad":[["morale",-3],["fame",-1]]},{"label":"先維持現狀","sub":"再觀察一年","rate":"50% 標準","mode":"normal","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["morale",-1]]},{"label":"不想再解釋","sub":"自己的生活自己扛","rate":"70% 安全","mode":"safe","good":[["morale",1],["health",1]],"mid":[["morale",1]],"bad":[["morale",-1]]}]}],"work4":[{"id":"savings","special":false,"cat":"工作事件｜存款","title":"你的存款終於足以支撐幾個月沒有薪水","desc":"這筆錢原本是安全感，現在卻像一張『全職打拳許可證』。你第一次認真計算辭職後能撐多久。","choices":[{"label":"開始做全職預算","sub":"為辭職做準備","rate":"35% 高回報","mode":"risk","good":[["income",2200],["fame",3]],"mid":[["income",700]],"bad":[["morale",-2],["income",-500]]},{"label":"再多存半年","sub":"增加安全墊","rate":"50% 標準","mode":"normal","good":[["income",1200],["morale",2]],"mid":[["income",500]],"bad":[["morale",-1]]},{"label":"不動這筆錢","sub":"繼續兼顧","rate":"70% 穩定","mode":"safe","good":[["technique",1],["morale",1]],"mid":[["morale",1]],"bad":[["income",-200]]}]},{"id":"coach_offer","special":false,"cat":"工作事件｜教練","title":"教練說如果你願意全職，他可以幫你安排更完整的賽程","desc":"這不是保證成功，但代表拳館真的願意把資源放到你身上。","choices":[{"label":"馬上加大訓練量","sub":"先證明自己值得","rate":"35% 高回報","mode":"risk","good":[["technique",2],["fame",1]],"mid":[["stamina",1]],"bad":[["health",-3],["morale",-2]]},{"label":"先談清楚賽程","sub":"確認不是空話","rate":"50% 標準","mode":"normal","good":[["technique",1],["stamina",1]],"mid":[["technique",1]],"bad":[["morale",-1]]},{"label":"維持現況","sub":"不要太快改變人生","rate":"70% 安全","mode":"safe","good":[["health",1],["morale",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"serious_injury","special":false,"cat":"工作事件｜傷病","title":"你在實戰中傷到手腕，醫師建議休息幾週","desc":"工作反而讓你有固定收入，但拳擊節奏突然被切斷。你開始思考如果全職後再遇到這種事怎麼辦。","choices":[{"label":"縮短休息期","sub":"不想失去機會","rate":"35% 高風險","mode":"risk","good":[["stamina",2],["chin",1]],"mid":[["stamina",1]],"bad":[["health",-5],["morale",-2]]},{"label":"完整復健","sub":"先把手養好","rate":"50% 標準","mode":"normal","good":[["health",2],["stamina",1]],"mid":[["health",1]],"bad":[["health",-2]]},{"label":"暫停實戰、只做體能","sub":"保留訓練習慣","rate":"70% 安全","mode":"safe","good":[["health",3],["morale",1]],"mid":[["health",1]],"bad":[["fame",-1]]}]},{"id":"partner_future","special":true,"cat":"特殊事件｜感情未來","title":"伴侶問你：如果全職打拳，我們的生活怎麼辦？","desc":"這不只是支持不支持，而是房租、時間、旅行和未來都會一起改變。","choices":[{"label":"把全職計畫講清楚","sub":"讓對方參與決定","rate":"35% 高波動","mode":"risk","good":[["morale",3],["fame",1]],"mid":[["morale",1]],"bad":[["morale",-3],["stamina",-1]]},{"label":"承諾保留收入來源","sub":"降低風險","rate":"50% 標準","mode":"normal","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["morale",-1]]},{"label":"堅持拳擊優先","sub":"不想再拖","rate":"70% 穩定","mode":"safe","good":[["stamina",1],["morale",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]}],"pro1":[{"id":"opponent_change","special":false,"cat":"職業事件｜臨時換人","title":"比賽前十天，對手突然換了","desc":"新對手風格完全不同，影片也很少。你第一次感受到職業拳擊的混亂不只發生在擂台。","choices":[{"label":"完全改戰術","sub":"快速重做準備","rate":"35% 高回報","mode":"risk","good":[["technique",2],["fame",1]],"mid":[["stamina",1]],"bad":[["health",-3],["morale",-2]]},{"label":"只調整關鍵細節","sub":"保留原本節奏","rate":"50% 標準","mode":"normal","good":[["technique",1],["stamina",1]],"mid":[["technique",1]],"bad":[["morale",-1]]},{"label":"照原計畫打","sub":"相信自己的基本功","rate":"70% 安全","mode":"safe","good":[["health",1],["morale",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"cheap_hotel","special":false,"cat":"職業事件｜賽事生活","title":"主辦安排的旅館比想像中糟","desc":"隔音差、床很硬、附近也沒什麼適合的食物。這場比賽還沒開始，恢復就先出問題。","choices":[{"label":"自己花錢換旅館","sub":"花錢買睡眠","rate":"35% 高風險","mode":"risk","good":[["stamina",2],["chin",1]],"mid":[["stamina",1]],"bad":[["health",-5],["morale",-2]]},{"label":"想辦法撐兩晚","sub":"控制成本","rate":"50% 標準","mode":"normal","good":[["health",2],["stamina",1]],"mid":[["health",1]],"bad":[["health",-2]]},{"label":"跟主辦強硬反映","sub":"要求改善","rate":"70% 安全","mode":"safe","good":[["health",3],["morale",1]],"mid":[["health",1]],"bad":[["fame",-1]]}]},{"id":"first_interview","special":false,"cat":"職業事件｜媒體","title":"第一次有媒體正式採訪你","desc":"記者不只問拳擊，還問你從台灣出國、高中、大學或工作的故事。你的私人生活開始變成職業的一部分。","choices":[{"label":"把故事完整說出來","sub":"建立個人形象","rate":"35% 高曝光","mode":"risk","good":[["fame",4],["income",1200]],"mid":[["fame",2]],"bad":[["morale",-3],["fame",-1]]},{"label":"只談拳擊","sub":"控制私人資訊","rate":"50% 標準","mode":"normal","good":[["fame",2],["income",500]],"mid":[["fame",1]],"bad":[["morale",-1]]},{"label":"簡短回答","sub":"不想被媒體帶節奏","rate":"70% 低調","mode":"safe","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"manager_fee","special":true,"cat":"特殊事件｜經理","title":"經理提出新的抽成比例","desc":"他說能幫你拿到更好的比賽，但抽成也要提高。你第一次真正碰到拳擊生意。","choices":[{"label":"接受條件","sub":"換取更多安排","rate":"35% 高回報","mode":"risk","good":[["income",2200],["fame",3]],"mid":[["income",700]],"bad":[["morale",-2],["income",-500]]},{"label":"談低一點比例","sub":"試著平衡","rate":"50% 標準","mode":"normal","good":[["income",1200],["morale",2]],"mid":[["income",500]],"bad":[["morale",-1]]},{"label":"拒絕","sub":"自己找機會","rate":"70% 穩定","mode":"safe","good":[["technique",1],["morale",1]],"mid":[["morale",1]],"bad":[["income",-200]]}]}],"regional":[{"id":"visa_problem","special":false,"cat":"職業事件｜文件","title":"海外比賽的簽證文件突然出問題","desc":"機票已經買了，訓練營也快結束，現在只差一張文件。這是最讓人無力的那種問題。","choices":[{"label":"花錢找專人處理","sub":"用成本換速度","rate":"35% 高回報","mode":"risk","good":[["income",2200],["fame",3]],"mid":[["income",700]],"bad":[["morale",-2],["income",-500]]},{"label":"自己跑流程","sub":"省錢但耗時間","rate":"50% 標準","mode":"normal","good":[["income",1200],["morale",2]],"mid":[["income",500]],"bad":[["morale",-1]]},{"label":"放棄這場","sub":"不要硬冒風險","rate":"70% 穩定","mode":"safe","good":[["technique",1],["morale",1]],"mid":[["morale",1]],"bad":[["income",-200]]}]},{"id":"belt_fee","special":false,"cat":"職業事件｜腰帶費用","title":"一場區域腰帶戰需要額外支付不少認證費","desc":"贏了有頭銜，但這筆錢對現在的你並不輕。團隊開始計算這場比賽值不值得。","choices":[{"label":"自己補一部分","sub":"把頭銜當投資","rate":"35% 高回報","mode":"risk","good":[["income",1600],["fame",2]],"mid":[["income",500]],"bad":[["income",-600],["morale",-2]]},{"label":"找贊助商分攤","sub":"把成本轉成曝光","rate":"50% 標準","mode":"normal","good":[["income",900],["morale",1]],"mid":[["income",400]],"bad":[["morale",-1]]},{"label":"先不打腰帶","sub":"把錢留給訓練營","rate":"70% 穩定","mode":"safe","good":[["morale",1],["health",1]],"mid":[["morale",1]],"bad":[["income",-200]]}]},{"id":"trainer_tension","special":false,"cat":"職業事件｜團隊","title":"體能教練和拳擊教練對課表吵起來","desc":"一個要你衝體能，一個要你減量。兩邊都說自己是為你好，你卻只剩一個身體。","choices":[{"label":"自己決定課表","sub":"承擔責任","rate":"35% 高風險","mode":"risk","good":[["morale",2],["fame",1]],"mid":[["morale",-1]],"bad":[["morale",-3],["fame",-1]]},{"label":"讓主教練拍板","sub":"統一指揮","rate":"50% 標準","mode":"normal","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["morale",-1]]},{"label":"請兩人坐下來談","sub":"找折衷","rate":"70% 安全","mode":"safe","good":[["morale",1],["health",1]],"mid":[["morale",1]],"bad":[["morale",-1]]}]},{"id":"relationship_travel","special":true,"cat":"特殊事件｜感情","title":"連續海外比賽讓感情開始變得很遠","desc":"你總是在訓練營、機場或比賽城市。對方開始問：『我們到底什麼時候才像正常情侶？』","choices":[{"label":"安排固定見面時間","sub":"主動維持","rate":"35% 高波動","mode":"risk","good":[["morale",3],["fame",1]],"mid":[["morale",1]],"bad":[["morale",-3],["stamina",-1]]},{"label":"承認拳擊現在優先","sub":"把話說清楚","rate":"50% 標準","mode":"normal","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["morale",-1]]},{"label":"先暫停關係","sub":"不要彼此消耗","rate":"70% 穩定","mode":"safe","good":[["stamina",1],["morale",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]}],"contender":[{"id":"ranking_debate","special":false,"cat":"職業事件｜排名","title":"你明明連勝，排名卻沒有想像中升得快","desc":"社群上有人替你抱不平，也有人說你對手強度不夠。你開始意識到排名不是只看勝負。","choices":[{"label":"公開回應","sub":"強調自己願意打任何人","rate":"35% 高曝光","mode":"risk","good":[["fame",4],["income",1200]],"mid":[["fame",2]],"bad":[["morale",-3],["fame",-1]]},{"label":"讓經理處理","sub":"自己不要下場吵","rate":"50% 標準","mode":"normal","good":[["fame",2],["income",500]],"mid":[["fame",1]],"bad":[["morale",-1]]},{"label":"完全不理","sub":"下一場說話","rate":"70% 低調","mode":"safe","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"podcast","special":false,"cat":"職業事件｜節目","title":"熱門 Podcast 想聊你的海外拳擊人生","desc":"節目不是純體育，主持人一定會問感情、收入、爭議和過去。曝光很大，風險也不小。","choices":[{"label":"完整上節目","sub":"把故事變成品牌","rate":"35% 高曝光","mode":"risk","good":[["fame",4],["income",1200]],"mid":[["fame",2]],"bad":[["morale",-3],["fame",-1]]},{"label":"只談拳擊與訓練","sub":"限制話題","rate":"50% 標準","mode":"normal","good":[["fame",2],["income",500]],"mid":[["fame",1]],"bad":[["morale",-1]]},{"label":"婉拒","sub":"不要在大賽前分心","rate":"70% 低調","mode":"safe","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"late_replacement","special":false,"cat":"職業事件｜臨時對手","title":"主賽前一週，原對手受傷退出","desc":"主辦找來一個風格完全不同、但排名差不多的替補。你要不要照打？","choices":[{"label":"照打不退","sub":"機會比完美準備重要","rate":"35% 高回報","mode":"risk","good":[["income",2200],["fame",3]],"mid":[["income",700]],"bad":[["morale",-2],["income",-500]]},{"label":"要求重新談酬勞","sub":"風險要有價格","rate":"50% 標準","mode":"normal","good":[["income",1200],["morale",2]],"mid":[["income",500]],"bad":[["morale",-1]]},{"label":"拒絕替補","sub":"等原本規劃的比賽","rate":"70% 穩定","mode":"safe","good":[["technique",1],["morale",1]],"mid":[["morale",1]],"bad":[["income",-200]]}]},{"id":"hand_pain","special":true,"cat":"特殊事件｜傷病","title":"慣用手開始出現持續疼痛","desc":"不是完全不能打，但每天打靶都更痛一點。距離大賽還有三週。","choices":[{"label":"照常打實戰","sub":"不想改變備戰","rate":"35% 高風險","mode":"risk","good":[["stamina",2],["chin",1]],"mid":[["stamina",1]],"bad":[["health",-5],["morale",-2]]},{"label":"減少重擊量","sub":"維持技術與體能","rate":"50% 標準","mode":"normal","good":[["health",2],["stamina",1]],"mid":[["health",1]],"bad":[["health",-2]]},{"label":"停打做檢查","sub":"先確定不是大傷","rate":"70% 安全","mode":"safe","good":[["health",3],["morale",1]],"mid":[["health",1]],"bad":[["fame",-1]]}]}],"prime":[{"id":"world_offer","special":true,"cat":"特殊事件｜世界冠軍機會","title":"世界冠軍戰的電話終於打來了","desc":"時間很近、客場作戰、條件不完美，但這可能就是整個生涯等的那一次。","choices":[{"label":"直接接受","sub":"機會來了就上","rate":"35% 高回報","mode":"risk","good":[["income",2200],["fame",3]],"mid":[["income",700]],"bad":[["morale",-2],["income",-500]]},{"label":"要求更完整訓練期","sub":"用談判換準備","rate":"50% 標準","mode":"normal","good":[["income",1200],["morale",2]],"mid":[["income",500]],"bad":[["morale",-1]]},{"label":"先不接","sub":"等更好的條件","rate":"70% 穩定","mode":"safe","good":[["technique",1],["morale",1]],"mid":[["morale",1]],"bad":[["income",-200]]}]},{"id":"big_endorsement","special":false,"cat":"職業事件｜大型代言","title":"國際品牌提出一份你從沒見過的代言金額","desc":"合約要求大量拍攝與公開活動，剛好撞到訓練營。錢第一次大到真的能改變生活。","choices":[{"label":"把代言接滿","sub":"利用巔峰期最大化收入","rate":"35% 高曝光","mode":"risk","good":[["fame",4],["income",1200]],"mid":[["fame",2]],"bad":[["morale",-3],["fame",-1]]},{"label":"只接核心拍攝","sub":"保留拳擊優先","rate":"50% 標準","mode":"normal","good":[["fame",2],["income",500]],"mid":[["fame",1]],"bad":[["morale",-1]]},{"label":"拒絕","sub":"冠軍比錢重要","rate":"70% 低調","mode":"safe","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"trainer_split","special":false,"cat":"職業事件｜團隊裂痕","title":"陪你多年的教練和經理徹底鬧翻","desc":"兩個人都說對方正在拖累你的生涯。你必須選邊，或者想辦法讓團隊不要散掉。","choices":[{"label":"站在教練這邊","sub":"拳擊技術優先","rate":"35% 高風險","mode":"risk","good":[["morale",2],["fame",1]],"mid":[["morale",-1]],"bad":[["morale",-3],["fame",-1]]},{"label":"站在經理這邊","sub":"商業與賽程優先","rate":"50% 標準","mode":"normal","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["morale",-1]]},{"label":"逼兩邊先合作到比賽後","sub":"暫時壓住衝突","rate":"70% 安全","mode":"safe","good":[["morale",1],["health",1]],"mid":[["morale",1]],"bad":[["morale",-1]]}]},{"id":"family_time","special":false,"cat":"職業事件｜家庭","title":"家人希望你回台灣多待一點","desc":"你已經很多年把比賽放在所有事情前面。這次沒有危機，只是有人真的想見你。","choices":[{"label":"排出完整假期","sub":"把家人放進生涯","rate":"35% 高波動","mode":"risk","good":[["morale",3],["fame",1]],"mid":[["morale",1]],"bad":[["morale",-3],["stamina",-1]]},{"label":"回去幾天就走","sub":"兩邊兼顧","rate":"50% 標準","mode":"normal","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["morale",-1]]},{"label":"等比賽後再說","sub":"巔峰期不能停","rate":"70% 穩定","mode":"safe","good":[["stamina",1],["morale",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]}],"decline":[{"id":"young_challenger","special":true,"cat":"特殊事件｜世代交替","title":"一個比你小十歲的拳手公開點名你","desc":"他說你已經老了，現在只是佔著排名。媒體很興奮，因為這就是最容易炒熱的故事。","choices":[{"label":"直接回嗆並接戰","sub":"用一場比賽證明","rate":"35% 高曝光","mode":"risk","good":[["fame",4],["income",1200]],"mid":[["fame",2]],"bad":[["morale",-3],["fame",-1]]},{"label":"冷靜回應","sub":"不被年輕人帶節奏","rate":"50% 標準","mode":"normal","good":[["fame",2],["income",500]],"mid":[["fame",1]],"bad":[["morale",-1]]},{"label":"完全不理","sub":"只打自己想打的比賽","rate":"70% 低調","mode":"safe","good":[["morale",2],["technique",1]],"mid":[["morale",1]],"bad":[["fame",-1]]}]},{"id":"chronic_injury","special":false,"cat":"職業事件｜老傷","title":"以前的小傷現在每次訓練都會回來","desc":"身體不再像二十歲時修一下就好。你開始需要真的安排恢復，而不是靠意志。","choices":[{"label":"照舊高強度","sub":"不想承認自己老了","rate":"35% 高風險","mode":"risk","good":[["stamina",2],["chin",1]],"mid":[["stamina",1]],"bad":[["health",-5],["morale",-2]]},{"label":"增加恢復日","sub":"重新調整課表","rate":"50% 標準","mode":"normal","good":[["health",2],["stamina",1]],"mid":[["health",1]],"bad":[["health",-2]]},{"label":"完整做醫療檢查","sub":"把長期健康放前面","rate":"70% 安全","mode":"safe","good":[["health",3],["morale",1]],"mid":[["health",1]],"bad":[["fame",-1]]}]},{"id":"coaching_offer","special":false,"cat":"職業事件｜下一個角色","title":"拳館問你願不願意開始帶年輕拳手","desc":"這不是要你立刻退休，而是第一次有人把你當成『前輩』而不是單純的拳手。","choices":[{"label":"開始固定帶課","sub":"為退休後鋪路","rate":"35% 高回報","mode":"risk","good":[["income",2200],["fame",3]],"mid":[["income",700]],"bad":[["morale",-2],["income",-500]]},{"label":"偶爾幫忙","sub":"還是以自己比賽為主","rate":"50% 標準","mode":"normal","good":[["income",1200],["morale",2]],"mid":[["income",500]],"bad":[["morale",-1]]},{"label":"先拒絕","sub":"我還是拳手","rate":"70% 穩定","mode":"safe","good":[["technique",1],["morale",1]],"mid":[["morale",1]],"bad":[["income",-200]]}]},{"id":"last_payday","special":false,"cat":"職業事件｜高額酬勞","title":"主辦提出一場酬勞很高、但對手很年輕的比賽","desc":"這筆錢可能是生涯最後的大收入，但你知道風險也比一般比賽高。","choices":[{"label":"接下高額比賽","sub":"最後再拼一次","rate":"35% 高回報","mode":"risk","good":[["income",2200],["fame",3]],"mid":[["income",700]],"bad":[["morale",-2],["income",-500]]},{"label":"要求更好條件","sub":"把風險算進價格","rate":"50% 標準","mode":"normal","good":[["income",1200],["morale",2]],"mid":[["income",500]],"bad":[["morale",-1]]},{"label":"拒絕","sub":"不要用健康換錢","rate":"70% 穩定","mode":"safe","good":[["technique",1],["morale",1]],"mid":[["morale",1]],"bad":[["income",-200]]}]}]};
+Object.entries(EXTRA_PHASE_EVENTS).forEach(([phaseId,items])=>{
+  if(!PHASE_EVENTS[phaseId]) PHASE_EVENTS[phaseId]=[];
+  PHASE_EVENTS[phaseId].push(...items);
+});
+
 let G=null;
 const rnd=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
 const pick=a=>a[rnd(0,a.length-1)];
@@ -295,7 +350,7 @@ function apply(k,v){
 function spendPoint(k){const c=statCost(k);if(G.skillPoints<c||G.stats[k]>=95)return;G.skillPoints-=c;G.stats[k]++;log(`分配能力點：${NAMES[k]} +1（花費 ${c} 點）。`);save();render()}
 function createGame(){
  const country=document.getElementById("country").value;
- G={version:24,name:document.getElementById("name").value.trim()||"李逍遙",style:document.getElementById("style").value,country,base:COUNTRIES[country].base,
+ G={version:26,name:document.getElementById("name").value.trim()||"李逍遙",style:document.getElementById("style").value,country,base:COUNTRIES[country].base,
     lifePath:null,phaseIndex:0,turnInPhase:0,age:16,year:2026,health:100,morale:72,fame:3,income:0,skillPoints:3,
     stats:{power:rnd(43,49),speed:rnd(43,49),stamina:rnd(43,49),defense:rnd(42,48),chin:rnd(44,50),technique:rnd(43,49)},
     amateur:{w:0,l:0},pro:{w:0,l:0,d:0,ko:0},current:null,result:null,stageStory:false,logs:[],lastEvent:null,usedSpecial:{}};
@@ -312,21 +367,31 @@ function forcedSpecial(){
  const id=phase().id;
  const specials=(PHASE_EVENTS[id]||[]).filter(e=>e.special&&!G.usedSpecial[e.id]);
  if(!specials.length)return null;
- if(G.turnInPhase===2 || G.turnInPhase===3)return specials[0];
+ // 五回合中第 2、4 回合優先出現階段限定特殊事件；每階段最多可遇到兩個。
+ if(G.turnInPhase===1 || G.turnInPhase===3) return pick(specials);
  return null;
 }
 function drawEvent(){
  if(G.current||G.result)return;
+ if(!Array.isArray(G.recentEvents))G.recentEvents=[];
  if(G.stageStory){G.current=buildStageStory();save();render();return;}
  const special=forcedSpecial();
  let ev;
- if(special){ev=special;G.usedSpecial[ev.id]=true;}
- else{
-   let pool=eventPool().filter(e=>!e.special && e.id!==G.lastEvent);
+ if(special){
+   ev=special;
+   G.usedSpecial[ev.id]=true;
+ }else{
+   const recent=new Set(G.recentEvents.slice(-3));
+   let pool=eventPool().filter(e=>!e.special && !recent.has(e.id));
+   if(!pool.length)pool=eventPool().filter(e=>!e.special && e.id!==G.lastEvent);
    if(!pool.length)pool=eventPool().filter(e=>!e.special);
    ev=pick(pool);
  }
- G.current=JSON.parse(JSON.stringify(ev));G.lastEvent=ev.id;save();render();
+ G.current=JSON.parse(JSON.stringify(ev));
+ G.lastEvent=ev.id;
+ G.recentEvents.push(ev.id);
+ G.recentEvents=G.recentEvents.slice(-5);
+ save();render();
 }
 function buildStageStory(){
  const p=phase();
@@ -408,20 +473,284 @@ function resetGame(){if(confirm("確定重開人生嗎？")){localStorage.remove
 function startScreen(){return `<div class="start"><h1>Boxing <em>Life</em></h1><div class="startIntro">高一就開始海外留學。高一、高二、高三會照左側年表累積；高中畢業後，你可以選擇 <b style="color:var(--gold)">進大學邊讀邊練</b> 或 <b style="color:var(--gold)">工作邊練</b>。兩條人生線會出現不同事件，之後再匯入職業拳擊。</div><div class="startGrid"><div class="panel"><label>拳手名字</label><input id="name" value="李逍遙"><div class="row2" style="margin-top:12px"><div><label>拳風</label><select id="style"><option value="pressure">壓迫型</option><option value="boxer">技巧型</option><option value="puncher">重砲型</option></select></div><div><label>高一留學地</label><select id="country"><option value="usa">🇺🇸 美國</option><option value="japan">🇯🇵 日本</option><option value="philippines">🇵🇭 菲律賓</option></select></div></div></div><div class="panel"><label>人生事件會跟著階段改變</label><div style="color:#c6d4cc;line-height:1.9;font-size:15px">• 高中：想家、段考、談戀愛、分手<br>• 大學：同學吵架、室友、派對、實習、網紅偷拍、大學畢業<br>• 工作：加班、同事衝突、升職、收入、網紅偷拍<br>• 職業：經理、贊助、戀情曝光、媒體與排名<br>• 每階段約 5 回合後進重大劇情</div></div></div><button class="startBtn" onclick="createGame()">高一，出發 ▶</button></div>`}
 function rightAttrs(){return `<div class="pointsBox"><div class="pointsHead"><span>可分配能力點</span><b>${G.skillPoints}</b></div></div>${SKILLS.map(k=>{const c=statCost(k);return `<div class="attr"><div class="attrTop"><div class="attrName">${NAMES[k]}</div><div class="attrBar"><i style="width:${G.stats[k]}%"></i></div><div class="attrValue">${G.stats[k]}<span>/95</span></div><button class="plus" ${G.skillPoints<c||G.stats[k]>=95?"disabled":""} onclick="spendPoint('${k}')">＋</button></div><div class="cost">升 1 點花費 ${c} 能力點</div></div>`}).join("")}`}
 function render(){
- const app=document.getElementById("app");if(!G){G=load();if(!G){app.innerHTML=startScreen();return;}}
+ const app=document.getElementById("app");if(!G){G=load();if(!G){app.innerHTML=startScreen();return;}}if(!G.usedSpecial)G.usedSpecial={};if(!Array.isArray(G.recentEvents))G.recentEvents=[];
  const p=phase(),country=COUNTRIES[G.country],mode=G.current?"event":G.result?"result":"idle";
  const choices=mode==="event"?`<div class="sidePanel"><div class="choiceTitle">${G.current.cat}｜你要怎麼做？</div>${G.current.choices.map((c,i)=>`<button class="choice" onclick="choose(${i})"><b>${c.label}</b><span>${c.sub}</span><em>${c.rate}</em></button>`).join("")}</div>`:"";
  const res=mode==="result"?`<div class="sidePanel"><div class="rightTitle">RESULT</div><div class="die">${G.result.roll}</div><div class="resultText">${G.result.text}</div><div class="deltaWrap">${G.result.deltas.map(x=>`<span class="delta ${x.includes("能力點")?"point":x.includes("+")?"good":x.includes("-")?"bad":""}">${esc(x)}</span>`).join("")}</div></div>`:"";
  const nextSeq=getSequence();const nextName=nextSeq[Math.min(G.phaseIndex+1,nextSeq.length-1)]?.name||"下一階段";
- const action=mode==="idle"?`<button onclick="drawEvent()">${G.stageStory?`進入重大劇情：${p.story}`:`開始第 ${G.turnInPhase+1} / ${p.turns} 回合`}<small>${G.stageStory?"完成後進下一個人生階段":"事件內容會依高中／大學／工作／職業改變"}</small></button>`:mode==="result"?`<button onclick="continueAfterResult()">${G.result.stageDone?"進入下一階段":"繼續"}<small>${G.result.stageDone?`下一站：${nextName}`:"回到下一個事件回合"}</small></button>`:"";
+ const action=mode==="idle"?`<button onclick="drawEvent()">${G.stageStory?`進入重大劇情：${p.story}`:`開始第 ${G.turnInPhase+1} / ${p.turns} 回合`}<small>${G.stageStory?"完成後進下一個人生階段":"每個人生階段都有不同事件池，且會避開最近抽過的內容"}</small></button>`:mode==="result"?`<button onclick="continueAfterResult()">${G.result.stageDone?"進入下一階段":"繼續"}<small>${G.result.stageDone?`下一站：${nextName}`:"回到下一個事件回合"}</small></button>`:"";
  const center=mode==="event"?`<div class="card ${G.current.story||G.current.special?"major":""}"><div class="kicker ${G.current.story||G.current.special?"gold":""}">■ ${G.current.cat}</div><h2>${G.current.title}</h2><p>${G.current.desc}</p></div>`:mode==="result"?`<div class="card ${G.result.stageDone?"major":""}"><div class="kicker ${G.result.stageDone?"gold":""}">■ ${G.result.stageDone?"重大劇情結果":"事件結果"}</div><h2>${G.result.title}</h2><p>${G.result.text}</p><div class="deltaWrap">${G.result.deltas.map(x=>`<span class="delta ${x.includes("能力點")?"point":x.includes("+")?"good":x.includes("-")?"bad":""}">${esc(x)}</span>`).join("")}</div></div>`:`<div class="card"><div class="kicker">■ ${p.name}</div><h2>${G.stageStory?`5 回合完成：${p.story}`:`第 ${G.turnInPhase+1} 回合準備開始`}</h2><p>${G.stageStory?`這個人生階段的日常事件已完成，現在進入重大劇情。`:p.desc}</p><div class="progressBox"><div class="progressText">本階段進度 <b>${G.turnInPhase} / ${p.turns}</b></div><div class="turnDots">${Array.from({length:p.turns},(_,i)=>`<i class="${i<G.turnInPhase?"done":""}"></i>`).join("")}</div></div></div>`;
  app.innerHTML=`<div class="shell">
- <aside class="left"><div class="brand">Boxing <em>Life</em></div><div class="brandSub">拳 擊 人 生 模 擬 器</div><div class="school">台灣高中・拳擊部<small>${country.route}｜${country.name}・${G.base}</small></div><div class="timeline">${timelineHTML()}</div><div class="menu"><div class="active">▣ 生涯事件</div><div>◆ 能力點</div><div>♜ 劇情比賽</div><div>▦ 人生年表</div><div>★ 技能</div><div>▥ 數據</div><div>◉ 成就</div><div onclick="save()">▣ 儲存</div><div onclick="resetGame()">⚙ 重開人生</div></div><div class="version"><b>v2.4.0</b><br>${G.lifePath==="college"?"大學人生線":G.lifePath==="work"?"工作人生線":"高中人生線"}<br>5 回合推進・特殊事件分階段</div></aside>
+ <aside class="left"><div class="brand">Boxing <em>Life</em></div><div class="brandSub">拳 擊 人 生 模 擬 器</div><div class="school">台灣高中・拳擊部<small>${country.route}｜${country.name}・${G.base}</small></div><div class="timeline">${timelineHTML()}</div><div class="menu"><div class="active">▣ 生涯事件</div><div>◆ 能力點</div><div>♜ 劇情比賽</div><div>▦ 人生年表</div><div>★ 技能</div><div>▥ 數據</div><div>◉ 成就</div><div onclick="save()">▣ 儲存</div><div onclick="resetGame()">⚙ 重開人生</div></div><div class="version"><b>v2.6.0</b><br>${G.lifePath==="college"?"大學人生線":G.lifePath==="work"?"工作人生線":"高中人生線"}<br>5 回合推進・大量階段限定事件</div></aside>
  <main class="center"><header class="header"><div class="profile"><div class="no">1</div><div class="name"><b>${esc(G.name)}</b><div class="tags"><span class="tag">${p.identity}</span><span class="tag gold">${STYLES[G.style]}</span></div></div><div class="affil">所屬地區<b>${country.name}・${G.base}</b></div></div><div class="metrics"><div class="metric"><b>${G.age}</b><span>年齡</span></div><div class="metric"><b>${G.year}</b><span>年份</span></div><div class="metric"><b>${ovr()}</b><span>綜合</span></div><div class="metric"><b>${G.skillPoints}</b><span>能力點</span></div><div class="metric"><b>${G.pro.w}-${G.pro.l}</b><span>職業戰績</span></div></div></header><div class="content"><div class="card"><div class="kicker">■ 人生主線</div><p>左側會永久保留走過的年級／人生階段。高中畢業後會真正分成 <b>大學線</b> 或 <b>工作線</b>；每條線都有自己的特殊事件，再於 23 歲左右匯入職業拳擊。</p></div><div class="date">${G.year} 年 ・ ${G.age} 歲 ・ ${p.name}</div>${center}<div class="card"><div class="kicker">■ 最近紀錄</div>${G.logs.slice(0,7).map(l=>`<div class="log"><small>${l.when}</small><div>${esc(l.text)}</div></div>`).join("")}</div></div></main>
- <aside class="right"><div class="rhythm"><div class="rightTitle">LIFE RHYTHM</div><div class="rhythmRow ${!G.stageStory&&!G.current&&!G.result?"on":""}"><i></i>${p.name}：${G.turnInPhase}/${p.turns} 回合</div><div class="rhythmRow ${G.current?"on":""}"><i></i>本階段專屬／特殊事件</div><div class="rhythmRow ${G.result?"on":""}"><i></i>命運骰結算</div><div class="rhythmRow ${G.stageStory?"on":""}"><i></i>第 5 回合後：${p.story}</div></div>${rightAttrs()}${choices}${res}<div class="action">${action}</div></aside>
+ <aside class="right"><div class="rhythm"><div class="rightTitle">LIFE RHYTHM</div><div class="rhythmRow ${!G.stageStory&&!G.current&&!G.result?"on":""}"><i></i>${p.name}：${G.turnInPhase}/${p.turns} 回合</div><div class="rhythmRow ${G.current?"on":""}"><i></i>階段專屬事件／特殊事件</div><div class="rhythmRow ${G.result?"on":""}"><i></i>命運骰結算</div><div class="rhythmRow ${G.stageStory?"on":""}"><i></i>第 5 回合後：${p.story}</div></div>${rightAttrs()}${choices}${res}<div class="action">${action}</div></aside>
  </div>`;
 }
 render();
 </script>
+
+<script id="v26-career-js">
+function ensureCareerData(){
+  if(!G)return;
+  if(!Array.isArray(G.careerHistory))G.careerHistory=[];
+  if(!G.careerStats)G.careerStats={peakOvr:ovr(),peakFame:G.fame||0,totalEvents:0,specialEvents:0,fights:0};
+  if(G.retired===undefined)G.retired=false;
+  if(!G.retireReason)G.retireReason="";
+}
+function updateCareerPeaks(){
+  ensureCareerData();
+  G.careerStats.peakOvr=Math.max(G.careerStats.peakOvr||0,ovr());
+  G.careerStats.peakFame=Math.max(G.careerStats.peakFame||0,G.fame||0);
+}
+function addCareerRecord(title,text,type="life"){
+  ensureCareerData();
+  const p=phase();
+  const item={
+    year:G.year,age:G.age,phase:p.name,title,text,type,
+    route:G.lifePath||"highschool"
+  };
+  G.careerHistory.unshift(item);
+  G.careerHistory=G.careerHistory.slice(0,80);
+  updateCareerPeaks();
+}
+function routeLabel(){
+  if(G.lifePath==="college")return "高中留學 → 大學邊讀邊練 → 職業拳擊";
+  if(G.lifePath==="work")return "高中留學 → 工作邊練 → 職業拳擊";
+  return "海外高中拳擊";
+}
+function proRecord(){return `${G.pro.w}-${G.pro.l}-${G.pro.d||0} (${G.pro.ko||0}KO)`}
+function amateurRecord(){return `${G.amateur.w}-${G.amateur.l}`}
+function careerRecordModal(){
+  ensureCareerData();
+  let modal=document.getElementById("careerModal");
+  if(modal)modal.remove();
+  const list=G.careerHistory.length?G.careerHistory.map(x=>`
+    <div class="historyItem">
+      <div class="historyWhen"><b>${x.year}</b>${x.age} 歲<br>${x.phase}</div>
+      <div class="historyText"><strong>${esc(x.title)}</strong>${esc(x.text)}</div>
+    </div>`).join(""):`<div class="historyItem"><div class="historyText">目前還沒有重大生涯紀錄。</div></div>`;
+  document.body.insertAdjacentHTML("beforeend",`
+   <div id="careerModal" class="careerModal">
+    <div class="careerSheet">
+      <div class="careerTop">
+        <div><h2>${esc(G.name)} · 生涯紀錄</h2><p>${routeLabel()}｜${COUNTRIES[G.country].name}・${G.base}</p></div>
+        <button class="closeX" onclick="document.getElementById('careerModal').remove()">關閉</button>
+      </div>
+      <div class="careerSummary">
+        <div class="careerMetric"><b>${amateurRecord()}</b><span>業餘戰績</span></div>
+        <div class="careerMetric"><b>${proRecord()}</b><span>職業戰績</span></div>
+        <div class="careerMetric"><b>${G.careerStats.peakOvr}</b><span>最高 OVR</span></div>
+        <div class="careerMetric"><b>${money(G.income)}</b><span>生涯收入</span></div>
+      </div>
+      <div class="historyList">${list}</div>
+      <div class="shareArea">
+        <div class="shareButtons">
+          <button onclick="buildShareCard()">產生生涯分享圖</button>
+          ${G.retired?`<button onclick="downloadShareCard()">下載 PNG</button>`:""}
+        </div>
+        <div id="sharePreview" class="sharePreview" style="display:none"></div>
+      </div>
+    </div>
+   </div>`);
+}
+function getShareHighlights(){
+  ensureCareerData();
+  return G.careerHistory.slice(0,7).reverse();
+}
+function buildShareCard(){
+  ensureCareerData();
+  const preview=document.getElementById("sharePreview");
+  if(!preview)return;
+  preview.style.display="block";
+  preview.innerHTML="";
+  const canvas=document.createElement("canvas");
+  canvas.width=1200;canvas.height=1500;
+  const ctx=canvas.getContext("2d");
+  const bg=ctx.createLinearGradient(0,0,0,1500);
+  bg.addColorStop(0,"#0c3024");bg.addColorStop(1,"#061912");
+  ctx.fillStyle=bg;ctx.fillRect(0,0,1200,1500);
+
+  // decorative lines
+  ctx.strokeStyle="#365f4d";ctx.lineWidth=2;
+  for(let y=80;y<1480;y+=120){ctx.globalAlpha=.13;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(1200,y);ctx.stroke();}
+  ctx.globalAlpha=1;
+
+  ctx.fillStyle="#f1c553";ctx.font="900 44px sans-serif";
+  ctx.fillText("BOXING LIFE · CAREER RECORD",70,85);
+
+  ctx.fillStyle="#eef0e5";ctx.font="900 76px sans-serif";
+  ctx.fillText(G.name,70,185);
+  ctx.font="700 30px sans-serif";ctx.fillStyle="#a6b8ad";
+  ctx.fillText(`${routeLabel()} · ${COUNTRIES[G.country].name} ${G.base}`,70,235);
+
+  // summary cards
+  const cards=[
+    ["AMATEUR",amateurRecord()],["PRO",proRecord()],["PEAK OVR",String(G.careerStats.peakOvr)],
+    ["FAME",String(G.careerStats.peakFame)],["INCOME",money(G.income)],["AGE",`${G.age} 歲`]
+  ];
+  let cx=70,cy=290;
+  cards.forEach((c,i)=>{
+    const col=i%3,row=Math.floor(i/3),x=70+col*355,y=290+row*145;
+    ctx.fillStyle="#143a2d";ctx.strokeStyle="#345d4b";ctx.lineWidth=2;
+    roundRect(ctx,x,y,320,115,18,true,true);
+    ctx.fillStyle="#81998d";ctx.font="700 20px sans-serif";ctx.fillText(c[0],x+20,y+34);
+    ctx.fillStyle="#f1c553";ctx.font="900 35px sans-serif";ctx.fillText(c[1],x+20,y+82);
+  });
+
+  ctx.fillStyle="#eef0e5";ctx.font="900 34px sans-serif";ctx.fillText("生涯重要經歷",70,610);
+  ctx.strokeStyle="#315b49";ctx.beginPath();ctx.moveTo(70,630);ctx.lineTo(1130,630);ctx.stroke();
+
+  let y=685;
+  const hs=getShareHighlights();
+  if(!hs.length){
+    ctx.fillStyle="#a6b8ad";ctx.font="26px sans-serif";ctx.fillText("尚無生涯紀錄",90,y);
+  }else{
+    hs.forEach((h,idx)=>{
+      ctx.fillStyle="#f1c553";ctx.font="800 22px sans-serif";
+      ctx.fillText(`${h.year} · ${h.age}歲`,80,y);
+      ctx.fillStyle="#eef0e5";ctx.font="800 27px sans-serif";
+      ctx.fillText(trimText(ctx,h.title,780),280,y);
+      ctx.fillStyle="#9fb2a7";ctx.font="21px sans-serif";
+      wrapCanvasText(ctx,h.text,280,y+34,800,28,2);
+      y+=112;
+    });
+  }
+
+  ctx.fillStyle="#80998c";ctx.font="700 21px sans-serif";
+  ctx.fillText("從高一留學開始，每一次選擇都留下紀錄。",70,1430);
+  ctx.fillStyle="#f1c553";ctx.font="900 23px sans-serif";
+  ctx.fillText(G.retired?"CAREER COMPLETE":"CAREER IN PROGRESS",900,1430);
+
+  canvas.id="careerShareCanvas";
+  preview.appendChild(canvas);
+}
+function roundRect(ctx,x,y,w,h,r,fill,stroke){
+  ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill)ctx.fill();if(stroke)ctx.stroke();
+}
+function trimText(ctx,text,maxWidth){
+  let s=String(text);while(ctx.measureText(s).width>maxWidth&&s.length>2)s=s.slice(0,-2)+"…";return s;
+}
+function wrapCanvasText(ctx,text,x,y,maxWidth,lineHeight,maxLines){
+  const chars=String(text).split("");let line="",lines=[];
+  for(const ch of chars){
+    const test=line+ch;
+    if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=ch;if(lines.length>=maxLines)break;}
+    else line=test;
+  }
+  if(lines.length<maxLines&&line)lines.push(line);
+  lines.forEach((l,i)=>ctx.fillText(l,x,y+i*lineHeight));
+}
+function downloadShareCard(){
+  let c=document.getElementById("careerShareCanvas");
+  if(!c){buildShareCard();c=document.getElementById("careerShareCanvas")}
+  if(!c)return;
+  const a=document.createElement("a");
+  a.download=`${G.name}-boxing-career.png`;
+  a.href=c.toDataURL("image/png");
+  a.click();
+}
+function retireCareer(reason="完成最後階段，正式引退"){
+  ensureCareerData();
+  G.retired=true;G.retireReason=reason;
+  addCareerRecord("正式引退",reason,"retire");
+  save();render();
+  setTimeout(()=>careerRecordModal(),50);
+}
+function retirementPanel(){
+  if(!G)return "";
+  const seq=getSequence(),last=seq[seq.length-1];
+  if(phase().id!=="decline")return "";
+  if(G.retired)return `<div class="card retireCard"><div class="kicker gold">■ CAREER COMPLETE</div><h2>拳擊生涯已結束</h2><p>${esc(G.retireReason||"你正式結束拳擊生涯。")}</p><button class="retireBtn" onclick="careerRecordModal()">查看生涯紀錄與分享圖</button></div>`;
+  if(G.stageStory && G.turnInPhase>=phase().turns){
+    return `<div class="card retireCard"><div class="kicker gold">■ 生涯最後選擇</div><h2>這一段拳擊人生，走到最後了</h2><p>你可以把最後的大賽當成告別，也可以現在就結束。無論最後戰績如何，所有高中、大學／工作、職業拳擊經歷都會整理成一份生涯紀錄。</p><button class="retireBtn" onclick="retireCareer('在生涯後段完成最後一輪挑戰後正式引退。')">正式引退並結算生涯</button></div>`;
+  }
+  return "";
+}
+
+// wrap logics so important moments enter career history
+const V26_oldCreateGame=createGame;
+createGame=function(){
+  V26_oldCreateGame();
+  ensureCareerData();
+  addCareerRecord("高一海外留學",`${G.name} 從台灣前往 ${COUNTRIES[G.country].name}・${G.base}，開始高中拳擊人生。`,"stage");
+  save();
+};
+
+const V26_oldResolveEvent=resolveEvent;
+resolveEvent=function(ev,ch,roll){
+  V26_oldResolveEvent(ev,ch,roll);
+  ensureCareerData();G.careerStats.totalEvents++;
+  if(ev.special){
+    G.careerStats.specialEvents++;
+    addCareerRecord(ev.title,`選擇「${ch.label}」，命運骰 ${roll}。${G.result.text}`,"special");
+  }
+  updateCareerPeaks();
+  save();
+};
+
+const V26_oldResolveFight=resolveFight;
+resolveFight=function(ev,ch,roll){
+  const beforeA=`${G.amateur.w}-${G.amateur.l}`,beforeP=proRecord();
+  V26_oldResolveFight(ev,ch,roll);
+  ensureCareerData();G.careerStats.fights++;
+  addCareerRecord(ev.title,`${G.result.text}｜業餘 ${amateurRecord()}｜職業 ${proRecord()}`,"fight");
+  updateCareerPeaks();
+  save();
+};
+
+const V26_oldResolveSpecial=resolveSpecial;
+resolveSpecial=function(ev,ch,roll){
+  V26_oldResolveSpecial(ev,ch,roll);
+  addCareerRecord(ev.title,`選擇「${ch.label}」。${G.result.text}`,"choice");
+  updateCareerPeaks();save();
+};
+
+const V26_oldContinue=continueAfterResult;
+continueAfterResult=function(){
+  const wasDone=G.result?.stageDone;
+  const oldPhase=phase()?.name;
+  V26_oldContinue();
+  if(wasDone && !G.retired){
+    addCareerRecord("進入新階段",`結束「${oldPhase}」，進入「${phase().name}」。`,"stage");
+    save();
+  }
+};
+
+// augment main render
+const V26_oldRender=render;
+render=function(){
+  V26_oldRender();
+  if(!G)return;
+  ensureCareerData();updateCareerPeaks();
+
+  // left menu: convert 生涯事件 menu to add clickable 生涯紀錄 item
+  const menus=document.querySelectorAll(".menu div");
+  if(menus.length){
+    let exists=[...menus].some(x=>x.textContent.includes("生涯紀錄"));
+    if(!exists){
+      const anchor=[...menus].find(x=>x.textContent.includes("數據"))||menus[menus.length-1];
+      anchor.insertAdjacentHTML("afterend",`<div class="careerBtn" onclick="careerRecordModal()">▣ 生涯紀錄</div>`);
+    }
+  }
+
+  // insert compact record box in center
+  const content=document.querySelector(".content");
+  if(content && !document.getElementById("careerMini")){
+    const p=document.createElement("div");p.id="careerMini";p.className="card";
+    const last=G.careerHistory[0];
+    p.innerHTML=`<div class="kicker">■ 生涯紀錄</div>
+      <p>業餘 <b>${amateurRecord()}</b>　職業 <b>${proRecord()}</b>　最高 OVR <b>${G.careerStats.peakOvr}</b>　重大紀錄 <b>${G.careerHistory.length}</b> 筆。</p>
+      ${last?`<p style="margin-top:7px;color:#91a69a;font-size:12px">最近：${esc(last.year+" · "+last.title)}</p>`:""}
+      <button class="retireBtn" style="padding:9px;margin-top:9px" onclick="careerRecordModal()">打開完整生涯紀錄</button>`;
+    content.appendChild(p);
+  }
+  const ret=retirementPanel();
+  if(ret && content){
+    const holder=document.createElement("div");
+    holder.innerHTML=ret;content.appendChild(holder.firstElementChild);
+  }
+};
+</script>
+
 </body>
 </html>
