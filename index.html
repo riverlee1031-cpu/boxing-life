@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Boxing Life V39 · 下拉選單＋完整序章版</title>
+<title>Boxing Life V40 · 手機選單修正版</title>
 <style>
 :root{
   --bg:#061911; --bg2:#09251b; --panel:#0f3427; --panel2:#153d2f;
@@ -1240,11 +1240,89 @@ button,input,select{max-width:100%}
 }
 </style>
 
+
+<style id="v40-mobile-menu-fix-css">
+@media(max-width:1100px){
+  .mobileQuickbar{
+    overflow:visible!important;
+    justify-content:flex-end;
+  }
+
+  .mobileQuickbar .mqPhase{
+    flex:1 1 auto;
+    min-width:0!important;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+  }
+
+  /* V39: all actions are now inside one dropdown */
+  .mobileQuickbar > button{
+    display:none!important;
+  }
+
+  .mobileQuickbar .gameMenuSlot{
+    position:relative;
+    flex:0 0 auto;
+    min-width:auto!important;
+    margin:0!important;
+  }
+
+  .mobileQuickbar .gameMenuDropdown{
+    position:relative;
+    width:auto;
+  }
+
+  .mobileQuickbar .gameMenuDropdown > summary{
+    min-height:38px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:7px 11px!important;
+    border-color:#806d2b;
+    color:#f1c553;
+    background:#173729;
+    border-radius:9px;
+    white-space:nowrap;
+    font-size:11px;
+  }
+
+  /* Critical fix: anchor dropdown to its own button, not viewport top */
+  .mobileQuickbar .gameMenuDropBody{
+    position:absolute!important;
+    top:calc(100% + 6px)!important;
+    right:0!important;
+    left:auto!important;
+    width:210px!important;
+    max-width:calc(100vw - 20px);
+    z-index:9999!important;
+  }
+}
+
+@media(max-width:420px){
+  .mobileQuickbar{
+    gap:6px!important;
+    padding-left:8px!important;
+    padding-right:8px!important;
+  }
+  .mobileQuickbar .mqPhase{
+    font-size:9.5px!important;
+  }
+  .mobileQuickbar .gameMenuDropdown > summary{
+    padding:7px 9px!important;
+    font-size:10.5px!important;
+  }
+  .mobileQuickbar .gameMenuDropBody{
+    width:196px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div id="app"></div>
 <script>
-const SAVE_KEY="boxing-life-v39-dropdown-career-full-intro";
+const SAVE_KEY="boxing-life-v40-mobile-menu-fix";
 const COUNTRIES={usa:{name:"美國",base:"Las Vegas",route:"旅美"},japan:{name:"日本",base:"東京",route:"旅日"},philippines:{name:"菲律賓",base:"宿霧",route:"旅菲"}};
 const STYLES={pressure:"壓迫型",boxer:"技巧型",puncher:"重砲型"};
 const SKILLS=["power","speed","stamina","defense","chin","technique"];
@@ -1469,7 +1547,7 @@ function apply(k,v){
 function spendPoint(k){const c=statCost(k);if(G.skillPoints<c||G.stats[k]>=95)return;G.skillPoints-=c;G.stats[k]++;log(`分配能力點：${NAMES[k]} +1（花費 ${c} 點）。`);save();render()}
 function createGame(){
  const country=document.getElementById("country").value;
- G={version:39,name:document.getElementById("name").value.trim()||"李逍遙",style:document.getElementById("style").value,country,base:COUNTRIES[country].base,
+ G={version:40,name:document.getElementById("name").value.trim()||"李逍遙",style:document.getElementById("style").value,country,base:COUNTRIES[country].base,
     lifePath:null,phaseIndex:0,turnInPhase:0,age:16,year:2026,health:100,morale:72,fame:3,income:0,skillPoints:3,
     stats:{power:rnd(43,49),speed:rnd(43,49),stamina:rnd(43,49),defense:rnd(42,48),chin:rnd(44,50),technique:rnd(43,49)},
     amateur:{w:0,l:0},pro:{w:0,l:0,d:0,ko:0},current:null,result:null,stageStory:false,logs:[],lastEvent:null,usedSpecial:{}};
@@ -1618,7 +1696,7 @@ function render(){
  const centerFlow=`<div class="eventFlow">${mode==="event"?choices:""}${mode==="result"?res:""}<div class="action">${action}</div></div>`;
  const center=mode==="event"?`<div class="card ${G.current.story||G.current.special?"major":""}"><div class="kicker ${G.current.story||G.current.special?"gold":""}">■ ${G.current.cat}</div><h2>${G.current.title}</h2><p>${G.current.desc}</p></div>`:mode==="result"?`<div class="card ${G.result.stageDone?"major":""}"><div class="kicker ${G.result.stageDone?"gold":""}">■ ${G.result.stageDone?"重大劇情結果":"事件結果"}</div><h2>${G.result.title}</h2><p>${G.result.text}</p><div class="deltaWrap">${G.result.deltas.map(x=>`<span class="delta ${x.includes("能力點")?"point":x.includes("+")?"good":x.includes("-")?"bad":""}">${esc(x)}</span>`).join("")}</div></div>`:`<div class="card"><div class="kicker">■ ${p.name}</div><h2>${G.stageStory?`4 回合完成：${p.story}`:`第 ${G.turnInPhase+1} 回合準備開始`}</h2><p>${G.stageStory?`這個人生階段的日常事件已完成，現在進入重大劇情。`:p.desc}</p><div class="progressBox"><div class="progressText">本階段進度 <b>${G.turnInPhase} / ${p.turns}</b></div><div class="turnDots">${Array.from({length:p.turns},(_,i)=>`<i class="${i<G.turnInPhase?"done":""}"></i>`).join("")}</div></div></div>`;
  app.innerHTML=`<div class="shell">
- <aside class="left"><div class="brand">Boxing <em>Life</em></div><div class="brandSub">拳 擊 人 生 模 擬 器</div><div class="school">台灣高中・拳擊部<small>${country.route}｜${country.name}・${G.base}</small></div><div class="timeline">${timelineHTML()}</div><div class="menu"><div class="active">▣ 生涯事件</div><div>◆ 能力點</div><div>♜ 劇情比賽</div><div>▦ 人生年表</div><div>★ 技能</div><div>▥ 數據</div><div>◉ 成就</div><div onclick="save()">▣ 儲存</div><div onclick="resetGame()">⚙ 重開人生</div></div><div class="version"><b>v3.9.0</b><br>${G.lifePath==="college"?"大學人生線":G.lifePath==="work"?"工作人生線":"高中人生線"}<br>4 回合推進・大量階段限定事件</div></aside>
+ <aside class="left"><div class="brand">Boxing <em>Life</em></div><div class="brandSub">拳 擊 人 生 模 擬 器</div><div class="school">台灣高中・拳擊部<small>${country.route}｜${country.name}・${G.base}</small></div><div class="timeline">${timelineHTML()}</div><div class="menu"><div class="active">▣ 生涯事件</div><div>◆ 能力點</div><div>♜ 劇情比賽</div><div>▦ 人生年表</div><div>★ 技能</div><div>▥ 數據</div><div>◉ 成就</div><div onclick="save()">▣ 儲存</div><div onclick="resetGame()">⚙ 重開人生</div></div><div class="version"><b>v4.0.0</b><br>${G.lifePath==="college"?"大學人生線":G.lifePath==="work"?"工作人生線":"高中人生線"}<br>4 回合推進・大量階段限定事件</div></aside>
  <main class="center"><header class="header"><div class="profile"><div class="no">1</div><div class="name"><b>${esc(G.name)}</b><div class="tags"><span class="tag">${p.identity}</span><span class="tag gold">${STYLES[G.style]}</span></div></div><div class="affil">所屬地區<b>${country.name}・${G.base}</b></div></div><div class="metrics"><div class="metric"><b>${G.age}</b><span>年齡</span></div><div class="metric"><b>${G.year}</b><span>年份</span></div><div class="metric"><b>${ovr()}</b><span>綜合</span></div><div class="metric"><b>${G.skillPoints}</b><span>能力點</span></div><div class="metric"><b>${G.pro.w}-${G.pro.l}</b><span>職業戰績</span></div></div></header><div class="content"><div class="card"><div class="kicker">■ 人生主線</div><p>左側會永久保留走過的年級／人生階段。高中畢業後會真正分成 <b>大學線</b> 或 <b>工作線</b>；每條線都有自己的特殊事件，再於 23 歲左右匯入職業拳擊。</p></div><div class="date">${G.year} 年 ・ ${G.age} 歲 ・ ${p.name}</div>${center}${centerFlow}<div class="card"><div class="kicker">■ 最近紀錄</div>${G.logs.slice(0,7).map(l=>`<div class="log"><small>${l.when}</small><div>${esc(l.text)}</div></div>`).join("")}</div></div></main>
  <aside class="right"><div class="rhythm"><div class="rightTitle">LIFE RHYTHM</div><div class="rhythmRow ${!G.stageStory&&!G.current&&!G.result?"on":""}"><i></i>${p.name}：${G.turnInPhase}/${p.turns} 回合</div><div class="rhythmRow ${G.current?"on":""}"><i></i>階段專屬事件／特殊事件</div><div class="rhythmRow ${G.result?"on":""}"><i></i>命運骰結算</div><div class="rhythmRow ${G.stageStory?"on":""}"><i></i>第 4 回合後：${p.story}</div></div>${rightAttrs()}</aside>
  </div>`;
@@ -2941,6 +3019,40 @@ window.addEventListener("click",(e)=>{
     if(!d.contains(e.target))d.removeAttribute("open");
   });
 });
+</script>
+
+
+<script id="v40-mobile-menu-fix-js">
+function v40NormalizeMobileMenu(){
+  const q=document.getElementById("mobileQuickbar");
+  if(!q)return;
+
+  // Remove old standalone quickbar buttons such as 儲存 / 生涯紀錄.
+  [...q.children].forEach(el=>{
+    if(el.tagName==="BUTTON") el.remove();
+  });
+
+  // Make sure there is exactly one dropdown menu.
+  const menus=[...q.querySelectorAll(".gameMenuSlot")];
+  if(menus.length===0){
+    q.insertAdjacentHTML("beforeend",v39MenuHtml());
+  }else if(menus.length>1){
+    menus.slice(1).forEach(m=>m.remove());
+  }
+
+  // Always place menu at far right.
+  const slot=q.querySelector(".gameMenuSlot");
+  if(slot && q.lastElementChild!==slot) q.appendChild(slot);
+}
+
+const V40_prevRender=render;
+render=function(){
+  V40_prevRender();
+  requestAnimationFrame(v40NormalizeMobileMenu);
+};
+
+window.addEventListener("resize",()=>requestAnimationFrame(v40NormalizeMobileMenu));
+window.addEventListener("orientationchange",()=>setTimeout(v40NormalizeMobileMenu,120));
 </script>
 
 </body>
