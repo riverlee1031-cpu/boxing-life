@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Boxing Life V40 · 手機選單修正版</title>
+<title>Boxing Life V41 · 生涯結局與球員卡版</title>
 <style>
 :root{
   --bg:#061911; --bg2:#09251b; --panel:#0f3427; --panel2:#153d2f;
@@ -1318,11 +1318,229 @@ button,input,select{max-width:100%}
 }
 </style>
 
+
+<style id="v41-career-system-css">
+/* ===== V41 Career player-card / ability modal ===== */
+.playerCardTop{
+  display:grid;
+  grid-template-columns:minmax(0,1.2fr) minmax(260px,.8fr);
+  gap:18px;
+  margin-bottom:16px;
+}
+.playerIdentity{
+  padding:16px;
+  border:1px solid #385b4e;
+  border-radius:13px;
+  background:linear-gradient(180deg,#12382c,#0d2b22);
+}
+.playerIdentity .pcEyebrow{
+  color:#f1c553;
+  font-size:11px;
+  font-weight:950;
+  letter-spacing:.14em;
+}
+.playerIdentity h2{
+  margin:8px 0 4px;
+  font-size:31px;
+}
+.playerIdentity .pcSub{
+  color:#9eb2a7;
+  font-size:12px;
+  line-height:1.6;
+}
+.pcStatus{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:10px;
+}
+.pcBadge{
+  display:inline-flex;
+  padding:5px 8px;
+  border:1px solid #4a6c5c;
+  border-radius:999px;
+  color:#c9d5cf;
+  background:#15382c;
+  font-size:10px;
+  font-weight:900;
+}
+.pcBadge.gold{
+  border-color:#846f2d;
+  color:#f1c553;
+  background:#243a27;
+}
+.pcBadge.bad{
+  border-color:#814643;
+  color:#ff9a91;
+  background:#341e1d;
+}
+.pcSummaryGrid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;
+}
+.pcSummaryBox{
+  padding:12px;
+  min-height:82px;
+  border:1px solid #35594a;
+  border-radius:11px;
+  background:#102e25;
+}
+.pcSummaryBox b{
+  display:block;
+  color:#f1c553;
+  font-size:23px;
+}
+.pcSummaryBox span{
+  display:block;
+  margin-top:4px;
+  color:#8fa79b;
+  font-size:10px;
+}
+.pcSectionTitle{
+  margin:18px 0 9px;
+  color:#dbe4df;
+  font-size:13px;
+  font-weight:950;
+  letter-spacing:.08em;
+}
+.pcAbilityGrid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:9px;
+}
+.pcAbility{
+  padding:10px 11px;
+  border:1px solid #345a4a;
+  border-radius:10px;
+  background:#0f2d23;
+}
+.pcAbilityTop{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  align-items:center;
+}
+.pcAbilityTop span{
+  color:#afc1b7;
+  font-size:11px;
+  font-weight:850;
+}
+.pcAbilityTop b{
+  color:#f1c553;
+  font-size:18px;
+}
+.pcAbilityBar{
+  height:6px;
+  margin-top:7px;
+  border-radius:999px;
+  background:#25483a;
+  overflow:hidden;
+}
+.pcAbilityBar i{
+  display:block;
+  height:100%;
+  background:linear-gradient(90deg,#5fcf7f,#f1c553);
+}
+.pcEnding{
+  margin-top:15px;
+  padding:14px 15px;
+  border:1px solid #7c692c;
+  border-radius:11px;
+  background:linear-gradient(90deg,#213a29,#14352a);
+}
+.pcEnding small{
+  display:block;
+  color:#8fa79b;
+  font-size:9px;
+  letter-spacing:.12em;
+  font-weight:950;
+}
+.pcEnding b{
+  display:block;
+  margin-top:4px;
+  color:#f1c553;
+  font-size:22px;
+}
+.abilityModalGrid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+.abilityModalItem{
+  border:1px solid #35594a;
+  background:#102f25;
+  border-radius:11px;
+  padding:12px;
+}
+.abilityModalItem .amiTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.abilityModalItem .amiTop b{
+  color:#f1c553;
+  font-size:22px;
+}
+.abilityModalItem .amiBar{
+  height:7px;
+  background:#244739;
+  border-radius:999px;
+  overflow:hidden;
+  margin:8px 0;
+}
+.abilityModalItem .amiBar i{
+  display:block;
+  height:100%;
+  background:linear-gradient(90deg,#5ed07d,#f1c553);
+}
+.abilityModalItem button{
+  width:100%;
+  min-height:36px;
+  border:1px solid #6e6130;
+  border-radius:8px;
+  background:#243e2d;
+  color:#f1c553;
+  font-weight:900;
+}
+.careerEndingCard{
+  border-color:#806d2b!important;
+  background:
+    radial-gradient(circle at 90% 10%,rgba(241,197,83,.09),transparent 30%),
+    linear-gradient(180deg,#183828,#0b2b21)!important;
+}
+.careerEndingChoices{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;
+  margin-top:12px;
+}
+.careerEndingChoices button{
+  min-height:52px;
+  border:1px solid #526e5e;
+  border-radius:10px;
+  background:#14362b;
+  color:#e5ece8;
+  font-weight:900;
+}
+.careerEndingChoices button:hover{
+  border-color:#f1c553;
+  color:#f1c553;
+}
+@media(max-width:760px){
+  .playerCardTop{grid-template-columns:1fr}
+  .pcAbilityGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .abilityModalGrid{grid-template-columns:1fr}
+  .careerEndingChoices{grid-template-columns:1fr}
+}
+</style>
+
 </head>
 <body>
 <div id="app"></div>
 <script>
-const SAVE_KEY="boxing-life-v40-mobile-menu-fix";
+const SAVE_KEY="boxing-life-v41-career-endings-record-abilities";
 const COUNTRIES={usa:{name:"美國",base:"Las Vegas",route:"旅美"},japan:{name:"日本",base:"東京",route:"旅日"},philippines:{name:"菲律賓",base:"宿霧",route:"旅菲"}};
 const STYLES={pressure:"壓迫型",boxer:"技巧型",puncher:"重砲型"};
 const SKILLS=["power","speed","stamina","defense","chin","technique"];
@@ -1547,7 +1765,7 @@ function apply(k,v){
 function spendPoint(k){const c=statCost(k);if(G.skillPoints<c||G.stats[k]>=95)return;G.skillPoints-=c;G.stats[k]++;log(`分配能力點：${NAMES[k]} +1（花費 ${c} 點）。`);save();render()}
 function createGame(){
  const country=document.getElementById("country").value;
- G={version:40,name:document.getElementById("name").value.trim()||"李逍遙",style:document.getElementById("style").value,country,base:COUNTRIES[country].base,
+ G={version:41,name:document.getElementById("name").value.trim()||"李逍遙",style:document.getElementById("style").value,country,base:COUNTRIES[country].base,
     lifePath:null,phaseIndex:0,turnInPhase:0,age:16,year:2026,health:100,morale:72,fame:3,income:0,skillPoints:3,
     stats:{power:rnd(43,49),speed:rnd(43,49),stamina:rnd(43,49),defense:rnd(42,48),chin:rnd(44,50),technique:rnd(43,49)},
     amateur:{w:0,l:0},pro:{w:0,l:0,d:0,ko:0},current:null,result:null,stageStory:false,logs:[],lastEvent:null,usedSpecial:{}};
@@ -1696,7 +1914,7 @@ function render(){
  const centerFlow=`<div class="eventFlow">${mode==="event"?choices:""}${mode==="result"?res:""}<div class="action">${action}</div></div>`;
  const center=mode==="event"?`<div class="card ${G.current.story||G.current.special?"major":""}"><div class="kicker ${G.current.story||G.current.special?"gold":""}">■ ${G.current.cat}</div><h2>${G.current.title}</h2><p>${G.current.desc}</p></div>`:mode==="result"?`<div class="card ${G.result.stageDone?"major":""}"><div class="kicker ${G.result.stageDone?"gold":""}">■ ${G.result.stageDone?"重大劇情結果":"事件結果"}</div><h2>${G.result.title}</h2><p>${G.result.text}</p><div class="deltaWrap">${G.result.deltas.map(x=>`<span class="delta ${x.includes("能力點")?"point":x.includes("+")?"good":x.includes("-")?"bad":""}">${esc(x)}</span>`).join("")}</div></div>`:`<div class="card"><div class="kicker">■ ${p.name}</div><h2>${G.stageStory?`4 回合完成：${p.story}`:`第 ${G.turnInPhase+1} 回合準備開始`}</h2><p>${G.stageStory?`這個人生階段的日常事件已完成，現在進入重大劇情。`:p.desc}</p><div class="progressBox"><div class="progressText">本階段進度 <b>${G.turnInPhase} / ${p.turns}</b></div><div class="turnDots">${Array.from({length:p.turns},(_,i)=>`<i class="${i<G.turnInPhase?"done":""}"></i>`).join("")}</div></div></div>`;
  app.innerHTML=`<div class="shell">
- <aside class="left"><div class="brand">Boxing <em>Life</em></div><div class="brandSub">拳 擊 人 生 模 擬 器</div><div class="school">台灣高中・拳擊部<small>${country.route}｜${country.name}・${G.base}</small></div><div class="timeline">${timelineHTML()}</div><div class="menu"><div class="active">▣ 生涯事件</div><div>◆ 能力點</div><div>♜ 劇情比賽</div><div>▦ 人生年表</div><div>★ 技能</div><div>▥ 數據</div><div>◉ 成就</div><div onclick="save()">▣ 儲存</div><div onclick="resetGame()">⚙ 重開人生</div></div><div class="version"><b>v4.0.0</b><br>${G.lifePath==="college"?"大學人生線":G.lifePath==="work"?"工作人生線":"高中人生線"}<br>4 回合推進・大量階段限定事件</div></aside>
+ <aside class="left"><div class="brand">Boxing <em>Life</em></div><div class="brandSub">拳 擊 人 生 模 擬 器</div><div class="school">台灣高中・拳擊部<small>${country.route}｜${country.name}・${G.base}</small></div><div class="timeline">${timelineHTML()}</div><div class="menu"><div class="active">▣ 生涯事件</div><div>◆ 能力點</div><div>♜ 劇情比賽</div><div>▦ 人生年表</div><div>★ 技能</div><div>▥ 數據</div><div>◉ 成就</div><div onclick="save()">▣ 儲存</div><div onclick="resetGame()">⚙ 重開人生</div></div><div class="version"><b>v4.1.0</b><br>${G.lifePath==="college"?"大學人生線":G.lifePath==="work"?"工作人生線":"高中人生線"}<br>4 回合推進・大量階段限定事件</div></aside>
  <main class="center"><header class="header"><div class="profile"><div class="no">1</div><div class="name"><b>${esc(G.name)}</b><div class="tags"><span class="tag">${p.identity}</span><span class="tag gold">${STYLES[G.style]}</span></div></div><div class="affil">所屬地區<b>${country.name}・${G.base}</b></div></div><div class="metrics"><div class="metric"><b>${G.age}</b><span>年齡</span></div><div class="metric"><b>${G.year}</b><span>年份</span></div><div class="metric"><b>${ovr()}</b><span>綜合</span></div><div class="metric"><b>${G.skillPoints}</b><span>能力點</span></div><div class="metric"><b>${G.pro.w}-${G.pro.l}</b><span>職業戰績</span></div></div></header><div class="content"><div class="card"><div class="kicker">■ 人生主線</div><p>左側會永久保留走過的年級／人生階段。高中畢業後會真正分成 <b>大學線</b> 或 <b>工作線</b>；每條線都有自己的特殊事件，再於 23 歲左右匯入職業拳擊。</p></div><div class="date">${G.year} 年 ・ ${G.age} 歲 ・ ${p.name}</div>${center}${centerFlow}<div class="card"><div class="kicker">■ 最近紀錄</div>${G.logs.slice(0,7).map(l=>`<div class="log"><small>${l.when}</small><div>${esc(l.text)}</div></div>`).join("")}</div></div></main>
  <aside class="right"><div class="rhythm"><div class="rightTitle">LIFE RHYTHM</div><div class="rhythmRow ${!G.stageStory&&!G.current&&!G.result?"on":""}"><i></i>${p.name}：${G.turnInPhase}/${p.turns} 回合</div><div class="rhythmRow ${G.current?"on":""}"><i></i>階段專屬事件／特殊事件</div><div class="rhythmRow ${G.result?"on":""}"><i></i>命運骰結算</div><div class="rhythmRow ${G.stageStory?"on":""}"><i></i>第 4 回合後：${p.story}</div></div>${rightAttrs()}</aside>
  </div>`;
@@ -3053,6 +3271,373 @@ render=function(){
 
 window.addEventListener("resize",()=>requestAnimationFrame(v40NormalizeMobileMenu));
 window.addEventListener("orientationchange",()=>setTimeout(v40NormalizeMobileMenu,120));
+</script>
+
+
+<script id="v41-career-system-js">
+const CAREER_AGENT_EVENTS=[
+  {
+    id:"v41_agent_offer",
+    tags:["pro"], special:true, localCulture:false,
+    cat:"職業事件｜經紀公司",
+    title:"一家有名氣的經紀公司想簽下你",
+    desc:"對方願意替你安排更好的比賽、贊助與媒體曝光，但抽成不低，而且合約至少兩年。這可能是生涯第一次真正進入職業團隊體系。",
+    choices:[
+      {label:"簽約",sub:"用更高抽成換資源與曝光",rate:"50%｜機會與風險並存",mode:"normal",good:[["fame",5],["income",2500]],mid:[["fame",2],["income",900]],bad:[["income",-2200],["morale",-2]],careerEffect:"agency_sign"},
+      {label:"先找律師看合約",sub:"花錢換安全",rate:"70%｜低風險",mode:"safe",good:[["fame",3],["income",-600]],mid:[["income",-600]],bad:[["income",-900]],careerEffect:"agency_review"},
+      {label:"拒絕",sub:"維持自由拳手",rate:"35%｜保留自由",mode:"risk",good:[["morale",3],["fame",1]],mid:[["morale",1]],bad:[["fame",-2]],careerEffect:"agency_decline"}
+    ]
+  },
+  {
+    id:"v41_shady_manager",
+    tags:["pro"], special:true, localCulture:false,
+    cat:"職業事件｜黑心經紀",
+    title:"經紀人說可以幫你『買到排名』，但要先付一大筆處理費",
+    desc:"他講得很有自信，還拿出幾張跟知名拳手的合照。唯一奇怪的是，他一直催你今天就匯款。",
+    choices:[
+      {label:"先匯一半",sub:"怕錯過機會",rate:"35%｜高風險",mode:"risk",good:[["fame",3],["income",-1200]],mid:[["income",-3000]],bad:[["income",-6500],["morale",-4]],careerEffect:"scam_risk"},
+      {label:"查清楚他的背景",sub:"問其他拳手與主辦",rate:"70%｜安全",mode:"safe",good:[["morale",3],["fame",1]],mid:[["morale",1]],bad:[["income",-500]],careerEffect:"scam_check"},
+      {label:"直接拒絕",sub:"不碰任何不透明交易",rate:"50%｜穩定",mode:"normal",good:[["morale",2]],mid:[["morale",1]],bad:[["fame",-1]],careerEffect:"scam_decline"}
+    ]
+  },
+  {
+    id:"v41_coach_offer",
+    tags:["pro"], special:true, localCulture:false,
+    cat:"生涯後段｜轉型",
+    title:"拳館老闆問你：要不要開始帶年輕拳手？",
+    desc:"你的身體開始不如年輕時恢復得快，但多年比賽經驗反而變成其他拳手最需要的東西。第一次，有人認真把你當成未來教練看待。",
+    choices:[
+      {label:"開始兼任教練",sub:"一邊比賽，一邊累積教練經驗",rate:"70%｜長期路線",mode:"safe",good:[["income",1600],["morale",3]],mid:[["income",900],["morale",1]],bad:[["stamina",-1]],careerEffect:"coach_path"},
+      {label:"現在只想當拳手",sub:"等退休再說",rate:"50%｜專注",mode:"normal",good:[["technique",2],["morale",1]],mid:[["technique",1]],bad:[["morale",-1]],careerEffect:"coach_decline"},
+      {label:"乾脆開始準備轉教練",sub:"接受拳手生涯可能接近尾聲",rate:"35%｜重大轉型",mode:"risk",good:[["income",2500],["morale",4]],mid:[["income",1000]],bad:[["morale",-2]],careerEffect:"coach_retire"}
+    ]
+  }
+];
+
+function v41EnsureCareerState(){
+  if(!G)return;
+  ensureCareerData();
+  if(!G.careerState)G.careerState={
+    agency:"自由拳手",
+    agencySigned:false,
+    scammed:false,
+    coachPath:false,
+    worldChampion:false,
+    regionalChampion:false,
+    ending:"",
+    endingDetail:"",
+    endingYear:null,
+    endingAge:null,
+    keyLosses:0
+  };
+}
+function v41AgencyLabel(){
+  v41EnsureCareerState();
+  if(G.careerState.scammed && !G.careerState.agencySigned)return "曾遭黑心經紀詐騙";
+  if(G.careerState.agencySigned)return "經紀公司簽約拳手";
+  return G.careerState.agency||"自由拳手";
+}
+function v41EndingLabel(){
+  v41EnsureCareerState();
+  if(G.careerState.ending)return G.careerState.ending;
+  if(G.careerState.worldChampion)return "現役世界冠軍";
+  if(G.careerState.coachPath)return "職業拳手／準教練";
+  if(G.retired)return "退休職業拳手";
+  return "生涯進行中";
+}
+function v41SetEnding(title,detail){
+  v41EnsureCareerState();
+  G.careerState.ending=title;
+  G.careerState.endingDetail=detail;
+  G.careerState.endingYear=G.year;
+  G.careerState.endingAge=G.age;
+}
+function v41Retire(title,detail,asCoach=false){
+  v41EnsureCareerState();
+  if(asCoach)G.careerState.coachPath=true;
+  v41SetEnding(title,detail);
+  G.retired=true;
+  G.retireReason=detail;
+  addCareerRecord(title,detail,"retire");
+  save();render();
+  setTimeout(()=>careerRecordModal(),80);
+}
+function v41CareerEventPool(){
+  if(!G || phaseGroup()!=="pro" || G.retired)return [];
+  const id=phase().id;
+  return CAREER_AGENT_EVENTS.filter(e=>{
+    if(e.id==="v41_coach_offer")return id==="prime"||id==="decline";
+    return id==="pro1"||id==="regional"||id==="contender"||id==="prime";
+  });
+}
+
+const V41_oldEventPool=eventPool;
+eventPool=function(){
+  const base=V41_oldEventPool();
+  return [...base,...v41CareerEventPool()];
+};
+
+const V41_oldForcedSpecial=forcedSpecial;
+forcedSpecial=function(){
+  const base=V41_oldForcedSpecial();
+  if(base)return base;
+  if(!G||phaseGroup()!=="pro")return null;
+  const used=G.usedSpecial||{};
+  const pool=v41CareerEventPool().filter(e=>!used[e.id]);
+  if(!pool.length)return null;
+  if(G.turnInPhase===1 || G.turnInPhase===3){
+    const chosen=pick(pool);
+    used[chosen.id]=true;
+    return chosen;
+  }
+  return null;
+};
+
+function v41HandleCareerEffect(ch){
+  if(!ch?.careerEffect||!G.result)return;
+  v41EnsureCareerState();
+  const tier=G.result.tier;
+  switch(ch.careerEffect){
+    case "agency_sign":
+      if(tier==="bad"){
+        G.careerState.scammed=true;
+        G.careerState.agency="問題經紀合約";
+        G.result.text="你太快簽下合約，後來才發現費用與抽成都比口頭承諾高得多。你沒有立刻破產，但這份合約讓你付出昂貴代價。";
+        addCareerRecord("簽下問題經紀合約",G.result.text,"manager");
+      }else{
+        G.careerState.agencySigned=true;
+        G.careerState.agency="正式經紀公司";
+        G.result.text=tier==="good"?"簽約後，公司真的替你安排到更好的對手與曝光。你的職業生涯開始有了專業團隊。":"你正式成為經紀公司旗下拳手。資源增加，但抽成與商業安排也開始影響你的自由。";
+        addCareerRecord("被經紀公司簽下",G.result.text,"manager");
+      }
+      break;
+    case "agency_review":
+      if(tier!=="bad"){
+        G.careerState.agencySigned=true;
+        G.careerState.agency="審約後簽約";
+        G.result.text="你沒有急著簽字。確認條款後才完成合作，雖然多花一筆費用，卻避開幾個對拳手非常不利的條款。";
+        addCareerRecord("審約後簽下經紀公司",G.result.text,"manager");
+      }else{
+        G.result.text="律師一看就發現合約裡有幾個危險條款。這次合作沒有簽成，但至少你沒有把未來幾年綁死。";
+      }
+      break;
+    case "scam_risk":
+      if(tier==="bad"||tier==="mid"){
+        G.careerState.scammed=true;
+        G.careerState.agency="遭黑心經紀詐騙";
+        G.result.text=tier==="bad"?"錢匯出去後，對方開始已讀不回。幾週後你才確定，所謂排名與比賽全都是話術。":"你付了錢，最後只換到一場價值很低的比賽。你開始懷疑自己是不是被當成提款機。";
+        addCareerRecord("遭黑心經紀騙錢",G.result.text,"scam");
+      }else{
+        G.result.text="這次對方真的安排到比賽，但整個過程仍然非常不透明。你決定之後再也不先匯這種錢。";
+      }
+      break;
+    case "scam_check":
+      G.result.text=tier==="good"?"你問了幾個拳手，很快發現對方早就有騙錢紀錄。你成功避掉一個大坑。":G.result.text;
+      break;
+    case "coach_path":
+      G.careerState.coachPath=true;
+      G.result.text=tier==="bad"?"帶課讓你的訓練時間變少，但你第一次發現自己其實很會教人。":"你開始帶幾個年輕拳手。收入不高，卻讓你看到拳擊生涯之外的下一條路。";
+      addCareerRecord("開始兼任拳擊教練",G.result.text,"coach");
+      break;
+    case "coach_retire":
+      if(tier==="good"){
+        v41Retire("退休轉任拳擊教練","你沒有等到身體完全撐不住。你選擇在還能示範、還能上台帶人的時候離開職業擂台，正式把經驗傳給下一代。",true);
+      }else{
+        G.careerState.coachPath=true;
+        G.result.text="你開始把重心慢慢轉向教練工作，但還沒有立刻宣布退役。";
+      }
+      break;
+  }
+  save();
+}
+
+const V41_oldResolveEvent=resolveEvent;
+resolveEvent=function(ev,ch,roll){
+  V41_oldResolveEvent(ev,ch,roll);
+  v41HandleCareerEffect(ch);
+};
+
+const V41_oldResolveFight=resolveFight;
+resolveFight=function(ev,ch,roll){
+  V41_oldResolveFight(ev,ch,roll);
+  v41EnsureCareerState();
+  const p=phase();
+  const won=G.result?.tier==="good";
+  if(!won)G.careerState.keyLosses=(G.careerState.keyLosses||0)+1;
+
+  if(p.id==="regional" && won && roll>=5){
+    G.careerState.regionalChampion=true;
+    addCareerRecord("拿下地區級冠軍","你第一次真正拿到職業生涯的重要頭銜。","title");
+  }
+
+  if(p.id==="prime" && won && roll>=5 && (G.pro.w||0)>=5){
+    G.careerState.worldChampion=true;
+    G.result.text="你贏下生涯最重要的一場比賽。終場鐘響後，裁判舉起你的手——你真的成為世界冠軍。";
+    G.result.deltas.push("世界冠軍 🏆");
+    addCareerRecord("世界冠軍","你在世界舞台贏下冠軍戰，完成職業生涯最大的成就。","title");
+  }else if(p.id==="prime" && !won){
+    G.result.text="你站上了世界級舞台，但今晚沒有把冠軍帶回家。這場失敗會留在戰績上，人生卻仍然要繼續。";
+    addCareerRecord("世界舞台關鍵戰失利","你挑戰最高舞台失敗，沒有拿下冠軍。","fight");
+  }
+
+  if(!won && (G.health||100)<=18 && roll<=2 && !G.retired){
+    G.result.text+=" 比賽後檢查顯示傷勢比預期嚴重，醫師建議你不要再承受職業賽強度。";
+    G.result.stageDone=true;
+    setTimeout(()=>v41Retire("重傷被迫退休","一次關鍵比賽後的傷勢沒有完全恢復。醫療團隊認為繼續比賽風險太高，你被迫提前結束職業拳擊生涯。",G.careerState.coachPath),0);
+  }
+  save();
+};
+
+function v41AbilityModal(){
+  v41EnsureCareerState();
+  document.getElementById("abilityModal")?.remove();
+  const items=SKILLS.map(k=>{
+    const cost=statCost(k);
+    return `<div class="abilityModalItem">
+      <div class="amiTop"><span>${NAMES[k]}</span><b>${G.stats[k]}</b></div>
+      <div class="amiBar"><i style="width:${G.stats[k]}%"></i></div>
+      <button ${G.skillPoints<cost||G.stats[k]>=95?"disabled":""} onclick="spendPoint('${k}');document.getElementById('abilityModal').remove();v41AbilityModal()">＋1（消耗 ${cost} 點）</button>
+    </div>`;
+  }).join("");
+  document.body.insertAdjacentHTML("beforeend",`
+    <div id="abilityModal" class="careerModal">
+      <div class="careerSheet">
+        <div class="careerTop">
+          <div><h2>${esc(G.name)} · 能力值</h2><p>OVR ${ovr()}｜可分配能力點 ${G.skillPoints}</p></div>
+          <button class="closeX" onclick="document.getElementById('abilityModal').remove()">關閉</button>
+        </div>
+        <div class="careerSummary">
+          <div class="careerMetric"><b>${G.health}</b><span>健康</span></div>
+          <div class="careerMetric"><b>${G.morale}</b><span>士氣</span></div>
+          <div class="careerMetric"><b>${G.fame}</b><span>名氣</span></div>
+          <div class="careerMetric"><b>${ovr()}</b><span>綜合 OVR</span></div>
+        </div>
+        <div class="pcSectionTitle">拳擊能力</div>
+        <div class="abilityModalGrid">${items}</div>
+      </div>
+    </div>`);
+}
+
+const V41_baseCareerRecordModal=careerRecordModal;
+careerRecordModal=function(){
+  v41EnsureCareerState();
+  ensureCareerData();
+  document.getElementById("careerModal")?.remove();
+
+  const history=G.careerHistory.length?G.careerHistory.map(x=>`
+    <div class="historyItem">
+      <div class="historyWhen"><b>${x.year}</b>${x.age} 歲<br>${x.phase}</div>
+      <div class="historyText"><strong>${esc(x.title)}</strong>${esc(x.text)}</div>
+    </div>`).join(""):`<div class="historyItem"><div class="historyText">目前還沒有重大生涯紀錄。</div></div>`;
+
+  const abilities=SKILLS.map(k=>`
+    <div class="pcAbility">
+      <div class="pcAbilityTop"><span>${NAMES[k]}</span><b>${G.stats[k]}</b></div>
+      <div class="pcAbilityBar"><i style="width:${G.stats[k]}%"></i></div>
+    </div>`).join("");
+
+  const statusBad=G.careerState.scammed?`<span class="pcBadge bad">曾遭經紀詐騙</span>`:"";
+  const champ=G.careerState.worldChampion?`<span class="pcBadge gold">🏆 世界冠軍</span>`:G.careerState.regionalChampion?`<span class="pcBadge gold">🥇 地區冠軍</span>`:"";
+  const coach=G.careerState.coachPath?`<span class="pcBadge">🥊 教練路線</span>`:"";
+
+  document.body.insertAdjacentHTML("beforeend",`
+    <div id="careerModal" class="careerModal">
+      <div class="careerSheet">
+        <div class="careerTop">
+          <div><h2>${esc(G.name)} · 選手生涯紀錄</h2><p>${COUNTRIES[G.country].name}｜${routeLabel()}</p></div>
+          <button class="closeX" onclick="document.getElementById('careerModal').remove()">關閉</button>
+        </div>
+
+        <div class="playerCardTop">
+          <div class="playerIdentity">
+            <div class="pcEyebrow">BOXING LIFE · CAREER CARD</div>
+            <h2>${esc(G.name)}</h2>
+            <div class="pcSub">${STYLES[G.style]}｜${G.age} 歲｜${COUNTRIES[G.country].name}<br>${v41AgencyLabel()}</div>
+            <div class="pcStatus">
+              <span class="pcBadge">${G.retired?"已退休":"現役"}</span>
+              ${champ}${coach}${statusBad}
+            </div>
+            <div class="pcEnding">
+              <small>CAREER STATUS / ENDING</small>
+              <b>${v41EndingLabel()}</b>
+            </div>
+          </div>
+
+          <div class="pcSummaryGrid">
+            <div class="pcSummaryBox"><b>${amateurRecord()}</b><span>業餘戰績</span></div>
+            <div class="pcSummaryBox"><b>${proRecord()}</b><span>職業戰績</span></div>
+            <div class="pcSummaryBox"><b>${G.careerStats.peakOvr}</b><span>生涯最高 OVR</span></div>
+            <div class="pcSummaryBox"><b>${money(G.income)}</b><span>生涯總收入</span></div>
+            <div class="pcSummaryBox"><b>${G.careerStats.peakFame}</b><span>最高名氣</span></div>
+            <div class="pcSummaryBox"><b>${G.careerState.keyLosses||0}</b><span>重要敗戰</span></div>
+          </div>
+        </div>
+
+        <div class="pcSectionTitle">能力值</div>
+        <div class="pcAbilityGrid">${abilities}</div>
+
+        <div class="pcSectionTitle">生涯重要紀錄</div>
+        <div class="historyList">${history}</div>
+
+        <div class="shareArea">
+          <div class="shareButtons">
+            <button onclick="buildShareCard()">產生生涯分享圖</button>
+            <button onclick="v41AbilityModal()">查看／分配能力值</button>
+          </div>
+          <div id="sharePreview" class="sharePreview" style="display:none"></div>
+        </div>
+      </div>
+    </div>`);
+};
+
+function v41FinalChoicePanel(){
+  if(!G||G.retired||phase().id!=="decline")return "";
+  if(!(G.stageStory && G.turnInPhase>=phase().turns))return "";
+  return `<div class="card careerEndingCard">
+    <div class="kicker gold">■ FINAL CAREER DECISION</div>
+    <h2>最後，你要怎麼離開拳擊？</h2>
+    <p>你的職業生涯已經走到最後階段。你可以追最後一次機會，也可以接受身體與時間的現實，把多年累積的經驗帶到下一個角色。</p>
+    <div class="careerEndingChoices">
+      <button onclick="v41Retire('光榮退休','你完成最後一段職業生涯後主動退休。沒有任何人逼你離開，這是你自己選擇的終點。',false)">🥊 正式退休</button>
+      <button onclick="v41Retire('退休轉任拳擊教練','你離開職業擂台，把多年累積的經驗交給下一代拳手。',true)">📋 退休轉教練</button>
+      ${G.careerState.worldChampion?`<button onclick="v41Retire('世界冠軍退休','你選擇以世界冠軍身分結束拳擊生涯，讓最後的記憶停在最高點。',G.careerState.coachPath)">🏆 冠軍身分退休</button>`:`<button onclick="G.stageStory=false;G.turnInPhase=0;drawEvent()">🔥 再拚最後一戰</button>`}
+    </div>
+  </div>`;
+}
+
+function v41EnhanceMenu(){
+  document.querySelectorAll(".gameMenuDropBody").forEach(body=>{
+    if(body.querySelector(".v41CareerRecordBtn"))return;
+    body.innerHTML=`
+      <button class="v41CareerRecordBtn" type="button" onclick="careerRecordModal();this.closest('details').removeAttribute('open')">▣ 選手生涯紀錄</button>
+      <button type="button" onclick="v41AbilityModal();this.closest('details').removeAttribute('open')">◆ 能力值</button>
+      <button type="button" onclick="save();this.closest('details').removeAttribute('open')">▣ 儲存進度</button>
+      <button type="button" onclick="resetGame()">⚙ 重新開始人生</button>`;
+  });
+}
+
+const V41_prevRender=render;
+render=function(){
+  V41_prevRender();
+  if(!G)return;
+  v41EnsureCareerState();
+
+  requestAnimationFrame(()=>{
+    v41EnhanceMenu();
+
+    const content=document.querySelector(".content");
+    if(content && !document.getElementById("v41FinalPanel")){
+      const markup=v41FinalChoicePanel();
+      if(markup){
+        const holder=document.createElement("div");
+        holder.id="v41FinalPanel";
+        holder.innerHTML=markup;
+        const recent=[...content.querySelectorAll(":scope > .card")].find(c=>(c.querySelector(".kicker")?.textContent||"").includes("最近紀錄"));
+        if(recent)content.insertBefore(holder,recent); else content.appendChild(holder);
+      }
+    }
+  });
+};
 </script>
 
 </body>
